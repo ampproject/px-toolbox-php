@@ -54,7 +54,7 @@ final class PageSpeedInsightsApi
      * @param string $strategy Optional. Audit strategy to use. Can be 'mobile' or 'desktop'. Defaults to 'mobile'.
      * @param string $referrer Optional. Referrer that is requesting the audit. Defaults to an empty string.
      *
-     * @return array Associative array of audit data.
+     * @return array<mixed> Associative array of audit data.
      *
      * @throws RuntimeException If the remote request did not produce a successful result.
      */

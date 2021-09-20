@@ -5,7 +5,7 @@
   "license": "Apache-2.0",
   "require": {
     "php": "^5.6 || ^7.0 || ^8.0",
-    "ampproject/amp-toolbox": "^0.7",
+    "ampproject/amp-toolbox": "dev-main",
     "psr/http-message": "^1.0.1"
   },
   "require-dev": {
