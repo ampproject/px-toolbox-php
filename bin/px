@@ -1,0 +1,22 @@
+#!/usr/bin/env php
+<?php
+
+namespace PageExperience\Cli;
+
+if (!class_exists('PageExperience\Cli\PxExecutable')) {
+
+    $possibleAutoloaderLocations = [
+        dirname(__DIR__) . '/vendor/autoload.php',
+        dirname(__DIR__) . '/autoload.php',
+        // TODO: This should make use of dirname(__DIR__, 3) once we have a PHP minimum of 7+.
+        dirname(dirname(dirname(__DIR__))) . '/autoload.php',
+    ];
+
+    foreach ($possibleAutoloaderLocations as $possibleAutoloaderLocation) {
+        if (is_readable($possibleAutoloaderLocation)) {
+            include_once $possibleAutoloaderLocation;
+        }
+    }
+}
+
+( new PxExecutable() )->run();

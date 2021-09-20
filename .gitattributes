@@ -1,0 +1,13 @@
+# Improve diff output for PHP files.
+*.php              diff=php
+
+# Exclude build & test files from dist archives.
+/.github           export-ignore
+/bin               export-ignore
+/tests             export-ignore
+/.editorconfig     export-ignore
+/.gitattributes    export-ignore
+/.gitignore        export-ignore
+/.phpcs.xml.dist   export-ignore
+/phpstan.neon.dist export-ignore
+/phpunit.xml       export-ignore
