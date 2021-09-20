@@ -1,0 +1,141 @@
+name: Run tests
+on: [push, pull_request]
+
+jobs:
+  unit-test:
+    name: Unit test${{ matrix.coverage && ' (with coverage)' || '' }} / PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+    # We want to run on external PRs, but not on our own internal PRs as they'll be run
+    # by the push to the branch. This avoids running the workflows twice in such a case.
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.0', '7.4', '7.3', '7.2', '7.1', '7.0', '5.6']
+        coverage: [false]
+        include:
+          - php: '7.4'
+            coverage: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, iconv, json, libxml, zip
+          coverage: ${{ matrix.coverage && 'pcov' || 'none' }}
+          ini-values: pcov.directory=.
+          tools: composer
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Configure Composer cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install Composer dependencies
+        run: composer install
+
+      - name: Run tests
+        if: ${{ matrix.coverage == false }}
+        run: composer unit
+
+      - name: Run tests with coverage
+        if: ${{ matrix.coverage == true }}
+        run: vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+
+      - name: Upload code coverage report
+        if: ${{ matrix.coverage == true }}
+        uses: codecov/codecov-action@v1.5.0
+        with:
+          file: build/logs/clover.xml
+          flags: php
+          fail_ci_if_error: true
+
+  code-style:
+    name: Code style / PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+    # We want to run on external PRs, but not on our own internal PRs as they'll be run
+    # by the push to the branch. This avoids running the workflows twice in such a case.
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['7.4']
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, iconv, json, libxml, zip
+          tools: composer, cs2pr
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Configure Composer cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+      - name: Install Composer dependencies
+        run: composer install
+
+      - name: Detect coding standard violations (PHPCS)
+        run: vendor/bin/phpcs -q --report=checkstyle --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 | cs2pr --graceful-warnings
+
+  static-analysis:
+    name: Static analysis / PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+    # We want to run on external PRs, but not on our own internal PRs as they'll be run
+    # by the push to the branch. This avoids running the workflows twice in such a case.
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.0']
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, iconv, json, libxml, zip
+          tools: composer, cs2pr
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Configure Composer cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+      - name: Install Composer dependencies
+        run: composer install
+
+      - name: Static Analysis (PHPStan)
+        if: ${{ matrix.php != '5.6' && matrix.php != '7.0' }}
+        run: vendor/bin/phpstan analyse --error-format=checkstyle | cs2pr
