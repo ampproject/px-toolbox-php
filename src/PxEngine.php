@@ -17,11 +17,16 @@ final class PxEngine
      *
      * @param string               $url     URL to run an analysis for.
      * @param ConfigurationProfile $profile Configuration profile to use for the analysis.
-     * @return PxAnalysis Page experience analysis result.
+     * @return Analysis Page experience analysis.
      */
     public function analyze($url, ConfigurationProfile $profile)
     {
-        return new PxAnalysis();
+        return new Analysis\PageExperienceAnalysis(
+            Analysis\Status::SUCCESS(),
+            new \DateTimeImmutable(),
+            Analysis\Scope::PAGE(),
+            new Analysis\Ruleset('L1')
+        );
     }
 
     /**
