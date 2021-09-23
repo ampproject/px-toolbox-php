@@ -2,11 +2,11 @@
 
 namespace PageExperience;
 
-use DateTimeInterface;
 use PageExperience\Analysis\Result;
 use PageExperience\Analysis\Ruleset;
 use PageExperience\Analysis\Scope;
 use PageExperience\Analysis\Status;
+use PageExperience\Analysis\Timestamp;
 
 /**
  * Page experience analysis.
@@ -28,7 +28,7 @@ interface Analysis
     /**
      * Get the timestamp of the analysis run.
      *
-     * @return DateTimeInterface Timestamp of the analysis run.
+     * @return Timestamp Timestamp of the analysis run.
      */
     public function getTimestamp();
 

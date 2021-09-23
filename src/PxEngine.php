@@ -13,6 +13,25 @@ final class PxEngine
 {
 
     /**
+     * Factory instance to use for assembling a tool stack.
+     *
+     * @var ToolStackFactory
+     */
+    private $toolStackFactory;
+
+    /**
+     * Instantiate the Page Experience engine.
+     *
+     * @param ToolStackFactory|null $toolStackFactory Optional. Tool stack factory instance to use.
+     */
+    public function __construct(ToolStackFactory $toolStackFactory = null)
+    {
+        $this->toolStackFactory = $toolStackFactory instanceof ToolStackFactory
+            ? $toolStackFactory
+            : new DefaultToolStackFactory();
+    }
+
+    /**
      * Analyze a URL.
      *
      * @param string               $url     URL to run an analysis for.
@@ -21,12 +40,9 @@ final class PxEngine
      */
     public function analyze($url, ConfigurationProfile $profile)
     {
-        return new Analysis\PageExperienceAnalysis(
-            Analysis\Status::SUCCESS(),
-            new \DateTimeImmutable(),
-            Analysis\Scope::PAGE(),
-            new Analysis\Ruleset('L1')
-        );
+        $pipeline = $this->assemblePipelineForAnalysis($profile);
+
+        return $pipeline->analyze($url);
     }
 
     /**
@@ -38,7 +54,9 @@ final class PxEngine
      */
     public function optimizeHtml($html, ConfigurationProfile $profile)
     {
-        return '';
+        $pipeline = $this->assemblePipelineForOptimization($profile);
+
+        return $pipeline->optimizeHtml($html);
     }
 
     /**
@@ -50,6 +68,30 @@ final class PxEngine
      */
     public function optimizeResponse(ResponseInterface $response, ConfigurationProfile $profile)
     {
-        return $response;
+        $pipeline = $this->assemblePipelineForOptimization($profile);
+
+        return $pipeline->optimizeResponse($response);
+    }
+
+    /**
+     * Assemble a page experience pipeline for analysis.
+     *
+     * @param ConfigurationProfile $profile Configuration profile to use for the analysis.
+     * @return PxPipeline Analysis pipeline.
+     */
+    private function assemblePipelineForAnalysis(ConfigurationProfile $profile)
+    {
+        return new PxPipeline();
+    }
+
+    /**
+     * Assemble a page experience pipeline for optimization.
+     *
+     * @param ConfigurationProfile $profile Configuration profile to use for the optimization.
+     * @return PxPipeline Analysis pipeline.
+     */
+    private function assemblePipelineForOptimization(ConfigurationProfile $profile)
+    {
+        return new PxPipeline();
     }
 }

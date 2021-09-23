@@ -2,7 +2,6 @@
 
 namespace PageExperience\Analysis;
 
-use DateTimeInterface;
 use PageExperience\Analysis;
 
 /**
@@ -23,7 +22,7 @@ final class PageExperienceAnalysis implements Analysis
     /**
      * Timestamp of the analysis run.
      *
-     * @var DateTimeInterface
+     * @var Timestamp
      */
     private $timestamp;
 
@@ -51,15 +50,15 @@ final class PageExperienceAnalysis implements Analysis
     /**
      * Instantiate a PageExperienceAnalysis object.
      *
-     * @param Status            $status Status of the analysis.
-     * @param DateTimeInterface $timestamp Timestamp of the analysis run.
-     * @param Scope             $scope Scope of the analysis run.
-     * @param Ruleset           $ruleset Ruleset used for the analysis.
-     * @param array<Result>     $results Results produced by the analysis.
+     * @param Status        $status    Status of the analysis.
+     * @param Timestamp     $timestamp Timestamp of the analysis run.
+     * @param Scope         $scope     Scope of the analysis run.
+     * @param Ruleset       $ruleset   Ruleset used for the analysis.
+     * @param array<Result> $results   Results produced by the analysis.
      */
     public function __construct(
         Status $status,
-        DateTimeInterface $timestamp,
+        Timestamp $timestamp,
         Scope $scope,
         Ruleset $ruleset,
         $results = []
@@ -94,7 +93,7 @@ final class PageExperienceAnalysis implements Analysis
     /**
      * Get the timestamp of the analysis run.
      *
-     * @return DateTimeInterface Timestamp of the analysis run.
+     * @return Timestamp Timestamp of the analysis run.
      */
     public function getTimestamp()
     {
