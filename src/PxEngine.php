@@ -2,6 +2,9 @@
 
 namespace PageExperience;
 
+use PageExperience\ToolStack\DefaultToolStackFactory;
+use PageExperience\ToolStack\ToolStackConfiguration;
+use PageExperience\ToolStack\ToolStackFactory;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -28,7 +31,7 @@ final class PxEngine
     {
         $this->toolStackFactory = $toolStackFactory instanceof ToolStackFactory
             ? $toolStackFactory
-            : new DefaultToolStackFactory();
+            : new DefaultToolStackFactory(new ToolStackConfiguration());
     }
 
     /**
@@ -81,7 +84,9 @@ final class PxEngine
      */
     private function assemblePipelineForAnalysis(ConfigurationProfile $profile)
     {
-        return new PxPipeline();
+        $toolStack = $this->toolStackFactory->createForAnalysis($profile);
+
+        return new PxPipeline($toolStack);
     }
 
     /**
@@ -92,6 +97,8 @@ final class PxEngine
      */
     private function assemblePipelineForOptimization(ConfigurationProfile $profile)
     {
-        return new PxPipeline();
+        $toolStack = $this->toolStackFactory->createForOptimization($profile);
+
+        return new PxPipeline($toolstack);
     }
 }

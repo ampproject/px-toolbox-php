@@ -3,9 +3,9 @@
 namespace PageExperience\Tool;
 
 use PageExperience\Analysis;
-use PageExperience\Analysis\Context;
 use PageExperience\Analysis\ToolRuleset;
 use PageExperience\ConfigurationProfile;
+use PageExperience\Context;
 
 /**
  * Lighthouse abstraction as a page experience tool.

@@ -14,6 +14,23 @@ final class DefaultToolStackFactory implements ToolStackFactory
 {
 
     /**
+     * Tool stack configuration to use.
+     *
+     * @var ToolStackConfiguration
+     */
+    private $toolStackConfiguration;
+
+    /**
+     * Instantiate a default tool stack factory object.
+     *
+     * @param ToolStackConfiguration $toolStackConfiguration Tool stack configuration to use.
+     */
+    public function __construct(ToolStackConfiguration $toolStackConfiguration)
+    {
+        $this->toolStackConfiguration = $toolStackConfiguration;
+    }
+
+    /**
      * Create a tool stack instance for analysis.
      *
      * @param ConfigurationProfile $profile Configuration profile to use.

@@ -13,6 +13,23 @@ final class PxPipeline
 {
 
     /**
+     * Tool stack to use for the pipeline.
+     *
+     * @var ToolStack
+     */
+    private $toolStack;
+
+    /**
+     * Instantiate a PxPipeline object.
+     *
+     * @param ToolStack $toolStack Tool stack to use for the pipeline.
+     */
+    public function __construct(ToolStack $toolStack)
+    {
+        $this->toolStack = $toolStack;
+    }
+
+    /**
      * Analyze a URL.
      *
      * @param string $url URL to run an analysis for.
@@ -20,6 +37,8 @@ final class PxPipeline
      */
     public function analyze($url)
     {
+        // TODO: Implement analysis logic.
+
         return new Analysis\PageExperienceAnalysis(
             Analysis\Status::SUCCESS(),
             Analysis\Timestamp::now(),
@@ -36,6 +55,8 @@ final class PxPipeline
      */
     public function optimizeHtml($html)
     {
+        // TODO: Implement optimization logic.
+
         return $html;
     }
 
@@ -47,6 +68,8 @@ final class PxPipeline
      */
     public function optimizeResponse(ResponseInterface $response)
     {
+        // TODO: Implement optimization logic.
+
         return $response;
     }
 }

@@ -3,8 +3,8 @@
 namespace PageExperience\Tool;
 
 use PageExperience\Analysis;
-use PageExperience\Analysis\Context;
 use PageExperience\ConfigurationProfile;
+use PageExperience\Context;
 use PageExperience\Tool;
 use Psr\Http\Message\ResponseInterface;
 
@@ -30,10 +30,10 @@ interface OptimizationTool extends Tool
     /**
      * Optimize an HTTP response.
      *
-     * @param Analysis             $analysis Current state of the analysis.
-     * @param ResponseInterface    $response HTTP response to optimize.
-     * @param ConfigurationProfile $profile  Configuration profile to use for the analysis.
-     * @param Context              $context  Current context of the analysis.
+     * @param Analysis                $analysis Current state of the analysis.
+     * @param ResponseInterface       $response HTTP response to optimize.
+     * @param ConfigurationProfile    $profile  Configuration profile to use for the analysis.
+     * @param \PageExperience\Context $context  Current context of the analysis.
      * @return ResponseInterface Optimized HTTP response.
      */
     public function optimizeResponse(Analysis $analysis, $response, ConfigurationProfile $profile, Context $context);
