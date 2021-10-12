@@ -76,6 +76,8 @@ final class ParallelToolStack implements ToolStack
             );
         }
 
+        Loop::run();
+
         $context->replaceWith($contextMerger->mergeContext());
 
         return $analysisMerger->mergeAnalysis();
