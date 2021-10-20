@@ -12,6 +12,8 @@ use AmpProject\FakeEnum;
  * @method static self PAGE()
  * @method static self FRAGMENT()
  *
+ * @extends FakeEnum<int>
+ *
  * @package ampproject/px-toolbox
  */
 final class Scope extends FakeEnum

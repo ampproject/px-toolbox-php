@@ -77,7 +77,7 @@ final class PageSpeedInsightsApi
         $response = $this->remoteGetRequest->get($query, $headers);
 
         if ($response->getStatusCode() < 200 || $response->getStatusCode() >= 300) {
-            $message = "Failed to fetch remote audit results";
+            $message = 'Failed to fetch remote audit results';
 
             $result = json_decode($response->getBody(), true);
 

@@ -27,7 +27,7 @@
         <exclude-pattern>bin/*</exclude-pattern>
     </rule>
 
-    <!-- Line length can not easily be controlled in generated code. -->
+    <!-- Adapt line length constraints and ignore for tests. -->
     <rule ref="Generic.Files.LineLength.TooLong">
         <properties>
             <property name="lineLimit" value="120"/>

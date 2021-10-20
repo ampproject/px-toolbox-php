@@ -40,6 +40,7 @@ final class Ruleset
      * Add an individual tool ruleset.
      *
      * @param ToolRuleset $toolRuleset Individual tool ruleset to add.
+     * @return void
      */
     public function addToolRuleset(ToolRuleset $toolRuleset)
     {

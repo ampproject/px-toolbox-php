@@ -42,7 +42,7 @@ final class PxExecutable extends Executable
     {
         foreach (self::COMMAND_CLASSES as $commandClass) {
             /** @var Command $command */
-            $command = new $commandClass();
+            $command = new $commandClass($this);
 
             $command->register($options);
 

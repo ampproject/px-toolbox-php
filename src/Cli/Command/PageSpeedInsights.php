@@ -42,14 +42,14 @@ final class PageSpeedInsights extends Command
 
         $options->registerArgument(
             'url',
-            "URL to run the PageSpeed Insights audit against.",
+            'URL to run the PageSpeed Insights audit against.',
             true,
             self::NAME
         );
 
         $options->registerOption(
             'key',
-            "Google API key to use.",
+            'Google API key to use.',
             null,
             true,
             self::NAME
@@ -57,7 +57,7 @@ final class PageSpeedInsights extends Command
 
         $options->registerOption(
             'strategy',
-            "PageSpeed Insights strategy to use (desktop/mobile). Defaults to mobile.",
+            'PageSpeed Insights strategy to use (desktop/mobile). Defaults to mobile.',
             null,
             true,
             self::NAME
@@ -65,7 +65,7 @@ final class PageSpeedInsights extends Command
 
         $options->registerOption(
             'referrer',
-            "Referrer to use. Defaults to https://example.com/.",
+            'Referrer to use. Defaults to https://example.com/.',
             null,
             true,
             self::NAME
@@ -73,7 +73,7 @@ final class PageSpeedInsights extends Command
 
         $options->registerOption(
             'json',
-            "Output raw JSON result.",
+            'Output raw JSON result.',
             null,
             false,
             self::NAME

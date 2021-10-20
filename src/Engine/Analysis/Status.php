@@ -11,6 +11,8 @@ use AmpProject\FakeEnum;
  * @method static self SUCCESS()
  * @method static self ERROR()
  *
+ * @extends FakeEnum<int>
+ *
  * @package ampproject/px-toolbox
  */
 final class Status extends FakeEnum

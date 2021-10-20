@@ -36,7 +36,8 @@ final class ContextMerger
     /**
      * Collect a new context.
      *
-     * @param \PageExperience\Engine\Context $context Context to collect.
+     * @param Context $context Context to collect.
+     * @return void
      */
     public function collectContext(Context $context)
     {

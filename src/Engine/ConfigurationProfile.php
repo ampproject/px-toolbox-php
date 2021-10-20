@@ -7,7 +7,7 @@ namespace PageExperience\Engine;
  *
  * @package ampproject/px-toolbox
  */
-final class ConfigurationProfile
+class ConfigurationProfile
 {
 
     /**

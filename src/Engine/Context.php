@@ -16,6 +16,7 @@ final class Context
      * Replace the context internals with the internals of the provided Context object.
      *
      * @param Context $context Context object to use as new context internals.
+     * @return void
      */
     public function replaceWith(Context $context)
     {

@@ -40,6 +40,10 @@ final class JsonRenderer implements StringRenderer, FileRenderer
 
         // TODO: Add safeguards.
 
+        if (! is_string($json)) {
+            return '';
+        }
+
         return $json;
     }
 }

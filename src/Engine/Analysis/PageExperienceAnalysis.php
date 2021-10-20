@@ -74,6 +74,7 @@ final class PageExperienceAnalysis implements Analysis
      * Add an individual result to the analysis.
      *
      * @param Result $result Individual result to add to the analysis.
+     * @return void
      */
     public function addResult(Result $result)
     {

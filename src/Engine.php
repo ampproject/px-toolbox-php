@@ -102,6 +102,6 @@ final class Engine
     {
         $toolStack = $this->toolStackFactory->createForOptimization($profile);
 
-        return new Pipeline($toolstack);
+        return new Pipeline($toolStack);
     }
 }

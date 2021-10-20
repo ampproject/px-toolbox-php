@@ -81,7 +81,7 @@ final class SequentialToolStack extends BaseToolStack
                 continue;
             }
 
-            $response = $tool->optimizeHtml($analysis, $response, $profile, $context);
+            $response = $tool->optimizeResponse($analysis, $response, $profile, $context);
         }
 
         return $response;

@@ -81,6 +81,6 @@ final class DefaultToolStackFactory implements ToolStackFactory
 
         // TODO: Parallelize as much as possible.
 
-        return new SequentialToolStack(array_column($tools, 0));
+        return new SequentialToolStack(...array_column($tools, 0));
     }
 }

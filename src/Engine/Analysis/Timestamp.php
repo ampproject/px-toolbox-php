@@ -2,6 +2,7 @@
 
 namespace PageExperience\Engine\Analysis;
 
+use AmpProject\Exception\FailedToProcessTimestamp;
 use DateTimeImmutable;
 use DateTimeInterface;
 
@@ -57,10 +58,17 @@ final class Timestamp
      * Return timestamp as DateTimeImmutable object.
      *
      * @return DateTimeImmutable Timestamp as DateTimeImmutable object.
+     * @throws FailedToProcessTimestamp If the timestamp could not be converted into a DateTimeImmutable.
      */
     public function asDateTimeImmutable()
     {
-        return DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, $this->timestamp);
+        $dateTime = DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, $this->timestamp);
+
+        if (! $dateTime instanceof DateTimeImmutable) {
+            throw FailedToProcessTimestamp::forDateTimeImmutableFailure($dateTime, $this->timestamp);
+        }
+
+        return $dateTime;
     }
 
     /**

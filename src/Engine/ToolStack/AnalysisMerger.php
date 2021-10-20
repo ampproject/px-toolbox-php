@@ -37,6 +37,7 @@ final class AnalysisMerger
      * Collect a new analysis result.
      *
      * @param Analysis $analysis Analysis result to collect.
+     * @return void
      */
     public function collectAnalysis(Analysis $analysis)
     {
