@@ -6,9 +6,7 @@ use AmpProject\Exception\NotImplemented;
 use PageExperience\Engine\Analysis;
 use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\Engine\Context;
-use PageExperience\Engine\Tool;
 use PageExperience\Engine\Tool\OptimizationTool;
-use PageExperience\Engine\ToolStack;
 use PageExperience\Engine\Tool\AnalysisTool;
 use Psr\Http\Message\ResponseInterface;
 use React\EventLoop\Loop;
@@ -18,25 +16,8 @@ use React\EventLoop\Loop;
  *
  * @package ampproject/px-toolbox
  */
-final class ParallelToolStack implements ToolStack
+final class ParallelToolStack extends BaseToolStack
 {
-
-    /**
-     * Array of tools to execute in sequential order.
-     *
-     * @var array<Tool>
-     */
-    private $tools;
-
-    /**
-     * Instantiate a SequentialToolStack object.
-     *
-     * @param Tool ...$tools Tools to execute in sequential order.
-     */
-    public function __construct(Tool ...$tools)
-    {
-        $this->tools = $tools;
-    }
 
     /**
      * Analyze a URL.

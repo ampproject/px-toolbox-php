@@ -2,6 +2,9 @@
 
 namespace PageExperience;
 
+use PageExperience\Engine\Analysis;
+use PageExperience\Engine\ConfigurationProfile;
+use PageExperience\Engine\Pipeline;
 use PageExperience\Engine\ToolStack\DefaultToolStackFactory;
 use PageExperience\Engine\ToolStack\ToolStackConfiguration;
 use PageExperience\Engine\ToolStack\ToolStackFactory;

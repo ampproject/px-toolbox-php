@@ -5,8 +5,6 @@ namespace PageExperience\Engine\ToolStack;
 use PageExperience\Engine\Analysis;
 use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\Engine\Context;
-use PageExperience\Engine\Tool;
-use PageExperience\Engine\ToolStack;
 use PageExperience\Engine\Tool\AnalysisTool;
 use PageExperience\Engine\Tool\OptimizationTool;
 use Psr\Http\Message\ResponseInterface;
@@ -16,25 +14,8 @@ use Psr\Http\Message\ResponseInterface;
  *
  * @package ampproject/px-toolbox
  */
-final class SequentialToolStack implements ToolStack
+final class SequentialToolStack extends BaseToolStack
 {
-
-    /**
-     * Array of tools to execute in sequential order.
-     *
-     * @var array<Tool>
-     */
-    private $tools;
-
-    /**
-     * Instantiate a SequentialToolStack object.
-     *
-     * @param Tool ...$tools Tools to execute in sequential order.
-     */
-    public function __construct(Tool ...$tools)
-    {
-        $this->tools = $tools;
-    }
 
     /**
      * Analyze a URL.

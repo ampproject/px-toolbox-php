@@ -15,7 +15,7 @@ final class ToolStackConfiguration
     /**
      * Get the registered tools and their inter-dependencies.
      *
-     * @return array<array<string>> Associative array of tools. Key is the tool name, value is an array of dependencies.
+     * @return array<array<class-string<Tool>>> Associative array of tools. Key is the tool name, value is an array of dependencies.
      */
     public function getTools()
     {

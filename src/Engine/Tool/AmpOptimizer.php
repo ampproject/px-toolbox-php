@@ -76,8 +76,12 @@ final class AmpOptimizer implements OptimizationTool
      * @param Context              $context  Current context of the analysis.
      * @return ResponseInterface Optimized HTTP response.
      */
-    public function optimizeResponse(Analysis $analysis, $response, ConfigurationProfile $profile, Context $context)
-    {
+    public function optimizeResponse(
+        Analysis $analysis,
+        ResponseInterface $response,
+        ConfigurationProfile $profile,
+        Context $context
+    ) {
         // TODO: Implement optimizeResponse() method.
 
         return $response;

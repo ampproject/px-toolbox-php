@@ -3,8 +3,10 @@
 namespace PageExperience\Engine\ToolStack;
 
 use PageExperience\Engine\ConfigurationProfile;
-use PageExperience\Engine\ToolStack;
+use PageExperience\Engine\Tool;
 use PageExperience\Engine\Tool\AnalysisTool;
+use PageExperience\Engine\Tool\OptimizationTool;
+use PageExperience\Engine\ToolStack;
 
 /**
  * Factory for assembling a tool stack.
@@ -39,15 +41,7 @@ final class DefaultToolStackFactory implements ToolStackFactory
      */
     public function createForAnalysis(ConfigurationProfile $profile)
     {
-        $toolClassNames = $this->toolStackConfiguration->getTools();
-
-        foreach ($toolClassNames as $toolClassName => $dependencies) {
-            if (is_a($toolClassName, AnalysisTool::class, true)) {
-                $tools[$toolClassName] = new $toolClassName();
-            }
-        }
-
-
+        return $this->assembleToolStack(AnalysisTool::class, $profile);
     }
 
     /**
@@ -58,6 +52,35 @@ final class DefaultToolStackFactory implements ToolStackFactory
      */
     public function createForOptimization(ConfigurationProfile $profile)
     {
-        // TODO: Implement createForOptimization() method.
+        return $this->assembleToolStack(OptimizationTool::class, $profile);
+    }
+
+    /**
+     * Assemble a tool stack for a given type of tool.
+     *
+     * @param class-string<Tool>   $toolType Type of tool to assemble the tool stack for.
+     * @param ConfigurationProfile $profile  Configuration profile to use.
+     * @return ToolStack Assembled tool stack.
+     */
+    private function assembleToolStack($toolType, ConfigurationProfile $profile)
+    {
+        $toolClassNames = $this->toolStackConfiguration->getTools();
+
+        $tools = [];
+        foreach ($toolClassNames as $toolClassName => $dependencies) {
+            if (is_a($toolClassName, $toolType, true)) {
+                $tool = new $toolClassName();
+
+                if (! $profile->usesTool($tool->getName())) {
+                    continue;
+                }
+
+                $tools[$tool->getName()] = [$tool, $dependencies];
+            }
+        }
+
+        // TODO: Parallelize as much as possible.
+
+        return new SequentialToolStack(array_column($tools, 0));
     }
 }
