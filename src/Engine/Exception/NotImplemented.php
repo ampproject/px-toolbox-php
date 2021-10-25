@@ -1,9 +1,8 @@
 <?php
 
-namespace AmpProject\Exception;
+namespace PageExperience\Engine\Exception;
 
 use LogicException;
-use PageExperience\Engine\Exception\PxEngineException;
 
 /**
  * Exception thrown when a code path is being triggered that has not yet been implemented.

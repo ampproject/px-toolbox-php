@@ -2,9 +2,9 @@
 
 namespace PageExperience\Engine\Analysis;
 
-use AmpProject\Exception\FailedToProcessTimestamp;
 use DateTimeImmutable;
 use DateTimeInterface;
+use PageExperience\Engine\Exception\FailedToProcessTimestamp;
 
 /**
  * Timestamp value object.

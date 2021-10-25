@@ -2,8 +2,8 @@
 
 namespace PageExperience\Engine\ToolStack;
 
-use PageExperience\Engine\Analysis\ToolRuleset;
 use PageExperience\Engine\Tool;
+use PageExperience\Engine\Tool\ToolRuleset;
 use PageExperience\Engine\ToolStack;
 
 /**
@@ -44,7 +44,7 @@ abstract class BaseToolStack implements ToolStack
     /**
      * Configure the tool with a given ruleset.
      *
-     * @param ToolRuleset $toolRuleset Ruleset to configure the tool with.
+     * @param \PageExperience\Engine\Tool\ToolRuleset $toolRuleset Ruleset to configure the tool with.
      * @return void
      */
     public function configureWithRuleset(ToolRuleset $toolRuleset)

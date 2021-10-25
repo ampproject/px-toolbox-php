@@ -1,9 +1,9 @@
 <?php
 
-namespace PageExperience\Engine\Analysis;
+namespace PageExperience\Engine\Tool;
 
-use AmpProject\Exception\FailedToConfigureTool;
-use AmpProject\Exception\ToolRulesetMismatch;
+use PageExperience\Engine\Exception\FailedToConfigureTool;
+use PageExperience\Engine\Exception\ToolRulesetMismatch;
 use PageExperience\Engine\Tool;
 
 /**

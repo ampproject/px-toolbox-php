@@ -2,6 +2,8 @@
 
 namespace PageExperience\Engine\Analysis;
 
+use PageExperience\Engine\Tool\ToolRuleset;
+
 /**
  * Ruleset of the analysis.
  *

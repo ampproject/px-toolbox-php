@@ -2,12 +2,12 @@
 
 namespace PageExperience\Engine\Tool\Lighthouse;
 
-use AmpProject\Exception\FailedToConfigureTool;
-use AmpProject\Exception\ToolRulesetMismatch;
 use Exception;
-use PageExperience\Engine\Analysis\ToolRuleset;
+use PageExperience\Engine\Exception\FailedToConfigureTool;
+use PageExperience\Engine\Exception\ToolRulesetMismatch;
 use PageExperience\Engine\Tool;
 use PageExperience\Engine\Tool\Lighthouse;
+use PageExperience\Engine\Tool\ToolRuleset;
 
 /**
  * Ruleset for the Lighthouse tool.

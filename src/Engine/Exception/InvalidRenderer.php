@@ -1,9 +1,8 @@
 <?php
 
-namespace AmpProject\Exception;
+namespace PageExperience\Engine\Exception;
 
 use InvalidArgumentException;
-use PageExperience\Engine\Exception\PxEngineException;
 
 /**
  * Exception thrown when an invalid renderer is being requested.

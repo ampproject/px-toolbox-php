@@ -1,8 +1,7 @@
 <?php
 
-namespace AmpProject\Exception;
+namespace PageExperience\Engine\Exception;
 
-use PageExperience\Engine\Exception\PxEngineException;
 use RuntimeException;
 
 /**

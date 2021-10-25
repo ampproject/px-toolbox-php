@@ -1,11 +1,11 @@
 <?php
 
-namespace AmpProject\Exception;
+namespace PageExperience\Engine\Exception;
 
 /**
  * Helper class used to dump value as a string.
  *
- * @package ampproject/px-toolbox-php
+ * @package ampproject/px-toolbox
  */
 final class ValueDump
 {
@@ -35,7 +35,7 @@ final class ValueDump
     public function __toString()
     {
         if (is_object($this->value)) {
-            return get_class($this->value);
+            return '(object) ' . get_class($this->value);
         }
 
         if (is_array($this->value)) {

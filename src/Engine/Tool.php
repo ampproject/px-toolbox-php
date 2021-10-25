@@ -2,7 +2,7 @@
 
 namespace PageExperience\Engine;
 
-use PageExperience\Engine\Analysis\ToolRuleset;
+use PageExperience\Engine\Tool\ToolRuleset;
 
 /**
  * Individual tool that powers the aggregated page experience analysis.
@@ -23,7 +23,7 @@ interface Tool
     /**
      * Configure the tool with a given ruleset.
      *
-     * @param ToolRuleset $toolRuleset Ruleset to configure the tool with.
+     * @param \PageExperience\Engine\Tool\ToolRuleset $toolRuleset Ruleset to configure the tool with.
      * @return void
      */
     public function configureWithRuleset(ToolRuleset $toolRuleset);

@@ -3,7 +3,6 @@
 namespace PageExperience\Engine\Tool;
 
 use PageExperience\Engine\Analysis;
-use PageExperience\Engine\Analysis\ToolRuleset;
 use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\Engine\Context;
 use Psr\Http\Message\ResponseInterface;

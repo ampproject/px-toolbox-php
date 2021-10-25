@@ -2,8 +2,8 @@
 
 namespace PageExperience\Engine\Analysis\Renderer;
 
-use AmpProject\Exception\InvalidRenderer;
 use PageExperience\Engine\Analysis\Renderer;
+use PageExperience\Engine\Exception\InvalidRenderer;
 
 /**
  * Renderer factory.

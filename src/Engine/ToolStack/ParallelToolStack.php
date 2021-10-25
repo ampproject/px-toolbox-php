@@ -2,12 +2,12 @@
 
 namespace PageExperience\Engine\ToolStack;
 
-use AmpProject\Exception\NotImplemented;
 use PageExperience\Engine\Analysis;
 use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\Engine\Context;
-use PageExperience\Engine\Tool\OptimizationTool;
+use PageExperience\Engine\Exception\NotImplemented;
 use PageExperience\Engine\Tool\AnalysisTool;
+use PageExperience\Engine\Tool\OptimizationTool;
 use Psr\Http\Message\ResponseInterface;
 use React\EventLoop\Loop;
 

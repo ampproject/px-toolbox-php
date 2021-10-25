@@ -1,10 +1,9 @@
 <?php
 
-namespace AmpProject\Exception;
+namespace PageExperience\Engine\Exception;
 
-use PageExperience\Engine\Analysis\ToolRuleset;
 use PageExperience\Engine\Tool;
-use PageExperience\Engine\Exception\PxEngineException;
+use PageExperience\Engine\Tool\ToolRuleset;
 use RuntimeException;
 
 /**
