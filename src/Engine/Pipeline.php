@@ -20,13 +20,22 @@ final class Pipeline
     private $toolStack;
 
     /**
+     * Configuration profile to use for the pipeline.
+     *
+     * @var ConfigurationProfile
+     */
+    private $profile;
+
+    /**
      * Instantiate a Pipeline object.
      *
-     * @param ToolStack $toolStack Tool stack to use for the pipeline.
+     * @param ToolStack            $toolStack Tool stack to use for the pipeline.
+     * @param ConfigurationProfile $profile   Configuration profile to use for the pipeline.
      */
-    public function __construct(ToolStack $toolStack)
+    public function __construct(ToolStack $toolStack, ConfigurationProfile $profile)
     {
         $this->toolStack = $toolStack;
+        $this->profile   = $profile;
     }
 
     /**
@@ -39,12 +48,16 @@ final class Pipeline
     {
         // TODO: Implement analysis logic.
 
-        return new Analysis\PageExperienceAnalysis(
-            Analysis\Status::SUCCESS(),
+        $analysis = new Analysis\PageExperienceAnalysis(
+            Analysis\Status::UNKNOWN(),
             Analysis\Timestamp::now(),
             Analysis\Scope::PAGE(),
             new Analysis\Ruleset('L1')
         );
+
+        $context = new Context();
+
+        return $this->toolStack->analyze($analysis, $url, $this->profile, $context);
     }
 
     /**

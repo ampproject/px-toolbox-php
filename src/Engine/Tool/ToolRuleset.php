@@ -2,6 +2,7 @@
 
 namespace PageExperience\Engine\Tool;
 
+use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\Engine\Exception\FailedToConfigureTool;
 use PageExperience\Engine\Exception\ToolRulesetMismatch;
 use PageExperience\Engine\Tool;
@@ -13,6 +14,14 @@ use PageExperience\Engine\Tool;
  */
 interface ToolRuleset
 {
+
+    /**
+     * Instantiate a new ruleset from a configuration profile.
+     *
+     * @param ConfigurationProfile $profile Configuration profile to instantiate a ruleset from.
+     * @return ToolRuleset Ruleset instance.
+     */
+    public static function fromProfile(ConfigurationProfile $profile);
 
     /**
      * Get the name of the tool ruleset.

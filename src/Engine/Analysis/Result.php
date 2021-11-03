@@ -15,14 +15,14 @@ abstract class Result
      *
      * @var array<string>
      */
-    private $tags = [];
+    protected $tags = [];
 
     /**
      * Nested array of results to provide further details.
      *
      * @var array<Result>
      */
-    private $details = [];
+    protected $details = [];
 
     /**
      * Get the tags associated with this result.
@@ -35,6 +35,28 @@ abstract class Result
     }
 
     /**
+     * Add tag to the result.
+     *
+     * @param string $tag Tag to add.
+     * @return void
+     */
+    public function addTag($tag)
+    {
+        $this->tags[] = $tag;
+    }
+
+    /**
+     * Check whether the result has a given tag.
+     *
+     * @param string $tag Tag to check for.
+     * @return bool Whether the result has the given tag.
+     */
+    public function hasTag($tag)
+    {
+        return in_array($tag, $this->tags, true);
+    }
+
+    /**
      * Get the details for this result.
      *
      * @return array<Result>
@@ -42,6 +64,17 @@ abstract class Result
     public function getDetails()
     {
         return $this->details;
+    }
+
+    /**
+     * Add a detail to the result.
+     *
+     * @param Result $detail Detail to add.
+     * @return void
+     */
+    public function addDetail(Result $detail)
+    {
+        $this->details[] = $detail;
     }
 
     /**

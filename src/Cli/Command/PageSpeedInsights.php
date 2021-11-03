@@ -102,7 +102,7 @@ final class PageSpeedInsights extends Command
         $results = $psi->audit($url, $strategy, $referrer);
 
         if ($json) {
-            echo json_encode($results);
+            echo json_encode($results) . PHP_EOL;
             return;
         }
 

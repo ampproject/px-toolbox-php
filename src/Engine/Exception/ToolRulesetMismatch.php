@@ -30,4 +30,23 @@ final class ToolRulesetMismatch extends RuntimeException implements PxEngineExce
 
         return new self($message);
     }
+
+    /**
+     * Instantiate a ToolRulesetMismatch exception for a ruleset that does not implement the right base class.
+     *
+     * @param Tool                      $tool          Tool that could not be configured.
+     * @param ToolRuleset               $toolRuleset   Ruleset that did not match the tool.
+     * @param class-string<ToolRuleset> $expectedClass Expected FQCN for the matching ruleset.
+     * @return self
+     */
+    public static function forToolRulesetClassMismatch(Tool $tool, ToolRuleset $toolRuleset, $expectedClass)
+    {
+        $toolName    = $tool->getName();
+        $actualClass = get_class($toolRuleset);
+
+        $message = "Could not configure tool '{$toolName}' with ruleset of wrong type.";
+        $message .= " Expected object of type '{$expectedClass}', but got '{$actualClass}'.";
+
+        return new self($message);
+    }
 }

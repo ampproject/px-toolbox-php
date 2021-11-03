@@ -89,7 +89,7 @@ final class Engine
     {
         $toolStack = $this->toolStackFactory->createForAnalysis($profile);
 
-        return new Pipeline($toolStack);
+        return new Pipeline($toolStack, $profile);
     }
 
     /**
@@ -102,6 +102,6 @@ final class Engine
     {
         $toolStack = $this->toolStackFactory->createForOptimization($profile);
 
-        return new Pipeline($toolStack);
+        return new Pipeline($toolStack, $profile);
     }
 }

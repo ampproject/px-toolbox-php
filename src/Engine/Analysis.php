@@ -2,6 +2,7 @@
 
 namespace PageExperience\Engine;
 
+use JsonSerializable;
 use PageExperience\Engine\Analysis\Result;
 use PageExperience\Engine\Analysis\Ruleset;
 use PageExperience\Engine\Analysis\Scope;
@@ -15,8 +16,16 @@ use PageExperience\Engine\Analysis\Timestamp;
  *
  * @package ampproject/px-toolbox
  */
-interface Analysis
+interface Analysis extends JsonSerializable
 {
+
+    /**
+     * Add an individual result to the analysis.
+     *
+     * @param Result $result Individual result to add to the analysis.
+     * @return void
+     */
+    public function addResult(Result $result);
 
     /**
      * Get the status of the analysis.

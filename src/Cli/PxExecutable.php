@@ -22,6 +22,7 @@ final class PxExecutable extends Executable
      * @var string[]
      */
     const COMMAND_CLASSES = [
+        PxCommand\Analyze::class,
         PxCommand\PageSpeedInsights::class,
     ];
 

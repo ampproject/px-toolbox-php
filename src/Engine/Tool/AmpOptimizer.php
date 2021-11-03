@@ -5,6 +5,7 @@ namespace PageExperience\Engine\Tool;
 use PageExperience\Engine\Analysis;
 use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\Engine\Context;
+use PageExperience\Engine\Tool\AmpOptimizer\Ruleset;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -12,7 +13,7 @@ use Psr\Http\Message\ResponseInterface;
  *
  * @package ampproject/px-toolbox
  */
-final class AmpOptimizer implements OptimizationTool
+final class AmpOptimizer implements OptimizationTool, Configurable
 {
 
     /**
@@ -37,6 +38,16 @@ final class AmpOptimizer implements OptimizationTool
     public function getName()
     {
         return self::NAME;
+    }
+
+    /**
+     * Get the FQCN of the tool's ruleset object.
+     *
+     * @return class-string<ToolRuleset> FQCN of the tool's ruleset object.
+     */
+    public function getRulesetFqcn()
+    {
+        return Ruleset::class;
     }
 
     /**

@@ -130,4 +130,20 @@ final class PageExperienceAnalysis implements Analysis
     {
         return $this->results;
     }
+
+    /**
+     * Serialize into JSON.
+     *
+     * @return mixed Data to be serialized into JSON.
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'status'    => $this->getStatus(),
+            'timestamp' => $this->getTimestamp(),
+            'scope'     => $this->getScope(),
+            'ruleset'   => $this->getRuleset(),
+            'results'   => $this->getResults(),
+        ];
+    }
 }

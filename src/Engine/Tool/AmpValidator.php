@@ -5,13 +5,14 @@ namespace PageExperience\Engine\Tool;
 use PageExperience\Engine\Analysis;
 use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\Engine\Context;
+use PageExperience\Engine\Tool\AmpValidator\Ruleset;
 
 /**
  * AMP Validator abstraction as a page experience tool.
  *
  * @package ampproject/px-toolbox
  */
-final class AmpValidator implements AnalysisTool
+final class AmpValidator implements AnalysisTool, Configurable
 {
 
     /**
@@ -36,6 +37,16 @@ final class AmpValidator implements AnalysisTool
     public function getName()
     {
         return self::NAME;
+    }
+
+    /**
+     * Get the FQCN of the tool's ruleset object.
+     *
+     * @return class-string<ToolRuleset> FQCN of the tool's ruleset object.
+     */
+    public function getRulesetFqcn()
+    {
+        return Ruleset::class;
     }
 
     /**

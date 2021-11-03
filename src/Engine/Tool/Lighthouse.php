@@ -2,16 +2,20 @@
 
 namespace PageExperience\Engine\Tool;
 
+use AmpProject\RemoteGetRequest;
 use PageExperience\Engine\Analysis;
 use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\Engine\Context;
+use PageExperience\Engine\Exception\ToolRulesetMismatch;
+use PageExperience\Engine\Tool\Lighthouse\Ruleset;
+use PageExperience\PageSpeed\PageSpeedInsightsApi;
 
 /**
  * Lighthouse abstraction as a page experience tool.
  *
  * @package ampproject/px-toolbox
  */
-final class Lighthouse implements AnalysisTool
+final class Lighthouse implements AnalysisTool, Configurable
 {
 
     /**
@@ -22,11 +26,35 @@ final class Lighthouse implements AnalysisTool
     const NAME = 'lighthouse';
 
     /**
+     * Context key under which to store the lighthouse audit in the context.
+     *
+     * @var string
+     */
+    const LIGHTHOUSE_AUDIT_CONTEXT_KEY = 'lighthouse_audit';
+
+    /**
+     * Remote request handler instance to use.
+     *
+     * @var RemoteGetRequest
+     */
+    private $remoteRequest;
+
+    /**
      * Ruleset the tool is to be configured with.
      *
-     * @var ToolRuleset
+     * @var Ruleset
      */
     private $toolRuleset;
+
+    /**
+     * Instantiate a Lighthouse tool instance.
+     *
+     * @param RemoteGetRequest $remoteRequest Remote request handler instance to use.
+     */
+    public function __construct(RemoteGetRequest $remoteRequest)
+    {
+        $this->remoteRequest = $remoteRequest;
+    }
 
     /**
      * Get the name of the tool.
@@ -39,13 +67,28 @@ final class Lighthouse implements AnalysisTool
     }
 
     /**
+     * Get the FQCN of the tool's ruleset object.
+     *
+     * @return class-string<ToolRuleset> FQCN of the tool's ruleset object.
+     */
+    public function getRulesetFqcn()
+    {
+        return Ruleset::class;
+    }
+
+    /**
      * Configure the tool with a given ruleset.
      *
      * @param ToolRuleset $toolRuleset Ruleset to configure the tool with.
      * @return void
+     * @throws ToolRulesetMismatch If the FQCN of the ruleset does not match.
      */
     public function configureWithRuleset(ToolRuleset $toolRuleset)
     {
+        if (! $toolRuleset instanceof Ruleset) {
+            throw ToolRulesetMismatch::forToolRulesetClassMismatch($this, $toolRuleset, Ruleset::class);
+        }
+
         $this->toolRuleset = $toolRuleset;
     }
 
@@ -60,7 +103,24 @@ final class Lighthouse implements AnalysisTool
      */
     public function analyze(Analysis $analysis, $url, ConfigurationProfile $profile, Context $context)
     {
-        // TODO: Implement analyze() method.
+        $psiApi = new PageSpeedInsightsApi($this->toolRuleset->getPsiApiKey(), $this->remoteRequest);
+
+        $psiAudit = $psiApi->audit(
+            $url,
+            $this->toolRuleset->getStrategy()->getValue(),
+            $this->toolRuleset->getReferrer()
+        );
+
+        $lighthouseAudit = $psiAudit['lighthouseResult'];
+
+        $context->add(self::LIGHTHOUSE_AUDIT_CONTEXT_KEY, $lighthouseAudit);
+
+        foreach ($lighthouseAudit['audits'] as $issue) {
+            $analysis->addResult(new Analysis\Issue($issue['id'], $issue['title'], $issue['description']));
+        }
+        var_dump($analysis);
+
+        // TODO: Parse audit JSON into Analysis object tree.
 
         return $analysis;
     }

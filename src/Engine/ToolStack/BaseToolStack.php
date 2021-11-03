@@ -40,17 +40,4 @@ abstract class BaseToolStack implements ToolStack
     {
         return '[toolstack]';
     }
-
-    /**
-     * Configure the tool with a given ruleset.
-     *
-     * @param \PageExperience\Engine\Tool\ToolRuleset $toolRuleset Ruleset to configure the tool with.
-     * @return void
-     */
-    public function configureWithRuleset(ToolRuleset $toolRuleset)
-    {
-        foreach ($this->tools as $tool) {
-            $tool->configureWithRuleset($toolRuleset);
-        }
-    }
 }
