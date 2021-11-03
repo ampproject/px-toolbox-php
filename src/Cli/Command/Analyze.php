@@ -10,6 +10,7 @@ use PageExperience\Engine;
 use PageExperience\Engine\Analysis;
 use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\PageSpeed\PageSpeedInsightsApi;
+use PageExperience\Tests\ConfiguredStubbedRemoteGetRequest;
 
 /**
  * Run a Page Experience Engine analysis.
@@ -74,7 +75,7 @@ final class Analyze extends Command
         list($url) = $options->getArguments();
         $json      = (bool) $options->getOption('json');
 
-        $engine  = new Engine();
+        $engine  = new Engine(ConfiguredStubbedRemoteGetRequest::create());
         $profile = new ConfigurationProfile();
 
         $analysis = $engine->analyze($url, $profile);

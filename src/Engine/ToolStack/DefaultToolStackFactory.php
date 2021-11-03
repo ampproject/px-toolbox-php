@@ -41,7 +41,7 @@ final class DefaultToolStackFactory implements ToolStackFactory
      * Instantiate a default tool stack factory object.
      *
      * @param ToolStackConfiguration $toolStackConfiguration Tool stack configuration to use.
-     * @param RemoteGetRequest|null  $remoteRequest          Remote request handler instance to use.
+     * @param RemoteGetRequest|null  $remoteRequest          Optional. Remote request handler instance to use.
      */
     public function __construct(ToolStackConfiguration $toolStackConfiguration, RemoteGetRequest $remoteRequest = null)
     {
@@ -84,7 +84,7 @@ final class DefaultToolStackFactory implements ToolStackFactory
 
         $tools = [];
         foreach ($toolClassNames as $toolClassName => $dependencies) {
-            if (is_a($toolClassName, $toolType, true)) {
+            if (is_subclass_of($toolClassName, $toolType, true)) {
                 $tool = $this->instantiateTool($toolClassName);
 
                 if (! $profile->usesTool($tool->getName())) {
@@ -116,7 +116,7 @@ final class DefaultToolStackFactory implements ToolStackFactory
      */
     private function instantiateTool($toolClassName)
     {
-        if (! is_a($toolClassName, Tool::class)) {
+        if (! is_subclass_of($toolClassName, Tool::class)) {
             throw InvalidTool::forBadFqcn($toolClassName);
         }
 

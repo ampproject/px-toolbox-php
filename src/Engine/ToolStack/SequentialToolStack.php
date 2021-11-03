@@ -33,7 +33,7 @@ final class SequentialToolStack extends BaseToolStack
                 continue;
             }
 
-            $tool->analyze($analysis, $url, $profile, $context);
+            $analysis = $tool->analyze($analysis, $url, $profile, $context);
         }
 
         return $analysis;

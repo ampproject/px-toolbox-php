@@ -2,12 +2,14 @@
 
 namespace PageExperience\Engine\Analysis;
 
+use JsonSerializable;
+
 /**
  * Individual result entry of an analysis.
  *
  * @package ampproject/px-toolbox
  */
-abstract class Result
+abstract class Result implements JsonSerializable
 {
 
     /**

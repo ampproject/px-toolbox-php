@@ -15,17 +15,17 @@ final class ToolStackConfiguration
     /**
      * Get the registered tools and their inter-dependencies.
      *
-     * @return array<array<class-string<Tool>>> Associative array of tools. Key is the tool name, value is an array of
-     *                                          dependencies.
+     * @return array<class-string<Tool>, array<class-string<Tool>>> Associative array of tools. Key is the tool name,
+     *                                                              value is an array of dependencies.
      */
     public function getTools()
     {
         // TODO: Use dynamic configuration data.
 
         return [
-            Tool\AmpOptimizer::NAME => [],
-            Tool\AmpValidator::NAME => [],
-            Tool\Lighthouse::NAME   => [],
+            Tool\AmpOptimizer::class => [],
+            Tool\AmpValidator::class => [],
+            Tool\Lighthouse::class   => [],
         ];
     }
 }

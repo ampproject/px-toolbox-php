@@ -74,4 +74,18 @@ class Issue extends Result implements Identifiable
     {
         return $this->description;
     }
+
+    /**
+     * Specify data which should be serialized to JSON.
+     *
+     * @return mixed Data which can be serialized by json_encode, which is a value of any type other than a resource.
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'id'          => $this->getId(),
+            'label'       => $this->getLabel(),
+            'description' => $this->getDescription(),
+        ];
+    }
 }

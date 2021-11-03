@@ -118,7 +118,6 @@ final class Lighthouse implements AnalysisTool, Configurable
         foreach ($lighthouseAudit['audits'] as $issue) {
             $analysis->addResult(new Analysis\Issue($issue['id'], $issue['title'], $issue['description']));
         }
-        var_dump($analysis);
 
         // TODO: Parse audit JSON into Analysis object tree.
 

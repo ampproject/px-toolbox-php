@@ -139,10 +139,10 @@ final class PageExperienceAnalysis implements Analysis
     public function jsonSerialize()
     {
         return [
-            'status'    => $this->getStatus(),
-            'timestamp' => $this->getTimestamp(),
-            'scope'     => $this->getScope(),
-            'ruleset'   => $this->getRuleset(),
+            'status'    => (string) $this->getStatus()->getKey(),
+            'timestamp' => (string) $this->getTimestamp(),
+            'scope'     => (string) $this->getScope()->getKey(),
+            'ruleset'   => (string) $this->getRuleset()->getName(),
             'results'   => $this->getResults(),
         ];
     }

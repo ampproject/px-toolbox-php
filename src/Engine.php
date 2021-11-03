@@ -2,6 +2,7 @@
 
 namespace PageExperience;
 
+use AmpProject\RemoteGetRequest;
 use PageExperience\Engine\Analysis;
 use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\Engine\Pipeline;
@@ -28,13 +29,14 @@ final class Engine
     /**
      * Instantiate the Page Experience engine.
      *
+     * @param RemoteGetRequest|null $remoteRequest    Optional. Remote request handler instance to use.
      * @param ToolStackFactory|null $toolStackFactory Optional. Tool stack factory instance to use.
      */
-    public function __construct(ToolStackFactory $toolStackFactory = null)
+    public function __construct(RemoteGetRequest $remoteRequest = null, ToolStackFactory $toolStackFactory = null)
     {
         $this->toolStackFactory = $toolStackFactory instanceof ToolStackFactory
             ? $toolStackFactory
-            : new DefaultToolStackFactory(new ToolStackConfiguration());
+            : new DefaultToolStackFactory(new ToolStackConfiguration(), $remoteRequest);
     }
 
     /**
