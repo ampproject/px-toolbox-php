@@ -50,23 +50,23 @@ final class PageExperienceAnalysis implements Analysis
     /**
      * Instantiate a PageExperienceAnalysis object.
      *
-     * @param Status        $status    Status of the analysis.
-     * @param Timestamp     $timestamp Timestamp of the analysis run.
-     * @param Scope         $scope     Scope of the analysis run.
-     * @param Ruleset       $ruleset   Ruleset used for the analysis.
-     * @param array<Result> $results   Results produced by the analysis.
+     * @param Status        $status    Optional. Status of the analysis.
+     * @param Timestamp     $timestamp Optional. Timestamp of the analysis run.
+     * @param Scope         $scope     Optional. Scope of the analysis run.
+     * @param Ruleset       $ruleset   Optional. Ruleset used for the analysis.
+     * @param array<Result> $results   Optional. Results produced by the analysis.
      */
     public function __construct(
-        Status $status,
-        Timestamp $timestamp,
-        Scope $scope,
-        Ruleset $ruleset,
+        Status $status = null,
+        Timestamp $timestamp = null,
+        Scope $scope = null,
+        Ruleset $ruleset = null,
         $results = []
     ) {
-        $this->status = $status;
-        $this->timestamp = $timestamp;
-        $this->scope = $scope;
-        $this->ruleset = $ruleset;
+        $this->status = $status ?: Status::UNKNOWN();
+        $this->timestamp = $timestamp ?: Timestamp::now();
+        $this->scope = $scope ?: Scope::PAGE();
+        $this->ruleset = $ruleset ?: new Ruleset('L1');
         array_map([$this, 'addResult'], $results);
     }
 

@@ -44,6 +44,7 @@ final class ToolStackConfiguration
      *
      * @param class-string<Tool>        $toolFqcn         Fully-qualified class name of the tool implementation.
      * @param array<class-string<Tool>> $toolDependencies Array of fully-qualified class names of the tool dependencies.
+     * @return void
      */
     public function registerTool($toolFqcn, $toolDependencies)
     {
