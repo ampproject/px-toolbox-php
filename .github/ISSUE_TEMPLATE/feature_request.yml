@@ -1,0 +1,14 @@
+name: ✨ Feature request
+description: Suggest an idea for this project.
+labels:
+  - Enhancement
+
+body:
+  - type: textarea
+    attributes:
+      label: Feature Description
+      description: >
+        Please describe clear and concisely which problem the feature would solve or which publisher needs
+        it would address.
+    validations:
+      required: true
