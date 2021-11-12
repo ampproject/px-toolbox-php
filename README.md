@@ -5,7 +5,7 @@
   <p align="center">
     Tooling to get the best possible page experience results out of your PHP-powered web properties.
     <br />
-    <a href="https://github.com/ampproject/px-toolbox-php/docs/README.md"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/ampproject/px-toolbox-php/tree/main/docs/README.md#readme"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="https://github.com/ampproject/px-toolbox-php/issues">Report Bug</a>
