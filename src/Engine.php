@@ -4,8 +4,9 @@ namespace PageExperience;
 
 use AmpProject\RemoteGetRequest;
 use PageExperience\Engine\Analysis;
+use PageExperience\Engine\Analysis\PageExperienceAnalysis;
 use PageExperience\Engine\ConfigurationProfile;
-use PageExperience\Engine\Pipeline;
+use PageExperience\Engine\Context;
 use PageExperience\Engine\ToolStack\DefaultToolStackFactory;
 use PageExperience\Engine\ToolStack\ToolStackConfiguration;
 use PageExperience\Engine\ToolStack\ToolStackFactory;
@@ -48,9 +49,9 @@ final class Engine
      */
     public function analyze($url, ConfigurationProfile $profile)
     {
-        $pipeline = $this->assemblePipelineForAnalysis($profile);
+        $toolStack = $this->toolStackFactory->createForAnalysis($profile);
 
-        return $pipeline->analyze($url);
+        return $toolStack->analyze(new PageExperienceAnalysis(), $url, $profile, new Context());
     }
 
     /**
@@ -62,9 +63,9 @@ final class Engine
      */
     public function optimizeHtml($html, ConfigurationProfile $profile)
     {
-        $pipeline = $this->assemblePipelineForOptimization($profile);
+        $toolStack = $this->toolStackFactory->createForOptimization($profile);
 
-        return $pipeline->optimizeHtml($html);
+        return $toolStack->optimizeHtml(new PageExperienceAnalysis(), $html, $profile, new Context());
     }
 
     /**
@@ -76,34 +77,8 @@ final class Engine
      */
     public function optimizeResponse(ResponseInterface $response, ConfigurationProfile $profile)
     {
-        $pipeline = $this->assemblePipelineForOptimization($profile);
-
-        return $pipeline->optimizeResponse($response);
-    }
-
-    /**
-     * Assemble a page experience pipeline for analysis.
-     *
-     * @param ConfigurationProfile $profile Configuration profile to use for the analysis.
-     * @return Pipeline Analysis pipeline.
-     */
-    private function assemblePipelineForAnalysis(ConfigurationProfile $profile)
-    {
-        $toolStack = $this->toolStackFactory->createForAnalysis($profile);
-
-        return new Pipeline($toolStack, $profile);
-    }
-
-    /**
-     * Assemble a page experience pipeline for optimization.
-     *
-     * @param ConfigurationProfile $profile Configuration profile to use for the optimization.
-     * @return Pipeline Analysis pipeline.
-     */
-    private function assemblePipelineForOptimization(ConfigurationProfile $profile)
-    {
         $toolStack = $this->toolStackFactory->createForOptimization($profile);
 
-        return new Pipeline($toolStack, $profile);
+        return $toolStack->optimizeResponse(new PageExperienceAnalysis(), $response, $profile, new Context());
     }
 }

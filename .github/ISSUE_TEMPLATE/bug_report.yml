@@ -1,0 +1,61 @@
+name: 🐛 Bug report
+description: Create a report to help us improve.
+labels:
+  - Bug
+
+body:
+  - type: textarea
+    attributes:
+      label: Bug Description
+      description: Please describe clearly and concisely what the bug is.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Expected Behaviour
+      description: Please describe clearly and concisely what the expected behaviour should be.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Screenshots
+      description: >
+        Please provide detailed steps on how to reproduce the bug. Provide a URL where the issue can be seen on the
+        frontend when possible, otherwise go to “View source” in the browser and copy all to paste in a
+        [Gist](https://gist.github.com/) and share it.
+
+  - type: input
+    attributes:
+      label: PHP Version
+      description: Specify which PHP version the bug occurs on.
+      placeholder: e.g. 8.1
+    validations:
+      required: false
+
+  - type: input
+    attributes:
+      label: Library Version
+      description: Specify which `px-toolbox-php` library version the bug occurs on.
+      placeholder: e.g. 1.0.2
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: OS(s) Affected
+      description: If applicable, specify which operating system(s) are affected.
+      placeholder: e.g. Windows, Android
+
+  - type: input
+    attributes:
+      label: Browser(s) Affected
+      description: If applicable, specify which browser(s) are affected.
+      placeholder: e.g. Chrome, Firefox
+
+  - type: input
+    attributes:
+      label: Device(s) Affected
+      description: If applicable, specify which device(s) are affected.
+      placeholder: e.g. iPhone 12, Pixel 5
