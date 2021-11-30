@@ -71,6 +71,8 @@ final class AmpValidator implements AnalysisTool, Configurable
      */
     public function analyze(Analysis $analysis, $url, ConfigurationProfile $profile, Context $context)
     {
+        $this->toolRuleset->configureTool($this);
+
         // TODO: Implement analyze() method.
 
         return $analysis;

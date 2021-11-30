@@ -72,6 +72,8 @@ final class AmpOptimizer implements OptimizationTool, Configurable
      */
     public function optimizeHtml(Analysis $analysis, $html, ConfigurationProfile $profile, Context $context)
     {
+        $this->toolRuleset->configureTool($this);
+
         // TODO: Implement optimizeHtml() method.
 
         return $html;
@@ -92,6 +94,8 @@ final class AmpOptimizer implements OptimizationTool, Configurable
         ConfigurationProfile $profile,
         Context $context
     ) {
+        $this->toolRuleset->configureTool($this);
+
         // TODO: Implement optimizeResponse() method.
 
         return $response;
