@@ -15,6 +15,16 @@ use PageExperience\Engine\Exception\FailedToProcessTimestamp;
  */
 final class Timestamp
 {
+
+    /**
+     * Datetime format to use for the timestamp.
+     *
+     * This matches the DateTimeInterface::ATOM constant that was introduced with PHP 7.2.
+     *
+     * @var string
+     */
+    const DATETIME_FORMAT = 'Y-m-d\TH:i:sP';
+
     /**
      * Internal timestamp storage.
      *
@@ -51,7 +61,7 @@ final class Timestamp
      */
     public static function fromDateTime(DateTimeInterface $timestamp)
     {
-        return new self($timestamp->format(DateTimeInterface::ATOM));
+        return new self($timestamp->format(self::DATETIME_FORMAT));
     }
 
     /**
@@ -62,7 +72,7 @@ final class Timestamp
      */
     public function asDateTimeImmutable()
     {
-        $dateTime = DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, $this->timestamp);
+        $dateTime = DateTimeImmutable::createFromFormat(self::DATETIME_FORMAT, $this->timestamp);
 
         if (! $dateTime instanceof DateTimeImmutable) {
             throw FailedToProcessTimestamp::forDateTimeImmutableFailure($dateTime, $this->timestamp);
