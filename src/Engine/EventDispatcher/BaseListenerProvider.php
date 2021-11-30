@@ -15,7 +15,7 @@ class BaseListenerProvider implements ListenerProvider
     /**
      * Associative array of listeners.
      *
-     * @var array<class-string, callable>
+     * @var array<class-string, array<callable>>
      */
     private $listeners = [];
 
@@ -23,7 +23,7 @@ class BaseListenerProvider implements ListenerProvider
      * Get listeners for a specific event.
      *
      * @param Event $event An event for which to return the relevant listeners.
-     * @return iterable<callable> An iterable (array, iterator, or generator) of callables.
+     * @return array<callable> An iterable (array, iterator, or generator) of callables.
      */
     public function getListenersForEvent(Event $event)
     {
@@ -45,6 +45,10 @@ class BaseListenerProvider implements ListenerProvider
      */
     public function addListener($eventType, callable $callable)
     {
+        if (! array_key_exists($eventType, $this->listeners)) {
+            $this->listeners[$eventType] = [];
+        }
+
         $this->listeners[$eventType][] = $callable;
 
         return $this;
