@@ -37,7 +37,10 @@ final class Engine
     {
         $this->toolStackFactory = $toolStackFactory instanceof ToolStackFactory
             ? $toolStackFactory
-            : new DefaultToolStackFactory(new ToolStackConfiguration(), $remoteRequest);
+            : new DefaultToolStackFactory(
+                ToolStackConfiguration::fromJsonFile(__DIR__ . '/../default-toolstack.json'),
+                $remoteRequest
+            );
     }
 
     /**

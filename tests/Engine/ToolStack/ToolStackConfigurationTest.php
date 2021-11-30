@@ -16,6 +16,13 @@ use PageExperience\Tests\TestCase;
 final class ToolStackConfigurationTest extends TestCase
 {
 
+    /**
+     * Path to the default tool stack JSON configuration file.
+     *
+     * @var string
+     */
+    const DEFAULT_TOOLSTACK_JSON_FILEPATH = __DIR__ . '/../../../default-toolstack.json';
+
     public function testItCanBeInstantiated()
     {
         $toolStackConfiguration = new ToolStackConfiguration();
@@ -26,6 +33,16 @@ final class ToolStackConfigurationTest extends TestCase
     public function testItCanReturnToolConfiguration()
     {
         $toolStackConfiguration = new ToolStackConfiguration();
+
+        $tools = $toolStackConfiguration->getTools();
+
+        self::assertIsArray($tools);
+        self::assertCount(0, $tools);
+    }
+
+    public function testItCanReturnToolConfigurationFromJsonFile()
+    {
+        $toolStackConfiguration = ToolStackConfiguration::fromJsonFile(self::DEFAULT_TOOLSTACK_JSON_FILEPATH);
 
         $tools = $toolStackConfiguration->getTools();
 
@@ -41,7 +58,7 @@ final class ToolStackConfigurationTest extends TestCase
 
     public function testItCanRegisterNewTools()
     {
-        $toolStackConfiguration = new ToolStackConfiguration();
+        $toolStackConfiguration = ToolStackConfiguration::fromJsonFile(self::DEFAULT_TOOLSTACK_JSON_FILEPATH);
 
         $toolStackConfiguration->registerTool('DummyToolA', []);
         $toolStackConfiguration->registerTool('DummyToolB', [AmpValidator::class, 'DummyToolA']);
