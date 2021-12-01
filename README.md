@@ -40,9 +40,9 @@ The Page Experience Toolbox for PHP regroups tooling and library code that enabl
 
 Currently included in the toolbox:
 
-* **Page Experience Engine** - Higher-level library that aggregates and normalizes multiple tools to provide analysis and optimization functionality.
-* **PageSpeed Insights API** - API wrapper for PHP to run audits through the Google PageSpeed Insights API.
-* **PX CLI tool** - `px` binary to run the above tooling through the console. 
+* [**Page Experience Engine** - Higher-level library that aggregates and normalizes multiple tools to provide analysis and optimization functionality.](/docs/pxe/README.md#readme)
+* [**PageSpeed Insights API** - API wrapper for PHP to run audits through the Google PageSpeed Insights API.](/docs/psi/README.md#readme)
+* [**PX CLI tool** - `px` binary to run the above tooling through the console.](/docs/px/README.md#readme)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
