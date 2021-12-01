@@ -2,9 +2,14 @@
 
 namespace PageExperience\Engine\Tool;
 
+use AmpProject\Optimizer\DefaultConfiguration;
+use AmpProject\Optimizer\ErrorCollection;
+use AmpProject\Optimizer\TransformationEngine;
+use AmpProject\RemoteGetRequest;
 use PageExperience\Engine\Analysis;
 use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\Engine\Context;
+use PageExperience\Engine\StringStream;
 use PageExperience\Engine\Tool\AmpOptimizer\Ruleset;
 use Psr\Http\Message\ResponseInterface;
 
@@ -24,11 +29,28 @@ final class AmpOptimizer implements OptimizationTool, Configurable
     const NAME = 'amp-optimizer';
 
     /**
+     * Remote request handler instance to use.
+     *
+     * @var RemoteGetRequest
+     */
+    private $remoteRequest;
+
+    /**
      * Ruleset the tool is to be configured with.
      *
      * @var ToolRuleset
      */
     private $toolRuleset;
+
+    /**
+     * Instantiate a Lighthouse tool instance.
+     *
+     * @param RemoteGetRequest $remoteRequest Remote request handler instance to use.
+     */
+    public function __construct(RemoteGetRequest $remoteRequest)
+    {
+        $this->remoteRequest = $remoteRequest;
+    }
 
     /**
      * Get the name of the tool.
@@ -74,9 +96,18 @@ final class AmpOptimizer implements OptimizationTool, Configurable
     {
         $this->toolRuleset->configureTool($this);
 
-        // TODO: Implement optimizeHtml() method.
+        // TODO: Use the tool ruleset to adapt the configuration.
+        $configuration = new DefaultConfiguration();
 
-        return $html;
+        $errorCollection = new ErrorCollection();
+
+        $optimizer = new TransformationEngine($configuration, $this->remoteRequest);
+
+        $optimizedHtml = $optimizer->optimizeHtml($html, $errorCollection);
+
+        // TODO: Check error collection.
+
+        return $optimizedHtml;
     }
 
     /**
@@ -94,10 +125,8 @@ final class AmpOptimizer implements OptimizationTool, Configurable
         ConfigurationProfile $profile,
         Context $context
     ) {
-        $this->toolRuleset->configureTool($this);
+        $optimizedHtml = $this->optimizeHtml($analysis, (string) $response->getBody(), $profile, $context);
 
-        // TODO: Implement optimizeResponse() method.
-
-        return $response;
+        return $response->withBody(new StringStream($optimizedHtml));
     }
 }

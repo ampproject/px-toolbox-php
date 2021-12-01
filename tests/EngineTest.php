@@ -6,7 +6,9 @@ use AmpProject\RemoteGetRequest;
 use PageExperience\Engine;
 use PageExperience\Engine\Analysis;
 use PageExperience\Engine\ConfigurationProfile;
+use PageExperience\Engine\StringStream;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
 
 /**
  * Test the Engine entry point class.
@@ -54,7 +56,10 @@ final class EngineTest extends TestCase
         $engine  = new Engine();
         $profile = new ConfigurationProfile();
 
-        self::assertStringContainsString('<html>', $engine->optimizeHtml('<html></html>', $profile));
+        $optimizedHtml = $engine->optimizeHtml('<html></html>', $profile);
+
+        self::assertStringContainsString('<html', $optimizedHtml);
+        self::assertStringContainsString('transformed="self;v=1"', $optimizedHtml);
     }
 
     public function testItCanOptimizeAResponse()
@@ -62,7 +67,24 @@ final class EngineTest extends TestCase
         $engine   = new Engine();
         $profile  = new ConfigurationProfile();
         $response = $this->createMock(ResponseInterface::class);
+        $response->method('getBody')
+                 ->willReturn(new StringStream('<html></html>'));
 
-        self::assertInstanceOf(ResponseInterface::class, $engine->optimizeResponse($response, $profile));
+        $optimizedResponseCallback = function (...$arguments) {
+            $optimizedResponse = $this->createMock(ResponseInterface::class);
+            $optimizedResponse->method('getBody')
+                              ->willReturn(new StringStream($arguments[0]));
+            return $optimizedResponse;
+        };
+
+        $response->method('withBody')
+                 ->willReturnCallback($optimizedResponseCallback);
+
+        $optimizedResponse = $engine->optimizeResponse($response, $profile);
+
+        self::assertInstanceOf(ResponseInterface::class, $optimizedResponse);
+        self::assertInstanceOf(StreamInterface::class, $optimizedResponse->getBody());
+        self::assertStringContainsString('<html', (string) $optimizedResponse->getBody());
+        self::assertStringContainsString('transformed="self;v=1"', (string) $optimizedResponse->getBody());
     }
 }

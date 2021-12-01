@@ -24,10 +24,10 @@ final class ToolRulesetMismatchTest extends TestCase
 
     public function testItProducesTheExpectedMessageWithoutPreviousException()
     {
-        $exception = ToolRulesetMismatch::forToolWithToolRuleset(new AmpOptimizer(), new AmpValidator\Ruleset());
+        $exception = ToolRulesetMismatch::forToolWithToolRuleset(new AmpValidator(), new AmpOptimizer\Ruleset());
 
         self::assertEquals(
-            "Could not configure tool 'amp-optimizer' with ruleset targeted at tool 'amp-validator'.",
+            "Could not configure tool 'amp-validator' with ruleset targeted at tool 'amp-optimizer'.",
             $exception->getMessage()
         );
     }
