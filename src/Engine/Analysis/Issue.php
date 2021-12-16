@@ -32,17 +32,35 @@ class Issue extends Result implements Identifiable
     protected $description;
 
     /**
+     * Display value for the issue.
+     *
+     * @var string
+     */
+	protected $displayValue;
+
+    /**
+     * Score for the issue.
+     *
+     * @var string
+     */
+	protected $score;
+
+    /**
      * Instantiate a new Issue object.
      *
-     * @param string $id          ID of the issue.
-     * @param string $label       Label of the issue.
-     * @param string $description Description of the issue.
+     * @param string $id           ID of the issue.
+     * @param string $label        Label of the issue.
+     * @param string $description  Description of the issue.
+     * @param string $displayValue Display value for the issue.
+     * @param string $score        Score for the issue.
      */
-    public function __construct($id, $label, $description = '')
+    public function __construct($id, $label, $description = '', $displayValue, $score)
     {
-        $this->id          = $id;
-        $this->label       = $label;
-        $this->description = $description;
+        $this->id           = $id;
+        $this->label        = $label;
+        $this->description  = $description;
+        $this->displayValue = $displayValue;
+        $this->score        = $score;
     }
 
     /**
@@ -76,6 +94,26 @@ class Issue extends Result implements Identifiable
     }
 
     /**
+     * Get the display value of this result.
+     *
+     * @return string Display value for this result.
+     */
+	public function getDisplayValue()
+	{
+		return $this->displayValue;
+	}
+
+    /**
+     * Get the score of this result.
+     *
+     * @return string Score for this result.
+     */
+	public function getScore()
+	{
+		return $this->score;
+	}
+
+    /**
      * Specify data which should be serialized to JSON.
      *
      * @return mixed Data which can be serialized by json_encode, which is a value of any type other than a resource.
@@ -83,9 +121,11 @@ class Issue extends Result implements Identifiable
     public function jsonSerialize()
     {
         return [
-            'id'          => $this->getId(),
-            'label'       => $this->getLabel(),
-            'description' => $this->getDescription(),
+            'id'           => $this->getId(),
+            'label'        => $this->getLabel(),
+            'description'  => $this->getDescription(),
+            'displayValue' => $this->getDisplayValue(),
+            'score'        => $this->getScore(),
         ];
     }
 }

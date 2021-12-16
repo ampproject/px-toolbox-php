@@ -116,7 +116,13 @@ final class Lighthouse implements AnalysisTool, Configurable
         $context->add(self::LIGHTHOUSE_AUDIT_CONTEXT_KEY, $lighthouseAudit);
 
         foreach ($lighthouseAudit['audits'] as $issue) {
-            $analysis->addResult(new Analysis\Issue($issue['id'], $issue['title'], $issue['description']));
+            $analysis->addResult($issue['id'], new Analysis\Issue(
+				$issue['id'],
+				$issue['title'],
+				$issue['description'],
+				isset( $issue['displayValue'] ) ? $issue['displayValue'] : '',
+				isset( $issue['score'] ) ? $issue['score'] : 0
+			));
         }
 
         // TODO: Parse audit JSON into Analysis object tree.

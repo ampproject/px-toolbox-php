@@ -73,12 +73,13 @@ final class PageExperienceAnalysis implements Analysis
     /**
      * Add an individual result to the analysis.
      *
+     * @param string $id     ID of the result.
      * @param Result $result Individual result to add to the analysis.
      * @return void
      */
-    public function addResult(Result $result)
+    public function addResult($id, Result $result)
     {
-        $this->results[] = $result;
+        $this->results[ $id ] = $result;
     }
 
     /**
