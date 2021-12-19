@@ -84,7 +84,14 @@ final class Analyze extends Command
             $renderer = new Analysis\Renderer\JsonRenderer();
             echo $renderer->renderToString($analysis) . PHP_EOL;
         } else {
-            echo 'Non-JSON renderer not yet implemented, please use --json flag.' . PHP_EOL;
+            // TODO: This is only a summary for now.
+            /** @var array<Analysis\Result\ScoredMetric> $metrics */
+            $metrics = $analysis->getResultsOfType(Analysis\Result\ScoredMetric::class);
+            foreach ($metrics as $metric) {
+                $this->cli->info(
+                    sprintf('%s: %0.2f (%s)', $metric->getLabel(), $metric->getScore(), $metric->getDisplayValue())
+                );
+            }
         }
 
         if ($analysis->getStatus()->equals(Analysis\Status::ERROR())) {

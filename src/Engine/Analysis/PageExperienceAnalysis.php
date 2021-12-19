@@ -132,6 +132,25 @@ final class PageExperienceAnalysis implements Analysis
     }
 
     /**
+     * Get the results of the analysis run.
+     *
+     * @param class-string<Result> $type Type of result to fetch.
+     * @return array<Result> Filtered results of the analysis run.
+     */
+    public function getResultsOfType($type)
+    {
+        $filteredResults = [];
+
+        foreach ($this->results as $result) {
+            if ($result instanceof $type) {
+                $filteredResults[] = $result;
+            }
+        }
+
+        return $filteredResults;
+    }
+
+    /**
      * Serialize into JSON.
      *
      * @return mixed Data to be serialized into JSON.

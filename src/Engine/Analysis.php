@@ -61,4 +61,12 @@ interface Analysis extends JsonSerializable
      * @return array<Result> Results of the analysis run.
      */
     public function getResults();
+
+    /**
+     * Get the results of the analysis run.
+     *
+     * @param class-string<Result> $type Type of result to fetch.
+     * @return array<Result> Filtered results of the analysis run.
+     */
+    public function getResultsOfType($type);
 }
