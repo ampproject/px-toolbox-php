@@ -3,7 +3,7 @@
 namespace PageExperience\Engine\Analysis\Result;
 
 /**
- * Result entry of an analysis of type "metric".
+ * Result entry of an analysis of type "scored metric".
  *
  * @package ampproject/px-toolbox
  */
@@ -28,13 +28,28 @@ class ScoredMetric extends Metric
     /**
      * Instantiate a new Metric object.
      *
-     * @param string $id          ID of the metric.
-     * @param string $label       Label of the metric.
-     * @param string $description Description of the metric.
+     * @param string     $id             ID of the metric.
+     * @param string     $label          Label of the metric.
+     * @param string     $description    Description of the metric.
+     * @param int|float  $value          Value of the metric.
+     * @param string     $unit           Unit of the metric.
+     * @param string     $displayValue   Display value of the metric.
+     * @param float      $score          Score of the metric.
+     * @param string     $scoreType      Type of score of the metric.
+     * @param array|null $additionalData Optional. Additional data of the metric. Null if none.
      */
-    public function __construct($id, $label, $description, $value, $unit, $displayValue, $score, $scoreType)
-    {
-        parent::__construct($id, $label, $description, $value, $unit, $displayValue);
+    public function __construct(
+        $id,
+        $label,
+        $description,
+        $value,
+        $unit,
+        $displayValue,
+        $score,
+        $scoreType,
+        $additionalData = null
+    ) {
+        parent::__construct($id, $label, $description, $value, $unit, $displayValue, $additionalData);
 
         $this->score     = $score;
         $this->scoreType = $scoreType;
@@ -54,7 +69,7 @@ class ScoredMetric extends Metric
     /**
      * Get the score type of the metric.
      *
-     * @return float Score type of the metric.
+     * @return string Score type of the metric.
      */
     public function getScoreType()
     {

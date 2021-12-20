@@ -4,6 +4,7 @@ namespace PageExperience\Engine\Tool;
 
 use AmpProject\RemoteGetRequest;
 use PageExperience\Engine\Analysis;
+use PageExperience\Engine\Analysis\Result\Issue;
 use PageExperience\Engine\Analysis\Result\ScoredMetric;
 use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\Engine\Context;
@@ -137,6 +138,12 @@ final class Lighthouse implements AnalysisTool, Configurable
         return $analysis;
     }
 
+    /**
+     * Process an individual result entry.
+     *
+     * @param Analysis $analysis Analysis to add the processed result to.
+     * @param array    $result   Array of result to process.
+     */
     private function processResult(Analysis $analysis, $result)
     {
         if (! array_key_exists('id', $result)) {
@@ -162,6 +169,7 @@ final class Lighthouse implements AnalysisTool, Configurable
                 $analysis->addResult($parsedResult);
                 break;
 
+            // Issues.
             case 'bootup-time':
             case 'critical-request-chains':
             case 'diagnostics':
@@ -211,6 +219,9 @@ final class Lighthouse implements AnalysisTool, Configurable
             case 'uses-responsive-images':
             case 'uses-text-compression':
             default:
+                $parsedResult = $this->parseIssue($id, $result);
+                $analysis->addResult($parsedResult);
+                break;
         }
     }
 
@@ -231,11 +242,54 @@ final class Lighthouse implements AnalysisTool, Configurable
             }
 
             $arguments[] = $result[$key];
+            unset($result[$key]);
         }
 
         $label       = array_key_exists('title', $result) ? $result['title'] : $id;
+        unset($result['title']);
+
         $description = array_key_exists('description', $result) ? $result['description'] : '';
+        unset($result['description']);
+
+        $details = array_key_exists('details', $result) ? $result['details'] : null;
+        if (! empty($details)) {
+            $arguments[] = $details;
+        }
+        unset($result['details']);
+
+        // TODO: Detecting data that was not processed.
+        if (! empty($result)) {
+            var_dump($id);
+            var_dump($result);
+        }
 
         return new ScoredMetric($id, $label, $description, ...$arguments);
+    }
+
+
+    /**
+     * Parse result data as an issue.
+     *
+     * @param string $id     ID of the result.
+     * @param array  $result Associative array of result data.
+     * @return ScoredMetric Scored metric result object.
+     */
+    private function parseIssue($id, $result)
+    {
+        $arguments = [];
+
+        $label       = array_key_exists('title', $result) ? $result['title'] : $id;
+        unset($result['title']);
+
+        $description = array_key_exists('description', $result) ? $result['description'] : '';
+        unset($result['description']);
+
+        // TODO: Detecting data that was not processed.
+        if (! empty($result)) {
+            var_dump($id);
+            var_dump($result);
+        }
+
+        return new Issue($id, $label, $description, ...$arguments);
     }
 }

@@ -15,19 +15,22 @@ class Issue extends Result implements Identifiable
     use HasDescription;
     use HasIdentity;
     use HasLabel;
+    use HasAdditionalData;
 
     /**
      * Instantiate a new Issue object.
      *
-     * @param string $id          ID of the issue.
-     * @param string $label       Label of the issue.
-     * @param string $description Description of the issue.
+     * @param string     $id             ID of the issue.
+     * @param string     $label          Label of the issue.
+     * @param string     $description    Description of the issue.
+     * @param array|null $additionalData Optional. Additional data of the issue. Null if none.
      */
-    public function __construct($id, $label, $description = '')
+    public function __construct($id, $label, $description = '', $additionalData = null)
     {
         $this->processId($id);
         $this->processLabel($label);
         $this->processDescription($description);
+        $this->processAdditionalData($additionalData);
     }
 
     /**
@@ -37,10 +40,16 @@ class Issue extends Result implements Identifiable
      */
     public function jsonSerialize()
     {
-        return [
+        $data = [
             'id'          => $this->getId(),
             'label'       => $this->getLabel(),
             'description' => $this->getDescription(),
         ];
+
+        if ($this->hasAdditionalData()) {
+            $data['additionalData'] = $this->getAdditionalData();
+        }
+
+        return $data;
     }
 }
