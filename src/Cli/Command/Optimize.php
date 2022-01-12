@@ -34,6 +34,7 @@ final class Optimize extends Command
      * Register the command.
      *
      * @param Options $options Options instance to register the command with.
+     * @return void
      */
     public function register(Options $options)
     {
@@ -51,6 +52,7 @@ final class Optimize extends Command
      * Process the command.
      *
      * @param Options $options Options instance to process the command with.
+     * @return void
      *
      * @throws InvalidArgument If the provided file is not readable.
      */
@@ -72,7 +74,12 @@ final class Optimize extends Command
             $file = 'php://stdin';
         }
 
-        $html           = file_get_contents($file);
+        $html = file_get_contents($file);
+
+        if ($html === false) {
+            return;
+        }
+
         $engine         = new Engine(ConfiguredStubbedRemoteGetRequest::create());
         $profile        = new ConfigurationProfile();
         $optimized_html = $engine->optimizeHtml($html, $profile);
