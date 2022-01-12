@@ -2,11 +2,12 @@
 
 namespace PageExperience\Cli\Command;
 
+use PageExperience\Engine;
 use AmpProject\Cli\Command;
 use AmpProject\Cli\Options;
-use AmpProject\Optimizer\ErrorCollection;
 use AmpProject\Exception\Cli\InvalidArgument;
-use AmpProject\Optimizer\TransformationEngine;
+use PageExperience\Engine\ConfigurationProfile;
+use PageExperience\Tests\ConfiguredStubbedRemoteGetRequest;
 
 /**
  * Commands that deal with the AMP optimizer.
@@ -71,16 +72,13 @@ final class Optimize extends Command
             $file = 'php://stdin';
         }
 
-        $html                  = file_get_contents($file);
-        $errors                = new ErrorCollection();
-        $transformation_engine = new TransformationEngine();
-        $optimized_html        = $transformation_engine->optimizeHtml($html, $errors);
+        $html           = file_get_contents($file);
+        $engine         = new Engine(ConfiguredStubbedRemoteGetRequest::create());
+        $profile        = new ConfigurationProfile();
+        $optimized_html = $engine->optimizeHtml($html, $profile);
 
         fwrite(STDOUT, $optimized_html);
 
-        /** @var Error $error */
-        foreach ($errors as $error) {
-            $this->cli->warning("[{$error->getCode()}] {$error->getMessage()}");
-        }
+        // TODO: Display errors collected by the ErrorCollection in AmpOptimizer::optimizeHtml.
     }
 }
