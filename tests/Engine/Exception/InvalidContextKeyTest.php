@@ -19,7 +19,7 @@ final class InvalidContextKeyTest extends TestCase
         self::assertInstanceOf(InvalidContextKey::class, $exception);
     }
 
-    public function testItProducesTheExpectedMessageWithoutPreviousException()
+    public function testItProducesTheExpectedMessage()
     {
         $exception = InvalidContextKey::forContextKey('TEST_CONTEXT_KEY');
 
