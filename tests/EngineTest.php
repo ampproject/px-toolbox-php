@@ -73,7 +73,7 @@ final class EngineTest extends TestCase
         $optimizedResponseCallback = function (...$arguments) {
             $optimizedResponse = $this->createMock(ResponseInterface::class);
             $optimizedResponse->method('getBody')
-                              ->willReturn(new StringStream($arguments[0]));
+                              ->willReturn(new StringStream((string) $arguments[0]));
             return $optimizedResponse;
         };
 
