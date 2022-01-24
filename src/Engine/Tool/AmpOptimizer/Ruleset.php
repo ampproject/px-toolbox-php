@@ -17,7 +17,6 @@ use PageExperience\Engine\Tool\ToolRuleset;
  */
 final class Ruleset implements ToolRuleset
 {
-
     /**
      * Instantiate a new ruleset from a configuration profile.
      *

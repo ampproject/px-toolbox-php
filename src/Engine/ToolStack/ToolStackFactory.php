@@ -12,7 +12,6 @@ use PageExperience\Engine\ToolStack;
  */
 interface ToolStackFactory
 {
-
     /**
      * Create a tool stack instance for analysis.
      *

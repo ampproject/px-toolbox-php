@@ -11,7 +11,6 @@ use PageExperience\Engine\Tool\ToolRuleset;
  */
 final class Ruleset
 {
-
     /**
      * Name of the ruleset.
      *

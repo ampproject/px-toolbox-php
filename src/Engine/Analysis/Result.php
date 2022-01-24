@@ -11,7 +11,6 @@ use JsonSerializable;
  */
 abstract class Result implements JsonSerializable
 {
-
     /**
      * Tags associated with this result.
      *

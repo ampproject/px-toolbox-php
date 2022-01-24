@@ -11,7 +11,6 @@ use InvalidArgumentException;
  */
 final class InvalidTool extends InvalidArgumentException implements PxEngineException
 {
-
     /**
      * Instantiate an InvalidTool exception for a FQCN that does not implement the Tool interface.
      *

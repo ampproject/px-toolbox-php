@@ -12,7 +12,6 @@ use PageExperience\Tests\TestCase;
  */
 final class ContextTest extends TestCase
 {
-
     public function testItCanBeInstantiated()
     {
         $context = new Context();

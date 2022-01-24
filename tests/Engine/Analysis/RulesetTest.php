@@ -12,7 +12,6 @@ use PageExperience\Tests\TestCase;
  */
 final class RulesetTest extends TestCase
 {
-
     public function testItCanBeInstantiated()
     {
         $ruleset = new Ruleset('dummy');

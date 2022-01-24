@@ -12,7 +12,6 @@ use RuntimeException;
  */
 final class FailedToConfigureTool extends RuntimeException implements PxEngineException
 {
-
     /**
      * Instantiate a FailedToConfigureTool exception for a tool that could not be configured.
      *

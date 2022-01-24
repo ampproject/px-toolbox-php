@@ -19,7 +19,6 @@ use PageExperience\Tests\TestCase;
  */
 final class PageExperienceAnalysisTest extends TestCase
 {
-
     public function testItCanBeInstantiated()
     {
         $analysis = new PageExperienceAnalysis(Status::ERROR(), Timestamp::now(), Scope::SITE(), new Ruleset('dummy'));

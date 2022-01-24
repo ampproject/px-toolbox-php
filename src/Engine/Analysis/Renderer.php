@@ -9,7 +9,6 @@ namespace PageExperience\Engine\Analysis;
  */
 interface Renderer
 {
-
     /**
      * HTML report renderer.
      *

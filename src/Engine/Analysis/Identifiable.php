@@ -9,7 +9,6 @@ namespace PageExperience\Engine\Analysis;
  */
 interface Identifiable
 {
-
     /**
      * Get the ID of the result.
      *

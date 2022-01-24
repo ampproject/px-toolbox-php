@@ -52,7 +52,8 @@ final class BaseEventDispatcherTest extends TestCase
         $eventDispatcher = new BaseEventDispatcher($listenProvider);
 
         $event->method('isPropagationStopped')->willReturn(false);
-        $listenProvider->method('getListenersForEvent')->willReturn([function () {}]);
+        $listenProvider->method('getListenersForEvent')->willReturn([function () {
+        }]);
 
         $event = $eventDispatcher->dispatch($event);
 
@@ -68,7 +69,8 @@ final class BaseEventDispatcherTest extends TestCase
         $listenProvider  = $this->createMock(ListenerProvider::class);
         $eventDispatcher = new BaseEventDispatcher($listenProvider);
 
-        $listenProvider->method('getListenersForEvent')->willReturn([function () {}]);
+        $listenProvider->method('getListenersForEvent')->willReturn([function () {
+        }]);
 
         $event = $eventDispatcher->dispatch($event);
 

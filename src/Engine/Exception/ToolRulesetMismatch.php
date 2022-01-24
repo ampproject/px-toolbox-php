@@ -13,7 +13,6 @@ use RuntimeException;
  */
 final class ToolRulesetMismatch extends RuntimeException implements PxEngineException
 {
-
     /**
      * Instantiate a ToolRulesetMismatch exception for a tool that did not match the provided ruleset.
      *

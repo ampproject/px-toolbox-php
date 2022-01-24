@@ -18,7 +18,6 @@ use PageExperience\Tests\TestCase;
  */
 final class AmpOptimizerTest extends TestCase
 {
-
     public function testItCanBeInstantiated()
     {
         $remoteGetRequestMock = $this->createMock(RemoteGetRequest::class);

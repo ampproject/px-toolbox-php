@@ -11,7 +11,6 @@ use InvalidArgumentException;
  */
 final class InvalidContextKey extends InvalidArgumentException implements PxEngineException
 {
-
     /**
      * Instantiate an InvalidContextKey exception for a context key that is not known.
      *

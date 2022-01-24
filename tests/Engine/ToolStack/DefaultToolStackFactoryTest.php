@@ -13,7 +13,6 @@ use PageExperience\Tests\TestCase;
  */
 final class DefaultToolStackFactoryTest extends TestCase
 {
-
     public function testItCanBeInstantiated()
     {
         $toolStackConfiguration = new ToolStackConfiguration();

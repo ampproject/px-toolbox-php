@@ -116,13 +116,13 @@ final class InvalidJsonFileTest extends TestCase
     {
         $exception = InvalidJsonFile::forUndecodableFile('/path/to/file.json', $error);
 
-        self::assertEquals($message,$exception->getMessage());
+        self::assertEquals($message, $exception->getMessage());
     }
 
     public function testItProducesTheExpectedMessageForMissingFile()
     {
         $exception = InvalidJsonFile::forMissingFile('/path/to/file.json');
 
-        self::assertEquals("Could not find JSON file '/path/to/file.json'.",$exception->getMessage());
+        self::assertEquals("Could not find JSON file '/path/to/file.json'.", $exception->getMessage());
     }
 }

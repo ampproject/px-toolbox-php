@@ -13,7 +13,6 @@ use PageExperience\Engine\Exception\InvalidContextKey;
  */
 final class Context
 {
-
     /**
      * Internal key-value store.
      *

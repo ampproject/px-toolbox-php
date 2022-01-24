@@ -19,7 +19,6 @@ use PageExperience\PageSpeed\PageSpeedInsightsApi;
  */
 final class Lighthouse implements AnalysisTool, Configurable
 {
-
     /**
      * Array of scored metric keys.
      *
@@ -137,6 +136,12 @@ final class Lighthouse implements AnalysisTool, Configurable
         return $analysis;
     }
 
+    /**
+     * Process the lighthouse audit result.
+     *
+     * @param Analysis $analysis Current state of the analysis.
+     * @param array    $result   Associative array of result data.
+     */
     private function processResult(Analysis $analysis, $result)
     {
         if (! array_key_exists('id', $result)) {
@@ -220,6 +225,8 @@ final class Lighthouse implements AnalysisTool, Configurable
      * @param string $id     ID of the result.
      * @param array  $result Associative array of result data.
      * @return ScoredMetric Scored metric result object.
+     *
+     * @throws MissingResultDataKey If a key is missing from the audit result.
      */
     private function parseScoredMetric($id, $result)
     {

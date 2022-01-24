@@ -18,7 +18,6 @@ use React\EventLoop\Loop;
  */
 final class ParallelToolStack extends BaseToolStack
 {
-
     /**
      * Analyze a URL.
      *

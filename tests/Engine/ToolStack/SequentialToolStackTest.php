@@ -13,7 +13,6 @@ use PageExperience\Tests\TestCase;
  */
 final class SequentialToolStackTest extends TestCase
 {
-
     public function testItCanBeInstantiated()
     {
         $toolA = $this->createMock(Tool::class);

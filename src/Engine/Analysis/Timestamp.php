@@ -15,7 +15,6 @@ use PageExperience\Engine\Exception\FailedToProcessTimestamp;
  */
 final class Timestamp
 {
-
     /**
      * Datetime format to use for the timestamp.
      *

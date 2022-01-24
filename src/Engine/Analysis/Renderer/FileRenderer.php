@@ -11,7 +11,6 @@ use PageExperience\Engine\Analysis;
  */
 interface FileRenderer
 {
-
     /**
      * Render the analysis into a file-based output format.
      *

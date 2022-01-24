@@ -11,7 +11,6 @@ use PageExperience\Engine\Analysis;
  */
 final class JsonRenderer implements StringRenderer, FileRenderer
 {
-
     /**
      * Render the analysis into a file-based output format.
      *

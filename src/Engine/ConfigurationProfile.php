@@ -9,7 +9,6 @@ namespace PageExperience\Engine;
  */
 final class ConfigurationProfile
 {
-
     /**
      * Check whether a given tool is being used by the configuration profile.
      *

@@ -18,7 +18,6 @@ use PageExperience\Tests\TestCase;
  */
 final class LighthouseTest extends TestCase
 {
-
     public function testItCanBeInstantiated()
     {
         $remoteRequestMock = $this->createMock(RemoteGetRequest::class);

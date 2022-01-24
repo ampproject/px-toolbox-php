@@ -14,7 +14,6 @@ use PageExperience\Engine\Tool;
  */
 final class ToolStackConfiguration
 {
-
     /**
      * List of tools and their dependencies.
      *

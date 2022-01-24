@@ -12,7 +12,6 @@ use RuntimeException;
  */
 class StringStream implements StreamInterface
 {
-
     /**
      * Contents of the string stream.
      *

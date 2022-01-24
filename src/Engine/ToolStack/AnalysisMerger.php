@@ -13,7 +13,6 @@ use PageExperience\Engine\Analysis;
  */
 final class AnalysisMerger
 {
-
     /**
      * Collection of analysis results.
      *
