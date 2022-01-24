@@ -82,9 +82,9 @@ final class Optimize extends Command
 
         $engine         = new Engine(ConfiguredStubbedRemoteGetRequest::create());
         $profile        = new ConfigurationProfile();
-        $optimized_html = $engine->optimizeHtml($html, $profile);
+        $optimizedHtml  = $engine->optimizeHtml($html, $profile);
 
-        fwrite(STDOUT, $optimized_html);
+        echo($optimizedHtml . PHP_EOL);
 
         // TODO: Display errors collected by the ErrorCollection in AmpOptimizer::optimizeHtml.
     }
