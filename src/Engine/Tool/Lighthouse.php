@@ -139,8 +139,9 @@ final class Lighthouse implements AnalysisTool, Configurable
     /**
      * Process the lighthouse audit result.
      *
-     * @param Analysis $analysis Current state of the analysis.
-     * @param array    $result   Associative array of result data.
+     * @param Analysis             $analysis Current state of the analysis.
+     * @param array<string, mixed> $result   Associative array of result data.
+     * @return void
      */
     private function processResult(Analysis $analysis, $result)
     {
@@ -222,8 +223,8 @@ final class Lighthouse implements AnalysisTool, Configurable
     /**
      * Parse result data as a scored metric.
      *
-     * @param string $id     ID of the result.
-     * @param array  $result Associative array of result data.
+     * @param string               $id     ID of the result.
+     * @param array<string, mixed> $result Associative array of result data.
      * @return ScoredMetric Scored metric result object.
      *
      * @throws MissingResultDataKey If a key is missing from the audit result.

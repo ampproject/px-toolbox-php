@@ -22,6 +22,7 @@ trait HasDescription
      * This can be used in the constructor to validate and store the provided description.
      *
      * @param string $description Description to process.
+     * @return void
      */
     protected function processDescription($description)
     {

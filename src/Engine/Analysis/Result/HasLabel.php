@@ -22,6 +22,7 @@ trait HasLabel
      * This can be used in the constructor to validate and store the provided label.
      *
      * @param string $label Label to process.
+     * @return void
      */
     protected function processLabel($label)
     {

@@ -58,7 +58,7 @@ class ScoredMetric extends Metric
     /**
      * Get the score type of the metric.
      *
-     * @return float Score type of the metric.
+     * @return string Score type of the metric.
      */
     public function getScoreType()
     {
