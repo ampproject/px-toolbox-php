@@ -24,7 +24,11 @@
     "yoast/phpunit-polyfills": "^0.2.0 || ^1.0.0"
   },
   "config": {
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "civicrm/composer-downloads-plugin": true
+    }
   },
   "extra": {
     "downloads": {
