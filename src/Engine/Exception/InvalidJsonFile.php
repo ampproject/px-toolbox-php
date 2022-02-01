@@ -12,7 +12,6 @@ use InvalidArgumentException;
  */
 final class InvalidJsonFile extends InvalidArgumentException implements PxEngineException
 {
-
     /**
      * Instantiate an InvalidJsonFile exception for a JSON file that could not be read.
      *

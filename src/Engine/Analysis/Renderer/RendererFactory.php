@@ -12,7 +12,6 @@ use PageExperience\Engine\Exception\InvalidRenderer;
  */
 final class RendererFactory
 {
-
     /**
      * Create a renderer instance for the requested format.
      *

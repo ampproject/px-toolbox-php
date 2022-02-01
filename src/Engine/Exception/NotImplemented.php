@@ -11,7 +11,6 @@ use LogicException;
  */
 final class NotImplemented extends LogicException implements PxEngineException
 {
-
     /**
      * Instantiate a NotImplemented exception for using a parallel optimization tool stack.
      *

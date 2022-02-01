@@ -11,7 +11,6 @@ use OutOfRangeException;
  */
 final class MissingResultDataKey extends OutOfRangeException implements PxEngineException
 {
-
     /**
      * Instantiate a MissingResultDataKey exception for a key that is missing from the result data array.
      *

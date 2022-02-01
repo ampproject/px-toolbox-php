@@ -9,7 +9,6 @@ namespace PageExperience\Engine\Tool;
  */
 interface Configurable
 {
-
     /**
      * Get the FQCN of the tool's ruleset object.
      *

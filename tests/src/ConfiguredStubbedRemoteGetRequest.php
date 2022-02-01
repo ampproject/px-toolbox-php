@@ -11,7 +11,6 @@ use AmpProject\RemoteRequest\StubbedRemoteGetRequest;
  */
 final class ConfiguredStubbedRemoteGetRequest
 {
-
     /**
      * URL to the PageSpeed Insights API root.
      *

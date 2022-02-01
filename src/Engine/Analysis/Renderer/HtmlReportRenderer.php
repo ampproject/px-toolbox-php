@@ -11,7 +11,6 @@ use PageExperience\Engine\Analysis;
  */
 final class HtmlReportRenderer implements DirectoryRenderer
 {
-
     /**
      * Render the analysis into a directory-based output format.
      *

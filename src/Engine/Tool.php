@@ -9,7 +9,6 @@ namespace PageExperience\Engine;
  */
 interface Tool
 {
-
     /**
      * Get the name of the tool.
      *

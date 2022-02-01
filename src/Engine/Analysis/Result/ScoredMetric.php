@@ -9,7 +9,6 @@ namespace PageExperience\Engine\Analysis\Result;
  */
 class ScoredMetric extends Metric
 {
-
     /**
      * Normalized score.
      *
@@ -28,9 +27,14 @@ class ScoredMetric extends Metric
     /**
      * Instantiate a new Metric object.
      *
-     * @param string $id          ID of the metric.
-     * @param string $label       Label of the metric.
-     * @param string $description Description of the metric.
+     * @param string    $id           ID of the metric.
+     * @param string    $label        Label of the metric.
+     * @param string    $description  Description of the metric.
+     * @param int|float $value        Value of the metric.
+     * @param string    $unit         Unit of the metric.
+     * @param string    $displayValue Display value of the metric.
+     * @param float     $score        Normalization turns all scores into a value on the range of 0..1.
+     * @param string    $scoreType    Type of score.
      */
     public function __construct($id, $label, $description, $value, $unit, $displayValue, $score, $scoreType)
     {
@@ -54,7 +58,7 @@ class ScoredMetric extends Metric
     /**
      * Get the score type of the metric.
      *
-     * @return float Score type of the metric.
+     * @return string Score type of the metric.
      */
     public function getScoreType()
     {

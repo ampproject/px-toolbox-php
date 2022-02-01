@@ -11,7 +11,6 @@ use PageExperience\Engine\Analysis;
  */
 interface StringRenderer
 {
-
     /**
      * Render the analysis into a string-based output format.
      *

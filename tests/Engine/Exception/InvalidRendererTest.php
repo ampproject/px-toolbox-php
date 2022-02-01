@@ -12,7 +12,6 @@ use PageExperience\Tests\TestCase;
  */
 final class InvalidRendererTest extends TestCase
 {
-
     public function testItCanBeInstantiated()
     {
         $exception = new InvalidRenderer();

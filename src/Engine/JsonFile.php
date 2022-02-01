@@ -12,7 +12,6 @@ use PageExperience\Engine\Exception\InvalidJsonFile;
  */
 final class JsonFile
 {
-
     /**
      * Path to the JSON file.
      *

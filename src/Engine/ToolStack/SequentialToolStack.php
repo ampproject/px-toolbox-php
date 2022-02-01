@@ -16,7 +16,6 @@ use Psr\Http\Message\ResponseInterface;
  */
 final class SequentialToolStack extends BaseToolStack
 {
-
     /**
      * Analyze a URL.
      *

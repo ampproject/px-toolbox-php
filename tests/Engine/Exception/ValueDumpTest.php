@@ -12,7 +12,6 @@ use PageExperience\Tests\TestCase;
  */
 final class ValueDumpTest extends TestCase
 {
-
     public function testItCanBeInstantiated()
     {
         $valueDump = new ValueDump('abc');

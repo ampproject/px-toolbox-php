@@ -15,7 +15,6 @@ use PageExperience\Cli\Command as PxCommand;
  */
 final class PxExecutable extends Executable
 {
-
     /**
      * Array of command classes to register.
      *

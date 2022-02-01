@@ -17,7 +17,6 @@ use Psr\Http\Message\StreamInterface;
  */
 final class EngineTest extends TestCase
 {
-
     public function testItCanBeInstantiated()
     {
         $engine = new Engine();

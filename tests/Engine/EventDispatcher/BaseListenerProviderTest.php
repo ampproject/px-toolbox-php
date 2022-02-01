@@ -35,8 +35,10 @@ final class BaseListenerProviderTest extends TestCase
         $listeners = $eventListener->getListenersForEvent($event);
         self::assertEquals([], $listeners);
 
-        $eventListener->addListener($eventType, function () {} );
-        $eventListener->addListener($eventType, function () {} );
+        $eventListener->addListener($eventType, function () {
+        });
+        $eventListener->addListener($eventType, function () {
+        });
 
         $listeners = $eventListener->getListenersForEvent($event);
         self::assertIsArray($listeners);
