@@ -147,7 +147,6 @@ final class Lighthouse implements AnalysisTool, Configurable
     private function processResult(Analysis $analysis, $result)
     {
         if (! array_key_exists('id', $result)) {
-            var_dump($result);
             return;
         }
 
@@ -259,12 +258,6 @@ final class Lighthouse implements AnalysisTool, Configurable
         }
         unset($result['details']);
 
-        // TODO: Detecting data that was not processed.
-        if (! empty($result)) {
-            var_dump($id);
-            var_dump($result);
-        }
-
         return new ScoredMetric($id, $label, $description, ...$arguments);
     }
 
@@ -285,12 +278,6 @@ final class Lighthouse implements AnalysisTool, Configurable
 
         $description = array_key_exists('description', $result) ? $result['description'] : '';
         unset($result['description']);
-
-        // TODO: Detecting data that was not processed.
-        if (! empty($result)) {
-            var_dump($id);
-            var_dump($result);
-        }
 
         return new Issue($id, $label, $description, ...$arguments);
     }
