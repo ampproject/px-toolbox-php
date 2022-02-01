@@ -15,7 +15,6 @@ use PageExperience\PageSpeed\PageSpeedInsightsApi;
  */
 final class PageSpeedInsights extends Command
 {
-
     /**
      * Name of the command.
      *

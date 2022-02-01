@@ -14,7 +14,6 @@ use PageExperience\Engine\Tool;
  */
 interface ToolRuleset
 {
-
     /**
      * Instantiate a new ruleset from a configuration profile.
      *

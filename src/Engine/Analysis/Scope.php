@@ -18,7 +18,6 @@ use AmpProject\FakeEnum;
  */
 final class Scope extends FakeEnum
 {
-
     const UNKNOWN  = 0;
     const SITE     = 1;
     const PAGE     = 2;

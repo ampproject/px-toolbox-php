@@ -11,7 +11,6 @@ use PageExperience\Engine\Analysis;
  */
 final class PageExperienceAnalysis implements Analysis
 {
-
     /**
      * Status of the analysis.
      *

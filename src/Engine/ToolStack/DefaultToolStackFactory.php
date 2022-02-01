@@ -22,7 +22,6 @@ use ReflectionException;
  */
 final class DefaultToolStackFactory implements ToolStackFactory
 {
-
     /**
      * Tool stack configuration to use.
      *

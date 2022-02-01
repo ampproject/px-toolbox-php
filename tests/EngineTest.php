@@ -17,7 +17,6 @@ use Psr\Http\Message\StreamInterface;
  */
 final class EngineTest extends TestCase
 {
-
     public function testItCanBeInstantiated()
     {
         $engine = new Engine();
@@ -73,7 +72,7 @@ final class EngineTest extends TestCase
         $optimizedResponseCallback = function (...$arguments) {
             $optimizedResponse = $this->createMock(ResponseInterface::class);
             $optimizedResponse->method('getBody')
-                              ->willReturn(new StringStream($arguments[0]));
+                              ->willReturn(new StringStream((string) $arguments[0]));
             return $optimizedResponse;
         };
 

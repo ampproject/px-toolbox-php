@@ -19,7 +19,6 @@ use PageExperience\Tests\ConfiguredStubbedRemoteGetRequest;
  */
 final class Analyze extends Command
 {
-
     /**
      * Name of the command.
      *

@@ -15,7 +15,6 @@ use Psr\Http\Message\ResponseInterface;
  */
 interface OptimizationTool extends Tool
 {
-
     /**
      * Optimize a string of HTML.
      *

@@ -22,6 +22,7 @@ trait HasIdentity
      * This can be used in the constructor to validate and store the provided ID.
      *
      * @param string $id ID to process.
+     * @return void
      */
     protected function processId($id)
     {

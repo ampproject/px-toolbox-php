@@ -13,7 +13,6 @@ use PageExperience\Tests\TestCase;
  */
 final class ContextMergerTest extends TestCase
 {
-
     public function testItCanBeInstantiated()
     {
         $context = new Context();

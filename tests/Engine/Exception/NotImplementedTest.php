@@ -12,7 +12,6 @@ use PageExperience\Tests\TestCase;
  */
 final class NotImplementedTest extends TestCase
 {
-
     public function testItCanBeInstantiated()
     {
         $exception = new NotImplemented();

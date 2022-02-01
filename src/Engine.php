@@ -19,7 +19,6 @@ use Psr\Http\Message\ResponseInterface;
  */
 final class Engine
 {
-
     /**
      * Factory instance to use for assembling a tool stack.
      *

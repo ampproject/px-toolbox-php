@@ -14,7 +14,6 @@ use PageExperience\Tests\TestCase;
  */
 final class ToolRulesetMismatchTest extends TestCase
 {
-
     public function testItCanBeInstantiated()
     {
         $exception = new ToolRulesetMismatch();

@@ -9,5 +9,4 @@ namespace PageExperience\Engine\Exception;
  */
 interface PxEngineException
 {
-
 }

@@ -20,7 +20,6 @@ use Psr\Http\Message\ResponseInterface;
  */
 final class AmpOptimizer implements OptimizationTool, Configurable
 {
-
     /**
      * Name of the tool.
      *

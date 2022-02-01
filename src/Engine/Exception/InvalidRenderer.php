@@ -11,7 +11,6 @@ use InvalidArgumentException;
  */
 final class InvalidRenderer extends InvalidArgumentException implements PxEngineException
 {
-
     /**
      * Instantiate an InvalidRenderer exception for a renderer that is not known.
      *

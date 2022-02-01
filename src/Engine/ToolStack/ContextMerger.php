@@ -13,7 +13,6 @@ use PageExperience\Engine\Context;
  */
 final class ContextMerger
 {
-
     /**
      * Collection of contexts.
      *

@@ -9,7 +9,6 @@ namespace PageExperience\Engine\Exception;
  */
 final class ValueDump
 {
-
     /**
      * Value to dump.
      *

@@ -9,7 +9,6 @@ namespace PageExperience\Engine\Analysis\Result;
  */
 class ScoredMetric extends Metric
 {
-
     /**
      * Normalized score.
      *

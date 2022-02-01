@@ -12,7 +12,6 @@ use PageExperience\Tests\TestCase;
  */
 final class ConfigurationProfileTest extends TestCase
 {
-
     public function testItCanBeInstantiated()
     {
         $profile = new ConfigurationProfile();

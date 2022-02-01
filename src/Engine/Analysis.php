@@ -18,7 +18,6 @@ use PageExperience\Engine\Analysis\Timestamp;
  */
 interface Analysis extends JsonSerializable
 {
-
     /**
      * Add an individual result to the analysis.
      *

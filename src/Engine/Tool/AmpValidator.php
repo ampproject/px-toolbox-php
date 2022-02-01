@@ -14,7 +14,6 @@ use PageExperience\Engine\Tool\AmpValidator\Ruleset;
  */
 final class AmpValidator implements AnalysisTool, Configurable
 {
-
     /**
      * Name of the tool.
      *

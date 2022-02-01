@@ -12,7 +12,6 @@ use PageExperience\Tests\TestCase;
  */
 final class AmpValidatorTest extends TestCase
 {
-
     public function testItCanBeInstantiated()
     {
         $ampValidator = new AmpValidator();

@@ -13,7 +13,6 @@ use PageExperience\Tests\TestCase;
  */
 final class AnalysisMergerTest extends TestCase
 {
-
     public function testItCanBeInstantiated()
     {
         $toolStack = $this->createMock(Analysis::class);

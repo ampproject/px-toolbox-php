@@ -15,7 +15,6 @@ use PageExperience\Tests\TestCase;
  */
 final class ToolStackConfigurationTest extends TestCase
 {
-
     /**
      * Path to the default tool stack JSON configuration file.
      *

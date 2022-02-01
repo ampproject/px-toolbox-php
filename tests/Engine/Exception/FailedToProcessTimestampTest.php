@@ -12,7 +12,6 @@ use PageExperience\Tests\TestCase;
  */
 final class FailedToProcessTimestampTest extends TestCase
 {
-
     public function testItCanBeInstantiated()
     {
         $exception = new FailedToProcessTimestamp();

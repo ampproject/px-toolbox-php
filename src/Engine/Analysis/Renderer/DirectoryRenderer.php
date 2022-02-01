@@ -11,7 +11,6 @@ use PageExperience\Engine\Analysis;
  */
 interface DirectoryRenderer
 {
-
     /**
      * Render the analysis into a directory-based output format.
      *

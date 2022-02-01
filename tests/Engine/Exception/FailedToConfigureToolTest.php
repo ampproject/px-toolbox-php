@@ -13,7 +13,6 @@ use RuntimeException;
  */
 final class FailedToConfigureToolTest extends TestCase
 {
-
     public function testItCanBeInstantiated()
     {
         $exception = new FailedToConfigureTool();

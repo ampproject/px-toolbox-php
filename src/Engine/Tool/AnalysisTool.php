@@ -14,7 +14,6 @@ use PageExperience\Engine\Tool;
  */
 interface AnalysisTool extends Tool
 {
-
     /**
      * Analyze a URL.
      *

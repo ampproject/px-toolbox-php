@@ -13,7 +13,6 @@ use RuntimeException;
  */
 final class PageSpeedInsightsApi
 {
-
     /**
      * PageSpeed Insights API endpoint URL.
      *

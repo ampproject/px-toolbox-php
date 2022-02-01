@@ -13,7 +13,6 @@ use PageExperience\Engine\ToolStack;
  */
 abstract class BaseToolStack implements ToolStack
 {
-
     /**
      * Array of tools to execute in sequential order.
      *

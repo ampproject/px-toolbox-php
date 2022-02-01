@@ -11,7 +11,6 @@ use RuntimeException;
  */
 final class FailedToProcessTimestamp extends RuntimeException implements PxEngineException
 {
-
     /**
      * Instantiate a FailedToProcessTimestamp exception for an instantiation of DateTimeImmutable that failed.
      *
