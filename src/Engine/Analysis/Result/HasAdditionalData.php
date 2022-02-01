@@ -12,7 +12,7 @@ trait HasAdditionalData
     /**
      * Additional data for the result.
      *
-     * @var array|null
+     * @var array<string, mixed>|null
      */
     protected $additionalData;
 
@@ -21,7 +21,8 @@ trait HasAdditionalData
      *
      * This can be used in the constructor to validate and store the provided additional data.
      *
-     * @param array|null $additionalData Additional data to process. Null if none.
+     * @param array<string, mixed>|null $additionalData Additional data to process. Null if none.
+     * @return void
      */
     protected function processAdditionalData($additionalData)
     {
@@ -41,7 +42,7 @@ trait HasAdditionalData
     /**
      * Get the additional data of the result.
      *
-     * @return array|null AdditionalData of the result.
+     * @return array<string, mixed>|null AdditionalData of the result.
      */
     public function getAdditionalData()
     {

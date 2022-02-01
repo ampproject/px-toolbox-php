@@ -20,10 +20,10 @@ class Issue extends Result implements Identifiable
     /**
      * Instantiate a new Issue object.
      *
-     * @param string     $id             ID of the issue.
-     * @param string     $label          Label of the issue.
-     * @param string     $description    Description of the issue.
-     * @param array|null $additionalData Optional. Additional data of the issue. Null if none.
+     * @param string                    $id             ID of the issue.
+     * @param string                    $label          Label of the issue.
+     * @param string                    $description    Description of the issue.
+     * @param array<string, mixed>|null $additionalData Optional. Additional data of the issue. Null if none.
      */
     public function __construct($id, $label, $description = '', $additionalData = null)
     {

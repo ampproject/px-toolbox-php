@@ -41,13 +41,13 @@ class Metric extends Result implements Identifiable
     /**
      * Instantiate a new Metric object.
      *
-     * @param string     $id             ID of the metric.
-     * @param string     $label          Label of the metric.
-     * @param string     $description    Description of the metric.
-     * @param int|float  $value          Value of the metric.
-     * @param string     $unit           Unit of the metric.
-     * @param string     $displayValue   Display value of the metric.
-     * @param array|null $additionalData Optional. Additional data of the metric. Null if none.
+     * @param string                    $id             ID of the metric.
+     * @param string                    $label          Label of the metric.
+     * @param string                    $description    Description of the metric.
+     * @param int|float                 $value          Value of the metric.
+     * @param string                    $unit           Unit of the metric.
+     * @param string                    $displayValue   Display value of the metric.
+     * @param array<string, mixed>|null $additionalData Optional. Additional data of the metric. Null if none.
      */
     public function __construct($id, $label, $description, $value, $unit, $displayValue, $additionalData = null)
     {

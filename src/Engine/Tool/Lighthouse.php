@@ -265,9 +265,9 @@ final class Lighthouse implements AnalysisTool, Configurable
     /**
      * Parse result data as an issue.
      *
-     * @param string $id     ID of the result.
-     * @param array  $result Associative array of result data.
-     * @return ScoredMetric Scored metric result object.
+     * @param string               $id     ID of the result.
+     * @param array<string, mixed> $result Associative array of result data.
+     * @return Issue Detected issues.
      */
     private function parseIssue($id, $result)
     {
