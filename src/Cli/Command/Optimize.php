@@ -10,7 +10,7 @@ use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\Tests\ConfiguredStubbedRemoteGetRequest;
 
 /**
- * Commands that deal with the AMP optimizer.
+ * Commands that deal with the PX Engine Optimizer.
  *
  * @package ampproject/px-toolbox
  */
@@ -28,7 +28,7 @@ final class Optimize extends Command
      *
      * @var string
      */
-    const HELP_TEXT = 'Run a file or HTML through the AMP Optimizer.';
+    const HELP_TEXT = 'Run a file or a string of HTML through the PX Engine Optimizer.';
 
     /**
      * Register the command.
@@ -42,7 +42,7 @@ final class Optimize extends Command
 
         $options->registerArgument(
             'file',
-            "Input file to run through the AMP Optimizer. Omit or use '-' to read from STDIN.",
+            "Input file to run through the PX Engine Optimizer. Omit or use '-' to read from STDIN.",
             false,
             self::NAME
         );
@@ -85,7 +85,5 @@ final class Optimize extends Command
         $optimizedHtml  = $engine->optimizeHtml($html, $profile);
 
         echo($optimizedHtml . PHP_EOL);
-
-        // TODO: Display errors collected by the ErrorCollection in AmpOptimizer::optimizeHtml.
     }
 }

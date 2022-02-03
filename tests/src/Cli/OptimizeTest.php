@@ -5,15 +5,15 @@ namespace PageExperience\Tests\Cli;
 use AmpProject\Cli\Command;
 use AmpProject\Cli\Executable;
 use AmpProject\Cli\Options;
+use AmpProject\Exception\Cli\InvalidArgument;
 use org\bovigo\vfs\vfsStream;
 use PageExperience\Cli\Command\Optimize;
 use PageExperience\Tests\TestCase;
-use AmpProject\Exception\Cli\InvalidArgument;
 
 /**
  * Test the PageExperience\Cli\Command\Optimize class.
  *
- * @package ampproject/px-toolbox-php
+ * @package ampproject/px-toolbox
  */
 final class OptimizeTest extends TestCase
 {
