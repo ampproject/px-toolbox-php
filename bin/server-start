@@ -1,0 +1,54 @@
+#!/bin/bash
+
+# Check if wp-cli and ngrok are available or not.
+if ! which wp > /dev/null; then
+    echo "wp-cli is not installed. Please install it first."
+    exit
+fi
+
+if ! which ngrok > /dev/null; then
+    echo "ngrok is not installed. Please install it first."
+    exit
+fi
+
+# Create a wordpress directory where we can build the WordPress setup.
+mkdir -p wordpress
+
+# Change the current directory to our wordpress directory.
+cd wordpress
+
+# Launch the web server
+# wp server > /dev/null 2>&1 & # Not working. Need to check again.
+php -S localhost:8080 > /dev/null 2>&1 &
+
+# Launch ngrok to expose the localhost port to the internet.
+ngrok http 8080 > /dev/null 2>&1 &
+
+function getPublicUrl() {
+    echo $(curl http://localhost:4040/api/tunnels -s | grep -oP '(?<="public_url":")https[^"]*')
+}
+
+publicUrl=$(getPublicUrl)
+
+while [ -z "$publicUrl" ]; do
+    sleep 1
+    publicUrl=$(getPublicUrl)
+done
+
+# Create a WordPress site.
+dbname="px_toolbox_php"
+dbuser="root"
+dbpass="root"
+dbhost="localhost"
+
+FILE=wp-content
+if [ ! -d "$FILE" ]; then
+    wp core download
+    wp core config --dbname=$dbname --dbuser=$dbuser --dbpass=$dbpass --dbhost=$dbhost --extra-php <<PHP
+\$_SERVER['HTTPS']='on';
+PHP
+    wp db create
+    wp core install --url=$publicUrl --title="WordPress" --admin_user=admin --admin_password=password --admin_email="admin@example.com" --skip-email
+fi
+
+echo $publicUrl
