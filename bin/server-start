@@ -49,6 +49,18 @@ if [ ! -d "$FILE" ]; then
 PHP
     wp db create
     wp core install --url=$publicUrl --title="WordPress" --admin_user=admin --admin_password=password --admin_email="admin@example.com" --skip-email
+
+    # This is required for the .htaccess.
+    touch wp-cli.local.yml
+    echo "apache_modules:
+      - mod_rewrite
+    " > wp-cli.local.yml
+
+    # Set pretty urls.
+    wp rewrite structure '/%postname%/' --hard
+    wp rewrite flush --hard
+
+    rm wp-cli.local.yml
 fi
 
 echo $publicUrl
