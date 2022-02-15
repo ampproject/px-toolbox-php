@@ -61,6 +61,9 @@ PHP
     wp rewrite flush --hard
 
     rm wp-cli.local.yml
+
+    wp post create ../bin/posts/one.html --post_name=lorem-ipsum --post_title='Lorem Ipsum' --post_status=publish --post_author=1
+    wp post create ../bin/posts/two.html --post_name=servari-enim --post_title='Servari Enim' --post_status=publish --post_author=1
 fi
 
 echo $publicUrl
