@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Load environment variables from .env file if exists.
+if [ ! -f ../.env ]; then
+    export $(cat .env | xargs)
+fi
+
 # Check if wp-cli and ngrok are available or not.
 if ! which wp > /dev/null; then
     echo "wp-cli is not installed. Please install it first."
@@ -36,15 +41,10 @@ while [ -z "$publicUrl" ]; do
 done
 
 # Create a WordPress site.
-dbname="px_toolbox_php"
-dbuser="root"
-dbpass="root"
-dbhost="localhost"
-
 FILE=wp-content
 if [ ! -d "$FILE" ]; then
     wp core download
-    wp core config --dbname=$dbname --dbuser=$dbuser --dbpass=$dbpass --dbhost=$dbhost --extra-php <<PHP
+    wp core config --dbname=$DB_NAME --dbuser=$DB_USER --dbpass=$DB_PASS --dbhost=$DB_HOST --extra-php <<PHP
 \$_SERVER['HTTPS']='on';
 PHP
     wp db create
@@ -62,8 +62,12 @@ PHP
 
     rm wp-cli.local.yml
 
-    wp post create ../bin/posts/one.html --post_name=lorem-ipsum --post_title='Lorem Ipsum' --post_status=publish --post_author=1
-    wp post create ../bin/posts/two.html --post_name=servari-enim --post_title='Servari Enim' --post_status=publish --post_author=1
+    wp post create ../bin/posts/amp-page.html --post_name=amp-page --post_title='AMP Page' --post_status=publish --post_author=1
 fi
 
-echo $publicUrl
+# echo $publicUrl
+
+# Generate the fixture file for the amp-page.
+../bin/px psi --json --key $PSI_API_KEY $publicUrl/amp-page/ > ../tests/fixtures/psi_local-wp_amp-page.json
+
+echo "Generated the fixture file psi_local-wp_amp-page.json in tests/fixtures directory."
