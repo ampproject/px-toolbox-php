@@ -43,12 +43,12 @@ done
 # Create a WordPress site.
 FILE=wp-content
 if [ ! -d "$FILE" ]; then
-    wp core download
-    wp core config --dbname=$DB_NAME --dbuser=$DB_USER --dbpass=$DB_PASS --dbhost=$DB_HOST --extra-php <<PHP
+    wp core download --quiet
+    wp core config --dbname=$DB_NAME --dbuser=$DB_USER --dbpass=$DB_PASS --dbhost=$DB_HOST --extra-php --quiet <<PHP
 \$_SERVER['HTTPS']='on';
 PHP
-    wp db create
-    wp core install --url=$publicUrl --title="WordPress" --admin_user=admin --admin_password=password --admin_email="admin@example.com" --skip-email
+    wp db create --quiet
+    wp core install --url=$publicUrl --title="WordPress" --admin_user=admin --admin_password=password --admin_email="admin@example.com" --skip-email --quiet
 
     # This is required for the .htaccess.
     touch wp-cli.local.yml
@@ -57,17 +57,12 @@ PHP
     " > wp-cli.local.yml
 
     # Set pretty urls.
-    wp rewrite structure '/%postname%/' --hard
-    wp rewrite flush --hard
+    wp rewrite structure '/%postname%/' --hard --quiet
+    wp rewrite flush --hard --quiet
 
     rm wp-cli.local.yml
 
-    wp post create ../bin/posts/amp-page.html --post_name=amp-page --post_title='AMP Page' --post_status=publish --post_author=1
+    wp post create ../bin/posts/amp-page.html --post_name=amp-page --post_title='AMP Page' --post_status=publish --post_author=1 --quiet
 fi
 
-# echo $publicUrl
-
-# Generate the fixture file for the amp-page.
-../bin/px psi --json --key $PSI_API_KEY $publicUrl/amp-page/ > ../tests/fixtures/psi_local-wp_amp-page.json
-
-echo "Generated the fixture file psi_local-wp_amp-page.json in tests/fixtures directory."
+echo $publicUrl
