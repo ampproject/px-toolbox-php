@@ -67,9 +67,7 @@
     ],
     "analyze": "if [ -z $TEST_SKIP_PHPSTAN ]; then phpstan --version; phpstan analyze --ansi; fi",
     "unit": "if [ -z $TEST_SKIP_PHPUNIT ]; then phpunit --colors=always; fi",
-    "server:start": "bin/server-start",
-    "server:stop": "bin/server-stop",
-    "generate-fixture": "bin/generate-fixture",
-    "sync-fixture": "bin/server-start | bin/generate-fixture"
+    "update-fixture": "bin/update-fixture",
+    "stop-server": "bin/stop-server"
   }
 }

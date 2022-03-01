@@ -18,15 +18,18 @@ fi
 
 # Create a wordpress directory where we can build the WordPress setup.
 mkdir -p wordpress
+echo "WordPress directory is created."
 
 # Change the current directory to our wordpress directory.
 cd wordpress
+echo "Current directory is changed to wordpress."
 
 # Launch the web server
-# wp server > /dev/null 2>&1 & # Not working. Need to check again.
+echo "Launching the web server..."
 php -S localhost:8080 > /dev/null 2>&1 &
 
 # Launch ngrok to expose the localhost port to the internet.
+echo "Creating the public url..."
 ngrok http 8080 > /dev/null 2>&1 &
 
 function getPublicUrl() {
@@ -37,18 +40,19 @@ publicUrl=$(getPublicUrl)
 
 while [ -z "$publicUrl" ]; do
     sleep 1
+    echo "Waiting for the public url..."
     publicUrl=$(getPublicUrl)
 done
 
 # Create a WordPress site.
 FILE=wp-content
 if [ ! -d "$FILE" ]; then
-    wp core download --quiet
-    wp core config --dbname=$DB_NAME --dbuser=$DB_USER --dbpass=$DB_PASS --dbhost=$DB_HOST --extra-php --quiet <<PHP
+    wp core download
+    wp core config --dbname=$DB_NAME --dbuser=$DB_USER --dbpass=$DB_PASS --dbhost=$DB_HOST --extra-php <<PHP
 \$_SERVER['HTTPS']='on';
 PHP
-    wp db create --quiet
-    wp core install --url=$publicUrl --title="WordPress" --admin_user=admin --admin_password=password --admin_email="admin@example.com" --skip-email --quiet
+    wp db create
+    wp core install --url=$publicUrl --title="WordPress" --admin_user=admin --admin_password=password --admin_email="admin@example.com" --skip-email
 
     # This is required for the .htaccess.
     touch wp-cli.local.yml
@@ -57,12 +61,20 @@ PHP
     " > wp-cli.local.yml
 
     # Set pretty urls.
-    wp rewrite structure '/%postname%/' --hard --quiet
-    wp rewrite flush --hard --quiet
+    wp rewrite structure '/%postname%/' --hard
+    wp rewrite flush --hard
 
     rm wp-cli.local.yml
 
-    wp post create ../bin/posts/amp-page.html --post_name=amp-page --post_title='AMP Page' --post_status=publish --post_author=1 --quiet
+    wp post create ../bin/posts/amp-page.html --post_name=amp-page --post_title='AMP Page' --post_status=publish --post_author=1
 fi
 
-echo $publicUrl
+echo "WordPress public URL: $publicUrl"
+
+# Go back to the root directory.
+cd ../
+
+# Generate the fixture file for the amp-page.
+./bin/px psi --json --key $PSI_API_KEY $publicUrl/amp-page/ > ./tests/fixtures/psi_local-wp_amp-page.json
+
+echo "Generated the fixture file psi_local-wp_amp-page.json in tests/fixtures directory."
