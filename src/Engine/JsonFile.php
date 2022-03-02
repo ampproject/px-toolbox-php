@@ -53,7 +53,7 @@ final class JsonFile
      * Return the JSON file contents as an associative array of decoded data.
      *
      * @throws InvalidJsonFile If the file could not be read.
-     * @return array<class-string, array<mixed>> Associative array of decoded JSON data.
+     * @return array<string, mixed> Associative array of decoded JSON data.
      */
     public function asArray()
     {
@@ -84,7 +84,7 @@ final class JsonFile
      * Decodes JSON string and returns its decoded data.
      *
      * @param string $json JSON string to decode.
-     * @return array<class-string, array<mixed>> Decoded JSON data.
+     * @return array<string, mixed> Decoded JSON data.
      * @throws InvalidJsonFile If the provided JSON data could not be decoded.
      */
     private function decodeJson($json)
