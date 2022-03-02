@@ -38,6 +38,30 @@ The `<url>` needs to be replaced with the URL of the web page you want to audit.
 
 > Note: Currently the `--json` flag needs to be used _before_ the `<url>` argument due to a limitation in the CLI parsing algorithm. This will be fixed in a future patch.  
 
+## Page Experience Engine Optimization (`optimize`)
+
+The page experience optimization can be run with the following command:
+
+```sh
+bin/px optimize <file>
+```
+
+The `<file>` needs to be replaced with the filename/file path of the file you want to optimize. You can use the special filename `-` to let the tool read from STDIN instead.
+
+The optimized output will be printed to STDOUT and can be redirected into a new file as needed.
+
+### Examples
+
+```sh
+# Optimize a file called input.html and store the optimized result in a file called output.html
+bin/px optimize input.html > output.html
+```
+
+```sh
+# Optimize the Google.com homepage and store the optimized result in a file called output.html
+curl https://www.google.com/ | bin/px optimize - > output.html
+```
+
 ## PageSpeed Insights API Audit (`psi`)
 
 An audit via the PageSpeed Insights API can be requested with the following command:
