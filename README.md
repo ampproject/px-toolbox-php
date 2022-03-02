@@ -114,6 +114,48 @@ The project is currently in its very early stages, with the main focus lying on 
 
 The initial end-user integration this library is being coded against is the [PX Plugin for WordPress](https://github.com/ampproject/amp-wp).
 
+```mermaid
+%%{init: {'theme': 'neutral'}}%%
+graph
+    subgraph pxwp[px-wp]
+        rest[REST API]
+        devtools[Developer Tools]
+
+        devtools -.-> rest
+    end
+
+    subgraph pxtb[px-toolbox-php]
+        pxe[PX Engine]
+    end
+
+    subgraph amptb[amp-toolbox-php]
+        sanitizer[Sanitizer]
+        validator[Validator]
+        optimizer[Optimizer]
+        linter[Linter]
+        spec[AMP Spec]
+
+        sanitizer -.-> spec
+        validator -.-> spec
+        optimizer -.-> spec
+    end
+
+    pxe -.-> sanitizer
+    pxe -.-> validator
+    pxe -.-> optimizer
+    pxe -.-> linter
+
+    rest -.-> pxe
+    devtools -.-> pxe
+
+classDef cplugin fill:#33aa00,stroke:#002080,stroke-width:1px,color:#fff;
+classDef cpx fill:#9955f0,stroke:#002080,stroke-width:1px,color:#fff;
+classDef camp fill:#005af0,stroke:#002080,stroke-width:1px,color:#fff;
+class rest,devtools cplugin;
+class pxe,psi cpx;
+class sanitizer,validator,optimizer,linter,spec camp;
+```
+
 The roadmap will be further fleshed out as we approach the first feature-complete release. 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
