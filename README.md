@@ -44,6 +44,28 @@ Currently included in the toolbox:
 * [**PageSpeed Insights API** - API wrapper for PHP to run audits through the Google PageSpeed Insights API.](/docs/psi/README.md#readme)
 * [**PX CLI tool** - `px` binary to run the above tooling through the console.](/docs/px/README.md#readme)
 
+```mermaid
+%%{init: {'theme': 'neutral'}}%%
+graph
+    subgraph PXT[PX Toolbox]
+
+        PSI[<strong>PageSpeed Insights API Client</strong><br><br>API wrapper for PHP to run audits through<br>the Google PageSpeed Insights API]
+        PXE[<strong>Page Experience Engine</strong><br><br>Higher-level library that aggregates and<br>normalizes multiple tools to provide<br>analysis and optimization functionality]
+        PX[<strong>PX CLI Tool</strong><br><br>Console <code>px</code> binary to run the<br>PX Toolbox tools through the CLI]
+
+        PX --provides CLI interface for--> PSI
+        PX --provides CLI interface for--> PXE
+        PSI --powers audits in--> PXE
+    end
+
+classDef package fill:#005af0,stroke:#002080,stroke-width:1px,color:#fff;
+class PX,PXE,PSI package;
+
+click PX "/docs/px/README.md" "Documentation for the PX CLI Tool"
+click PSI "/docs/psi/README.md" "Documentation for the PageSpeed Insights API Client"
+click PXE "/docs/pxe/README.md" "Documentation for the Page Experience Engine"
+```
+
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Getting Started
@@ -91,6 +113,48 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 The project is currently in its very early stages, with the main focus lying on making the main functionality work as expected.
 
 The initial end-user integration this library is being coded against is the [PX Plugin for WordPress](https://github.com/ampproject/amp-wp).
+
+```mermaid
+%%{init: {'theme': 'neutral'}}%%
+graph
+    subgraph pxwp[px-wp]
+        rest[REST API]
+        devtools[Developer Tools]
+
+        devtools -.-> rest
+    end
+
+    subgraph pxtb[px-toolbox-php]
+        pxe[PX Engine]
+    end
+
+    subgraph amptb[amp-toolbox-php]
+        sanitizer[Sanitizer]
+        validator[Validator]
+        optimizer[Optimizer]
+        linter[Linter]
+        spec[AMP Spec]
+
+        sanitizer -.-> spec
+        validator -.-> spec
+        optimizer -.-> spec
+    end
+
+    pxe -.-> sanitizer
+    pxe -.-> validator
+    pxe -.-> optimizer
+    pxe -.-> linter
+
+    rest -.-> pxe
+    devtools -.-> pxe
+
+classDef cplugin fill:#33aa00,stroke:#002080,stroke-width:1px,color:#fff;
+classDef cpx fill:#9955f0,stroke:#002080,stroke-width:1px,color:#fff;
+classDef camp fill:#005af0,stroke:#002080,stroke-width:1px,color:#fff;
+class rest,devtools cplugin;
+class pxe,psi cpx;
+class sanitizer,validator,optimizer,linter,spec camp;
+```
 
 The roadmap will be further fleshed out as we approach the first feature-complete release. 
 
