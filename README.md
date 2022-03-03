@@ -61,9 +61,9 @@ graph
 classDef package fill:#005af0,stroke:#002080,stroke-width:1px,color:#fff;
 class PX,PXE,PSI package;
 
-click PX "/tree/main/docs/px/README.md" "Documentation for the PX CLI Tool"
-click PSI "/tree/main/docs/psi/README.md" "Documentation for the PageSpeed Insights API Client"
-click PXE "/tree/main/docs/pxe/README.md" "Documentation for the Page Experience Engine"
+click PX "https://github.com/ampproject/px-toolbox-php/tree/main/docs/px/README.md" "Documentation for the PX CLI Tool"
+click PSI "https://github.com/ampproject/px-toolbox-php/tree/main/docs/psi/README.md" "Documentation for the PageSpeed Insights API Client"
+click PXE "https://github.com/ampproject/px-toolbox-php/tree/main/docs/pxe/README.md" "Documentation for the Page Experience Engine"
 ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
