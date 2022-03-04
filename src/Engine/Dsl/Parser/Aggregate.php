@@ -2,7 +2,7 @@
 
 namespace PageExperience\Engine\Dsl\Parser;
 
-use PageExperience\Engine\Dsl\Expression;
+use PageExperience\Engine\Dsl\Operation;
 use PageExperience\Engine\Dsl\Parser;
 use PageExperience\Engine\Dsl\ParserFactory;
 
@@ -31,20 +31,20 @@ final class Aggregate implements Parser
     }
 
     /**
-     * Parse the DSL(s) into an object hierarchy.
+     * Parse the DSL(s) into an expression hierarchy.
      *
-     * @return array<Expression>
+     * @return Operation
      */
     public function parse()
     {
-        $expressions = [];
+        $operations    = [];
         $parserFactory = new ParserFactory();
 
         foreach ($this->dsls as $dsl) {
             $specificParser = $parserFactory->createSpecificParser($dsl);
-            $expressions    = array_merge($expressions, $specificParser->parse());
+            $operations[]   = $specificParser->parse();
         }
 
-        return $expressions;
+        return new Operation\Aggregate($operations);
     }
 }

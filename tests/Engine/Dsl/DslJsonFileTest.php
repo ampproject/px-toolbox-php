@@ -3,7 +3,7 @@
 namespace PageExperience\Tests\Engine\Dsl;
 
 use PageExperience\Engine\Dsl\DslJsonFile;
-use PageExperience\Engine\Dsl\Expression;
+use PageExperience\Engine\Dsl\Operation;
 use PageExperience\Engine\Exception\InvalidJsonFile;
 use PageExperience\Tests\TestCase;
 
@@ -37,13 +37,8 @@ final class DslJsonFileTest extends TestCase
     {
         $dslJsonFile = new DslJsonFile(__DIR__ . '/../../fixtures/dsl/dsl.json');
 
-        $expressions = $dslJsonFile->parse();
-
-        self::assertIsArray($expressions);
-        self::assertGreaterThan(0, count($expressions));
-
-        foreach ($expressions as $expression) {
-            self::assertInstanceOf(Expression::class, $expression);
-        }
+        $operation = $dslJsonFile->parse();
+        self::assertInstanceOf(Operation::class, $operation);
+        self::assertInstanceOf(Operation\Aggregate::class, $operation);
     }
 }

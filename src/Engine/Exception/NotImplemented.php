@@ -22,4 +22,17 @@ final class NotImplemented extends LogicException implements PxEngineException
 
         return new self($message);
     }
+
+    /**
+     * Instantiate a NotImplemented exception for using a DSL operation that was is unknown.
+     *
+     * @param string $operation Operation that is not yet implemented.
+     * @return self
+     */
+    public static function forDslOperation($operation)
+    {
+        $message = "The DSL operation '{$operation}' has not been implemented (yet).";
+
+        return new self($message);
+    }
 }

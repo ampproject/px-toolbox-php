@@ -12,8 +12,9 @@ interface Operation
     /**
      * Process the operation on the current stack.
      *
-     * @param Stack $stack Stack to process the operation on.
+     * @param array<string, mixed> $data  Data to process.
+     * @param Stack                $stack Stack to process the operation on.
      * @return void
      */
-    public function process(Stack $stack);
+    public function process(array $data, Stack $stack);
 }

@@ -13,11 +13,18 @@ use PageExperience\Engine\Dsl\Stack;
 final class Extract implements Operation
 {
     /**
-     * Data to extract from.
+     * ID of the extract operation.
      *
-     * @var array<string, mixed>
+     * @var string
      */
-    private $data;
+    const ID = 'extract';
+
+    /**
+     * Key-chain argument.
+     *
+     * @var string
+     */
+    const ARG_KEYCHAIN = 'key-chain';
 
     /**
      * Chain of nested keys to extract.
@@ -29,27 +36,26 @@ final class Extract implements Operation
     /**
      * Instantiate an Extract operation object.
      *
-     * @param array<string, mixed> $data      Data to extract from.
-     * @param array<string>        $keyChains Chain of nested keys to extract.
+     * @param array<string> $keyChains Chain of nested keys to extract.
      */
-    public function __construct(array $data, array $keyChains)
+    public function __construct(array $keyChains)
     {
-        $this->data      = $data;
         $this->keyChains = $keyChains;
     }
 
     /**
      * Process the operation on the current stack.
      *
-     * @param Stack $stack Stack to process the operation on.
+     * @param array<string, mixed> $data  Data to process.
+     * @param Stack                $stack Stack to process the operation on.
      * @return void
      */
-    public function process(Stack $stack)
+    public function process(array $data, Stack $stack)
     {
         $results = [];
 
         foreach ($this->keyChains as $keyChain) {
-            $result = $this->data;
+            $result = $data;
             foreach (explode('.', $keyChain) as $key) {
                 $result = $result[$key];
             }

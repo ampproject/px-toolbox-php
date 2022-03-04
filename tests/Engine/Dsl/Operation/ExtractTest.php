@@ -44,10 +44,10 @@ final class ExtractTest extends TestCase
      */
     public function testItCanProcess($data, $keys, $expectedInput)
     {
-        $extractOperation = new Extract($data, $keys);
+        $extractOperation = new Extract($keys);
         $stack            = new Stack();
 
-        $extractOperation->process($stack);
+        $extractOperation->process($data, $stack);
 
         self::assertEquals($expectedInput, $stack->getInput());
     }

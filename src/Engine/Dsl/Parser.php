@@ -10,9 +10,9 @@ namespace PageExperience\Engine\Dsl;
 interface Parser
 {
     /**
-     * Parse the DSL(s) into an object hierarchy.
+     * Parse the DSL(s) into an operation hierarchy.
      *
-     * @return array<Expression>
+     * @return Operation
      */
     public function parse();
 }

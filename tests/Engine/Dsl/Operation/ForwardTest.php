@@ -45,7 +45,7 @@ final class ForwardTest extends TestCase
         $stack            = new Stack();
         $stack->setInput($input);
 
-        $forwardOperation->process($stack);
+        $forwardOperation->process([], $stack);
 
         self::assertEquals($expectedOutput, $stack->getOutput());
     }
