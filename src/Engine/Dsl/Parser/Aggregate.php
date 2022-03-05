@@ -33,7 +33,7 @@ final class Aggregate implements Parser
     /**
      * Parse the DSL(s) into an expression hierarchy.
      *
-     * @return Operation
+     * @return Operation\Aggregate
      */
     public function parse()
     {

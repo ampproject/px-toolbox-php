@@ -2,6 +2,7 @@
 
 namespace PageExperience\Tests\Engine\Dsl;
 
+use PageExperience\Engine\Dsl\Key;
 use PageExperience\Engine\Dsl\Parser;
 use PageExperience\Engine\Dsl\ParserFactory;
 use PageExperience\Tests\TestCase;
@@ -37,8 +38,8 @@ final class ParserFactoryTest extends TestCase
         $parserFactory = new ParserFactory();
 
         $dsl = [
-            'id'   => 'some-tool-dsl',
-            'type' => 'tool-dsl',
+            Key::ID   => 'some-tool-dsl',
+            Key::TYPE => 'tool-dsl',
         ];
 
         $specificParser = $parserFactory->createSpecificParser($dsl);

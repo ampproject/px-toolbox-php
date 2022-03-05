@@ -9,7 +9,7 @@ use PageExperience\Engine\JsonFile;
  *
  * @package ampproject/px-toolbox
  */
-final class DslJsonFile implements Parser
+final class DslJsonFile
 {
     /**
      * JSON file object to use.
@@ -31,9 +31,9 @@ final class DslJsonFile implements Parser
     /**
      * Parse the DSL(s) into an operation hierarchy.
      *
-     * @return Operation
+     * @return Parser
      */
-    public function parse()
+    public function getParser()
     {
         if (! $this->jsonFile->exists()) {
             // TODO: throw exception.
@@ -43,12 +43,10 @@ final class DslJsonFile implements Parser
 
         $parserFactory = new ParserFactory();
 
-        if (array_key_exists('dsls', $dsl)) {
-            $parser = $parserFactory->createAggregateParser($dsl['dsls']);
-        } else {
-            $parser = $parserFactory->createSpecificParser($dsl);
+        if (array_key_exists(Key::DSLS, $dsl)) {
+            return $parserFactory->createAggregateParser($dsl[Key::DSLS]);
         }
 
-        return $parser->parse();
+        return $parserFactory->createSpecificParser($dsl);
     }
 }

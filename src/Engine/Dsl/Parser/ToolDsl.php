@@ -2,8 +2,10 @@
 
 namespace PageExperience\Engine\Dsl\Parser;
 
+use PageExperience\Engine\Dsl\Key;
 use PageExperience\Engine\Dsl\Operation;
 use PageExperience\Engine\Dsl\Parser;
+use PageExperience\Engine\Dsl\ToolSpecific;
 use PageExperience\Engine\Exception\NotImplemented;
 
 /**
@@ -11,7 +13,7 @@ use PageExperience\Engine\Exception\NotImplemented;
  *
  * @package ampproject/px-toolbox
  */
-final class ToolDsl implements Parser
+final class ToolDsl implements Parser, ToolSpecific
 {
     /**
      * DSL to parse.
@@ -30,10 +32,38 @@ final class ToolDsl implements Parser
         $this->dsl = $dsl;
     }
 
+     /**
+      * Get the ID of this DSL.
+      *
+      * @return string ID of the DSL.
+      */
+    public function getId()
+    {
+        if (! array_key_exists(Key::ID, $this->dsl)) {
+            // TODO: Throw exception.
+        }
+
+        return $this->dsl[Key::ID];
+    }
+
+    /**
+     * Get the name of the tool that this DSL is for.
+     *
+     * @return string Name of the tool that this DSL is for.
+     */
+    public function getToolName()
+    {
+        if (! array_key_exists(Key::TOOL, $this->dsl)) {
+            // TODO: Throw exception.
+        }
+
+        return $this->dsl[Key::TOOL];
+    }
+
     /**
      * Parse the DSL(s) into an object hierarchy.
      *
-     * @return Operation
+     * @return Operation\RuleCollection
      */
     public function parse()
     {
@@ -41,19 +71,19 @@ final class ToolDsl implements Parser
 
         $rules = [];
 
-        if (! array_key_exists('rules', $this->dsl)) {
+        if (! array_key_exists(Key::RULES, $this->dsl)) {
             // TODO: Throw exception.
         }
 
-        foreach ($this->dsl['rules'] as $dslEntry) {
-            if (! array_key_exists('id', $dslEntry)) {
+        foreach ($this->dsl[Key::RULES] as $dslEntry) {
+            if (! array_key_exists(Key::ID, $dslEntry)) {
                 // TODO: Throw exception.
             }
 
-            $rules[(string)$dslEntry['id']] = $this->parseDslEntry($dslEntry);
+            $rules[(string)$dslEntry[Key::ID]] = $this->parseDslEntry($dslEntry);
         }
 
-        return new Operation\RuleCollection($rules);
+        return new Operation\RuleCollection($this->dsl[Key::TOOL], $rules);
     }
 
     /**
@@ -65,18 +95,18 @@ final class ToolDsl implements Parser
      */
     private function parseDslEntry($dslEntry)
     {
-        if (! array_key_exists('script', $dslEntry)) {
+        if (! array_key_exists(Key::SCRIPT, $dslEntry)) {
             // TODO: Throw exception.
         }
 
         $operations = [];
 
-        foreach ($dslEntry['script'] as $scriptEntry) {
-            if (! array_key_exists('operation', $scriptEntry)) {
+        foreach ($dslEntry[Key::SCRIPT] as $scriptEntry) {
+            if (! array_key_exists(Key::OPERATION, $scriptEntry)) {
                 // TODO: Throw exception.
             }
 
-            switch ($scriptEntry['operation']) {
+            switch ($scriptEntry[Key::OPERATION]) {
                 case Operation\Extract::ID:
                     if (! array_key_exists(Operation\Extract::ARG_KEYCHAIN, $scriptEntry)) {
                         // TODO: Throw exception.
@@ -94,7 +124,7 @@ final class ToolDsl implements Parser
                     break;
 
                 default:
-                    throw NotImplemented::forDslOperation($scriptEntry['operation']);
+                    throw NotImplemented::forDslOperation($scriptEntry[Key::OPERATION]);
             }
         }
 

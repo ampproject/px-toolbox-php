@@ -30,6 +30,16 @@ final class Aggregate implements Operation
     }
 
     /**
+     * Get the sub-operations that make up this aggregate operation.
+     *
+     * @return array<Operation> Sub-operations that make up this aggregate operation.
+     */
+    public function getSubOperations()
+    {
+        return $this->operations;
+    }
+
+    /**
      * Process the operation on the current stack.
      *
      * @param array<string, mixed> $data  Data to process.

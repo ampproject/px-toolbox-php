@@ -28,12 +28,12 @@ final class ParserFactory
      */
     public function createSpecificParser(array $dsl)
     {
-        if (! array_key_exists('type', $dsl)) {
+        if (! array_key_exists(Key::TYPE, $dsl)) {
             // TODO: throw exception.
         }
 
         /** @var class-string<Parser> $class */
-        $class = __NAMESPACE__ . '\\Parser\\' . $this->sanitizeAsClassName($dsl['type']);
+        $class = __NAMESPACE__ . '\\Parser\\' . $this->sanitizeAsClassName($dsl[Key::TYPE]);
 
         if (! class_exists($class)) {
             // TODO: throw exception.
