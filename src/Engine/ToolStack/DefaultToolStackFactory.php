@@ -6,10 +6,12 @@ use AmpProject\RemoteGetRequest;
 use AmpProject\RemoteRequest\CurlRemoteGetRequest;
 use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\Engine\Exception\InvalidTool;
+use PageExperience\Engine\Rules;
 use PageExperience\Engine\Tool;
 use PageExperience\Engine\Tool\AnalysisTool;
 use PageExperience\Engine\Tool\Configurable;
 use PageExperience\Engine\Tool\OptimizationTool;
+use PageExperience\Engine\Tool\Programmable;
 use PageExperience\Engine\Tool\ToolRuleset;
 use PageExperience\Engine\ToolStack;
 use ReflectionClass;
@@ -51,43 +53,51 @@ final class DefaultToolStackFactory implements ToolStackFactory
     /**
      * Create a tool stack instance for analysis.
      *
+     * @param Rules                $rules   Rules to use for the programmable tools.
      * @param ConfigurationProfile $profile Configuration profile to use.
      * @return ToolStack Assembled tool stack.
      */
-    public function createForAnalysis(ConfigurationProfile $profile)
+    public function createForAnalysis(Rules $rules, ConfigurationProfile $profile)
     {
-        return $this->assembleToolStack(AnalysisTool::class, $profile);
+        return $this->assembleToolStack(AnalysisTool::class, $rules, $profile);
     }
 
     /**
      * Create a tool stack instance for optimization.
      *
+     * @param Rules                $rules   Rules to use for the programmable tools.
      * @param ConfigurationProfile $profile Configuration profile to use.
      * @return ToolStack Assembled tool stack.
      */
-    public function createForOptimization(ConfigurationProfile $profile)
+    public function createForOptimization(Rules $rules, ConfigurationProfile $profile)
     {
-        return $this->assembleToolStack(OptimizationTool::class, $profile);
+        return $this->assembleToolStack(OptimizationTool::class, $rules, $profile);
     }
 
     /**
      * Assemble a tool stack for a given type of tool.
      *
      * @param class-string<Tool>   $toolType Type of tool to assemble the tool stack for.
+     * @param Rules                $rules    Rules to use for the programmable tools.
      * @param ConfigurationProfile $profile  Configuration profile to use.
      * @return ToolStack Assembled tool stack.
      */
-    private function assembleToolStack($toolType, ConfigurationProfile $profile)
+    private function assembleToolStack($toolType, Rules $rules, ConfigurationProfile $profile)
     {
         $toolClassNames = $this->toolStackConfiguration->getTools();
 
         $tools = [];
         foreach ($toolClassNames as $toolClassName => $dependencies) {
             if (is_subclass_of($toolClassName, $toolType, true)) {
-                $tool = $this->instantiateTool($toolClassName);
+                $tool     = $this->instantiateTool($toolClassName);
+                $toolName = $tool->getName();
 
                 if (! $profile->usesTool($tool->getName())) {
                     continue;
+                }
+
+                if ($tool instanceof Programmable && $rules->hasRulesForTool($toolName)) {
+                    $tool->attachRuleCollection($rules->getRulesForTool($toolName));
                 }
 
                 if ($tool instanceof Configurable) {
@@ -96,7 +106,7 @@ final class DefaultToolStackFactory implements ToolStackFactory
                     $tool->configureWithRuleset($rulesetFqcn::fromProfile($profile));
                 }
 
-                $tools[$tool->getName()] = [$tool, $dependencies];
+                $tools[$toolName] = [$tool, $dependencies];
             }
         }
 

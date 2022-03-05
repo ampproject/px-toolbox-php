@@ -7,6 +7,7 @@ use PageExperience\Engine\Analysis;
 use PageExperience\Engine\Analysis\PageExperienceAnalysis;
 use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\Engine\Context;
+use PageExperience\Engine\Rules;
 use PageExperience\Engine\ToolStack\DefaultToolStackFactory;
 use PageExperience\Engine\ToolStack\ToolStackConfiguration;
 use PageExperience\Engine\ToolStack\ToolStackFactory;
@@ -27,6 +28,13 @@ final class Engine
     private $toolStackFactory;
 
     /**
+     * Rules to use for the programmable tools.
+     *
+     * @var Rules
+     */
+    private $rules;
+
+    /**
      * Instantiate the Page Experience engine.
      *
      * @param RemoteGetRequest|null $remoteRequest    Optional. Remote request handler instance to use.
@@ -40,6 +48,9 @@ final class Engine
                 ToolStackConfiguration::fromJsonFile(__DIR__ . '/../default-toolstack.json'),
                 $remoteRequest
             );
+
+        $this->rules = Rules::createDefaultRules();
+        $this->rules->readRules();
     }
 
     /**
@@ -51,7 +62,7 @@ final class Engine
      */
     public function analyze($url, ConfigurationProfile $profile)
     {
-        $toolStack = $this->toolStackFactory->createForAnalysis($profile);
+        $toolStack = $this->toolStackFactory->createForAnalysis($this->rules, $profile);
 
         return $toolStack->analyze(new PageExperienceAnalysis(), $url, $profile, new Context());
     }
@@ -65,7 +76,7 @@ final class Engine
      */
     public function optimizeHtml($html, ConfigurationProfile $profile)
     {
-        $toolStack = $this->toolStackFactory->createForOptimization($profile);
+        $toolStack = $this->toolStackFactory->createForOptimization($this->rules, $profile);
 
         return $toolStack->optimizeHtml(new PageExperienceAnalysis(), $html, $profile, new Context());
     }
@@ -79,7 +90,7 @@ final class Engine
      */
     public function optimizeResponse(ResponseInterface $response, ConfigurationProfile $profile)
     {
-        $toolStack = $this->toolStackFactory->createForOptimization($profile);
+        $toolStack = $this->toolStackFactory->createForOptimization($this->rules, $profile);
 
         return $toolStack->optimizeResponse(new PageExperienceAnalysis(), $response, $profile, new Context());
     }

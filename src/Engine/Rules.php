@@ -91,6 +91,17 @@ final class Rules
     }
 
     /**
+     * Check if rules are known for a specific tool.
+     *
+     * @param string $toolName Name of the tool to check the rules for.
+     * @return bool Whether rules are known for the requested tool.
+     */
+    public function hasRulesForTool($toolName)
+    {
+        return array_key_exists($toolName, $this->rules);
+    }
+
+    /**
      * Get the rules for a specific tool.
      *
      * @param string $toolName Name of the tool to get the rules for.
@@ -99,5 +110,17 @@ final class Rules
     public function getRulesForTool($toolName)
     {
         return $this->rules[$toolName];
+    }
+
+    /**
+     * Create the default rules instance.
+     *
+     * @return Rules Rules with package defaults.
+     */
+    public static function createDefaultRules()
+    {
+        $rules = new self();
+        $rules->registerRulesLocation(__DIR__ . '/../../tests/fixtures/dsl/dsl.json');
+        return $rules;
     }
 }

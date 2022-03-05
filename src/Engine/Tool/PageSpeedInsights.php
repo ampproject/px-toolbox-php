@@ -8,6 +8,8 @@ use PageExperience\Engine\Analysis\Result\Issue;
 use PageExperience\Engine\Analysis\Result\ScoredMetric;
 use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\Engine\Context;
+use PageExperience\Engine\Dsl\Operation\RuleCollection;
+use PageExperience\Engine\Dsl\Stack;
 use PageExperience\Engine\Exception\MissingResultDataKey;
 use PageExperience\Engine\Exception\ToolRulesetMismatch;
 use PageExperience\Engine\Tool\PageSpeedInsights\Ruleset;
@@ -18,7 +20,7 @@ use PageExperience\PageSpeed\PageSpeedInsightsApi;
  *
  * @package ampproject/px-toolbox
  */
-final class PageSpeedInsights implements AnalysisTool, Configurable
+final class PageSpeedInsights implements AnalysisTool, Configurable, Programmable
 {
     /**
      * Array of scored metric keys.
@@ -62,13 +64,21 @@ final class PageSpeedInsights implements AnalysisTool, Configurable
     private $toolRuleset;
 
     /**
+     * Rule collection to use.
+     *
+     * @var RuleCollection
+     */
+    private $ruleCollection;
+
+    /**
      * Instantiate a PageSpeedInsights tool instance.
      *
      * @param RemoteGetRequest $remoteRequest Remote request handler instance to use.
      */
     public function __construct(RemoteGetRequest $remoteRequest)
     {
-        $this->remoteRequest = $remoteRequest;
+        $this->remoteRequest  = $remoteRequest;
+        $this->ruleCollection = new RuleCollection(self::NAME, []);
     }
 
     /**
@@ -108,6 +118,17 @@ final class PageSpeedInsights implements AnalysisTool, Configurable
     }
 
     /**
+     * Attach a rule collection to the tool.
+     *
+     * @param RuleCollection $ruleCollection Rule collection to attach.
+     * @return void
+     */
+    public function attachRuleCollection(RuleCollection $ruleCollection)
+    {
+        $this->ruleCollection = $ruleCollection;
+    }
+
+    /**
      * Analyze a URL.
      *
      * @param Analysis             $analysis Current state of the analysis.
@@ -126,12 +147,11 @@ final class PageSpeedInsights implements AnalysisTool, Configurable
             $this->toolRuleset->getReferrer()
         );
 
-        $lighthouseAudit = $psiAudit['lighthouseResult'];
+        $stack = new Stack();
+        $this->ruleCollection->process($psiAudit, $stack);
 
-        $context->add(self::LIGHTHOUSE_AUDIT_CONTEXT_KEY, $lighthouseAudit);
-
-        foreach ($lighthouseAudit['audits'] as $result) {
-            $this->processResult($analysis, $result);
+        foreach ($stack->getOutput() as $field => $result) {
+            $this->processResult($analysis, $field, $result);
         }
 
         return $analysis;
@@ -141,19 +161,13 @@ final class PageSpeedInsights implements AnalysisTool, Configurable
      * Process the lighthouse audit result.
      *
      * @param Analysis             $analysis Current state of the analysis.
+     * @param string               $field    Field ID of the result.
      * @param array<string, mixed> $result   Associative array of result data.
      * @return void
      */
-    private function processResult(Analysis $analysis, $result)
+    private function processResult(Analysis $analysis, $field, $result)
     {
-        if (! array_key_exists('id', $result)) {
-            return;
-        }
-
-        $id = $result['id'];
-        unset($result['id']);
-
-        switch ($id) {
+        switch ($field) {
             // Metrics.
             case 'cumulative-layout-shift':
             case 'first-contentful-paint':
@@ -164,7 +178,7 @@ final class PageSpeedInsights implements AnalysisTool, Configurable
             case 'max-potential-fid':
             case 'speed-index':
             case 'total-blocking-time':
-                $parsedResult = $this->parseScoredMetric($id, $result);
+                $parsedResult = $this->parseScoredMetric($field, $result);
                 $analysis->addResult($parsedResult);
                 break;
 
@@ -218,7 +232,7 @@ final class PageSpeedInsights implements AnalysisTool, Configurable
             case 'uses-responsive-images':
             case 'uses-text-compression':
             default:
-                $parsedResult = $this->parseIssue($id, $result);
+                $parsedResult = $this->parseIssue($field, $result);
                 $analysis->addResult($parsedResult);
                 break;
         }
@@ -227,26 +241,26 @@ final class PageSpeedInsights implements AnalysisTool, Configurable
     /**
      * Parse result data as a scored metric.
      *
-     * @param string               $id     ID of the result.
+     * @param string               $field  Field ID of the result.
      * @param array<string, mixed> $result Associative array of result data.
      * @return ScoredMetric Scored metric result object.
      *
      * @throws MissingResultDataKey If a key is missing from the audit result.
      */
-    private function parseScoredMetric($id, $result)
+    private function parseScoredMetric($field, $result)
     {
         $arguments = [];
 
         foreach (self::SCORED_METRIC_KEYS as $key) {
             if (! array_key_exists($key, $result)) {
-                throw MissingResultDataKey::forKey($id, $key);
+                throw MissingResultDataKey::forKey($field, $key);
             }
 
             $arguments[] = $result[$key];
             unset($result[$key]);
         }
 
-        $label       = array_key_exists('title', $result) ? $result['title'] : $id;
+        $label       = array_key_exists('title', $result) ? $result['title'] : $field;
         unset($result['title']);
 
         $description = array_key_exists('description', $result) ? $result['description'] : '';
@@ -258,27 +272,27 @@ final class PageSpeedInsights implements AnalysisTool, Configurable
         }
         unset($result['details']);
 
-        return new ScoredMetric($id, $label, $description, ...$arguments);
+        return new ScoredMetric($field, $label, $description, ...$arguments);
     }
 
 
     /**
      * Parse result data as an issue.
      *
-     * @param string               $id     ID of the result.
+     * @param string               $field  Field ID of the result.
      * @param array<string, mixed> $result Associative array of result data.
      * @return Issue Detected issues.
      */
-    private function parseIssue($id, $result)
+    private function parseIssue($field, $result)
     {
         $arguments = [];
 
-        $label       = array_key_exists('title', $result) ? $result['title'] : $id;
+        $label       = array_key_exists('title', $result) ? $result['title'] : $field;
         unset($result['title']);
 
         $description = array_key_exists('description', $result) ? $result['description'] : '';
         unset($result['description']);
 
-        return new Issue($id, $label, $description, ...$arguments);
+        return new Issue($field, $label, $description, ...$arguments);
     }
 }
