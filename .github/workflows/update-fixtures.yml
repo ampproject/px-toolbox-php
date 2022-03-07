@@ -1,4 +1,4 @@
-name: Update the fixture files audited by the PageSpeed Insight API
+name: Update the test fixtures audited by the PageSpeed Insight API
 on:
   schedule:
     # https://crontab.guru/once-a-week
@@ -90,14 +90,14 @@ jobs:
           chmod +x wp-cli.phar
           mv wp-cli.phar /usr/local/bin/wp
 
-      - name: Run the updater script
+      - name: Run the generator script
         env:
           PSI_API_KEY: ${{ secrets.PSI_API_KEY }}
           DB_NAME: px_toolbox_php
           DB_USER: root
           DB_PASS: ''
           DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
-        run: composer run update-fixture
+        run: composer run generate-fixture
 
       - name: Check if there are changes
         id: changes
