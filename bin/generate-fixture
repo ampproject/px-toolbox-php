@@ -49,6 +49,7 @@ FILE=wp-content
 if [ ! -d "$FILE" ]; then
     wp core download
     wp core config --dbname=$DB_NAME --dbuser=$DB_USER --dbpass=$DB_PASS --dbhost=$DB_HOST --extra-php <<PHP
+define( 'SCRIPT_DEBUG', true );
 \$_SERVER['HTTPS']='on';
 PHP
     wp db create
@@ -66,7 +67,11 @@ PHP
 
     rm wp-cli.local.yml
 
-    wp post create ../bin/posts/amp-page.html --post_name=amp-page --post_title='AMP Page' --post_status=publish --post_author=1
+    wp post create ../bin/wp/amp-page.html --post_name=amp-page --post_title='AMP Page' --post_status=publish --post_author=1
+
+    # Copy and activate the test plugin
+    cp -r ../bin/wp/px-test-plugin ./wp-content/plugins/
+    wp plugin activate px-test-plugin
 fi
 
 echo "WordPress public URL: $publicUrl"
