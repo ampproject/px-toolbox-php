@@ -2,6 +2,95 @@
 
 Higher-level library that aggregates and normalizes multiple tools to provide analysis and optimization functionality.
 
+## Overview
+
+At its most basic, the Page Experience Engine (PXE) is a higher-level tool to configure and execute a pipeline of
+lower-level tools and collect their output in a normalized way.
+
+It provides multiple profiles that it can run, with each profile being a set of configuration options for each of the
+included tools.
+
+The output is shaped in such a way that it becomes digestible as guidelines/AIs for a site owner who wants to take
+progressive steps to improve their site’s Page Experience rating.
+
+Multiple cumulative profiles allow the site owner to start with the low-hanging fruit and work through guidelines to
+meet more and more ambitious milestones.
+
+
+### Primary Goal
+
+The PXE is an abstraction layer built on top of the existing and future tooling that decouples changes in the tooling
+from the UI/UX requirements of a framework or CMS integration.
+
+Using this approach, the user interface within the integration needs to be designed and implemented only once, against
+the normalized data model that PXE returns. Any future changes to the tooling, like adapting validation rules and specs
+or adding a completely new CLI tool, will only need normalization logic within the PXE. The user interface of the
+integration will remain mostly unaffected by these changes.
+
+This in turn means we can transparently move the underlying technology out of focus and rather concentrate on the actual
+outcome. For a non-technical end user, does it really matter what exact HTML framework was in use when the page is
+demonstrably at its fastest and meets all required thresholds?
+
+## The Toolbelt
+
+The PXE is an abstraction using a pipeline for running multiple tools and aggregating their results.
+
+Configuring a tool to be included will happen by implementing interfaces that PXE provides. Once an implementation
+exists for the interfaces that PXE needs for a given tool, that tool can be included in any PXE configuration file and
+configured via that configuration file’s rules.
+
+PXE also manages dependencies amongst tools, so that a given tool can depend on and make use of results that were
+gathered from a different tool. This can for example be used to make the Lighthouse audit results (which include the
+CWV) available to the AMP Linter tool. This is also a requirement for something like the Sanitizer, where it does not
+make sense to run other diagnostics on the unsanitized content.
+
+For the best runtime behavior, PXE can run multiple tools in parallel (optionally), while ensuring that inter-dependent
+tools still run sequentially.
+
+This combination of parallel runs and sequential dependencies that build on top of each other will result in a branching
+execution flow that optimizes itself based on system resources.
+
+```mermaid
+%%{init: {'theme': 'neutral'}}%%
+stateDiagram-v2
+    state "PageExperience\Engine::optimize()" as optimize()
+    state "PageExperience\Engine::analyze()" as analyze()
+
+    state optimize() {
+        state "AMP Sanitizer" as Amp_Sanitizer
+        state "AMP Optimizer" as Amp_Optimizer
+        state "Dom\Document::saveHtml()" as saveHtml()
+
+        [*] --> Amp_Sanitizer
+        Amp_Sanitizer --> Amp_Optimizer
+        Amp_Optimizer --> saveHtml()
+        saveHtml() --> [*]
+    }
+
+    state analyze() {
+        state "AMP Validator" as Amp_Validator
+        state "AMP Linter" as Amp_Linter
+        state "Cache Analysis" as Cache_Analysis
+        state "PageExeprience\Engine::renderResults()" as renderResults()
+
+        state fork_state <<fork>>
+
+        [*] --> fork_state
+        fork_state --> Lighthouse
+        fork_state --> Amp_Validator
+        fork_state --> Cache_Analysis
+        Lighthouse --> Amp_Linter
+
+        state join_state <<join>>
+
+        Amp_Linter --> join_state
+        Amp_Validator --> join_state
+        Cache_Analysis --> join_state
+        join_state --> renderResults()
+        renderResults() --> [*]
+    }
+```
+
 ## Instantiation
 
 The [`PageExperience\Engine`](/src/Engine.php) can be directly instantiated by invoking its constructor.
