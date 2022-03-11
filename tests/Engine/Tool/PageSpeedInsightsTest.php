@@ -3,43 +3,41 @@
 namespace PageExperience\Tests\Engine\Tool;
 
 use AmpProject\RemoteGetRequest;
-use AmpProject\RemoteRequest\StubbedRemoteGetRequest;
 use PageExperience\Engine\Analysis;
 use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\Engine\Context;
-use PageExperience\Engine\Tool\Lighthouse;
+use PageExperience\Engine\Tool\PageSpeedInsights;
 use PageExperience\Tests\ConfiguredStubbedRemoteGetRequest;
 use PageExperience\Tests\TestCase;
 
 /**
- * Test the Lighthouse class.
+ * Test the PageSpeedInsights class.
  *
  * @package ampproject/px-toolbox-php
  */
-final class LighthouseTest extends TestCase
+final class PageSpeedInsightsTest extends TestCase
 {
     public function testItCanBeInstantiated()
     {
         $remoteRequestMock = $this->createMock(RemoteGetRequest::class);
 
-        $lighthouse = new Lighthouse($remoteRequestMock);
+        $pageSpeedInsights = new PageSpeedInsights($remoteRequestMock);
 
-        self::assertInstanceOf(Lighthouse::class, $lighthouse);
+        self::assertInstanceOf(PageSpeedInsights::class, $pageSpeedInsights);
     }
 
     public function testItCanRunAnAudit()
     {
-        $lighthouse = new Lighthouse(ConfiguredStubbedRemoteGetRequest::create());
+        $pageSpeedInsights = new PageSpeedInsights(ConfiguredStubbedRemoteGetRequest::create());
 
         $analysis = $this->createMock(Analysis::class);
         $profile  = new ConfigurationProfile();
         $context  = new Context();
 
-        $ruleset = Lighthouse\Ruleset::fromProfile($profile);
-        $lighthouse->configureWithRuleset($ruleset);
+        $ruleset = PageSpeedInsights\Ruleset::fromProfile($profile);
+        $pageSpeedInsights->configureWithRuleset($ruleset);
 
-        $analysis = $lighthouse->analyze($analysis, 'https://amp-wp.org', $profile, $context);
-
+        $analysis = $pageSpeedInsights->analyze($analysis, 'https://amp-wp.org', $profile, $context);
         $this->assertInstanceOf(Analysis::class, $analysis);
     }
 }

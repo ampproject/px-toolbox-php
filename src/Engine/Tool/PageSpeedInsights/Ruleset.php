@@ -1,17 +1,17 @@
 <?php
 
-namespace PageExperience\Engine\Tool\Lighthouse;
+namespace PageExperience\Engine\Tool\PageSpeedInsights;
 
 use Exception;
 use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\Engine\Exception\FailedToConfigureTool;
 use PageExperience\Engine\Exception\ToolRulesetMismatch;
 use PageExperience\Engine\Tool;
-use PageExperience\Engine\Tool\Lighthouse;
+use PageExperience\Engine\Tool\PageSpeedInsights;
 use PageExperience\Engine\Tool\ToolRuleset;
 
 /**
- * Ruleset for the Lighthouse tool.
+ * Ruleset for the PageSpeedInsights tool.
  *
  * @package ampproject/px-toolbox
  */
@@ -37,7 +37,7 @@ final class Ruleset implements ToolRuleset
      */
     public function getToolName()
     {
-        return Lighthouse::NAME;
+        return PageSpeedInsights::NAME;
     }
 
     /**
@@ -51,7 +51,7 @@ final class Ruleset implements ToolRuleset
      */
     public function configureTool(Tool $tool)
     {
-        if (! $tool instanceof Lighthouse) {
+        if (! $tool instanceof PageSpeedInsights) {
             throw ToolRulesetMismatch::forToolWithToolRuleset($tool, $this);
         }
 
@@ -75,9 +75,9 @@ final class Ruleset implements ToolRuleset
     }
 
     /**
-     * Get the Lighthouse strategy to use.
+     * Get the PageSpeedInsights strategy to use.
      *
-     * @return Strategy Lighthouse strategy to use.
+     * @return Strategy PageSpeedInsights strategy to use.
      */
     public function getStrategy()
     {

@@ -46,8 +46,9 @@ final class EngineTest extends TestCase
     {
         $engine  = new Engine(ConfiguredStubbedRemoteGetRequest::create());
         $profile = new ConfigurationProfile();
+        $analysis = $engine->analyze('https://amp-wp.org', $profile);
 
-        self::assertInstanceOf(Analysis::class, $engine->analyze('https://amp-wp.org', $profile));
+        self::assertInstanceOf(Analysis::class, $analysis);
     }
 
     public function testItCanOptimizeHtml()

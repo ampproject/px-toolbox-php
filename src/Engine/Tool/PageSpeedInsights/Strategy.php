@@ -1,11 +1,11 @@
 <?php
 
-namespace PageExperience\Engine\Tool\Lighthouse;
+namespace PageExperience\Engine\Tool\PageSpeedInsights;
 
 use AmpProject\FakeEnum;
 
 /**
- * Strategy to use for the Lighthouse audit.
+ * Strategy to use for the PageSpeedInsights audit.
  *
  * @method static self MOBILE()
  * @method static self DESKTOP()

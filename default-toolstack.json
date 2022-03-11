@@ -1,5 +1,5 @@
 {
   "PageExperience\\Engine\\Tool\\AmpOptimizer": [],
   "PageExperience\\Engine\\Tool\\AmpValidator": [],
-  "PageExperience\\Engine\\Tool\\Lighthouse": []
+  "PageExperience\\Engine\\Tool\\PageSpeedInsights": []
 }
