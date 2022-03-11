@@ -16,7 +16,6 @@ progressive steps to improve their site’s Page Experience rating.
 Multiple cumulative profiles allow the site owner to start with the low-hanging fruit and work through guidelines to
 meet more and more ambitious milestones.
 
-
 ### Primary Goal
 
 The PXE is an abstraction layer built on top of the existing and future tooling that decouples changes in the tooling
@@ -88,6 +87,134 @@ stateDiagram-v2
         Cache_Analysis --> join_state
         join_state --> renderResults()
         renderResults() --> [*]
+    }
+```
+
+### Analysis Results Object Model
+
+The following diagram provides a simplified (work-in-progress) of the object model that is produced by the PXE.
+
+_Note: Classes are clickable and will bring you to the latest version of the corresponding code._
+
+```mermaid
+classDiagram
+    direction LR
+
+    PageExperienceAnalysis ..|> Analysis
+    PageExperienceAnalysis "-details" --* "*" Result
+    PageExperienceAnalysis "-ruleset" --* Ruleset
+    Result "-details" --* "*" Result
+    Analysis ..> Result
+    JsonRenderer ..> Analysis : uses
+    JsonRenderer ..|> Renderer
+    Renderer ..> Analysis : uses
+    Ruleset "-tools" --* "*" ToolRuleset
+    AmpValidatorRuleset ..|> ToolRuleset
+    AmpLinterRuleset ..|> ToolRuleset
+    Issue ..> Severity : uses
+    FixableIssue --|> Issue
+    FixableIssue ..|> Fixable
+    AnalysisFactory --> PageExperienceAnalysis : creates
+    AnalysisFactory ..> Analysis : uses
+    Analysis ..> Scope : uses
+    PageExperienceAnalysis ..> Scope : uses
+    PageExperienceAnalysis ..> Status : uses
+    Analysis ..> Status : uses
+
+    click PageExperienceAnalysis href "https://github.com/ampproject/px-toolbox-php/blob/main/src/Engine/Analysis/PageExperienceAnalysis.php"
+    click Result href "https://github.com/ampproject/px-toolbox-php/blob/main/src/Engine/Analysis/Result.php"
+    click Issue href "https://github.com/ampproject/px-toolbox-php/blob/main/src/Engine/Analysis/Result/Issue.php"
+    click Status href "https://github.com/ampproject/px-toolbox-php/blob/main/src/Engine/Analysis/Status.php"
+    click Scope href "https://github.com/ampproject/px-toolbox-php/blob/main/src/Engine/Analysis/Scope.php"
+    click Analysis href "https://github.com/ampproject/px-toolbox-php/blob/main/src/Engine/Analysis.php"
+    click ToolRuleset href "https://github.com/ampproject/px-toolbox-php/blob/main/src/Engine/Tool/ToolRuleset.php"
+    click Ruleset href "https://github.com/ampproject/px-toolbox-php/blob/main/src/Engine/Analysis/Ruleset.php"
+    click Renderer href "https://github.com/ampproject/px-toolbox-php/blob/main/src/Engine/Analysis/Renderer.php"
+    click JsonRenderer href "https://github.com/ampproject/px-toolbox-php/blob/main/src/Engine/Analysis/Renderer/JsonRenderer.php"
+
+    class PageExperienceAnalysis {
+        -status: Status
+        -timestamp: DateTimeInterface
+        -scope: Scope
+        +getStatus() Status
+        +getTimestamp() DateTimeInterface
+        +getScope() Scope
+        +getRuleset() Ruleset
+        +getResults() array~Result~
+    }
+    class Result {
+        -tags: array~string~
+        +getTags() array~string~
+        +getDetails() array~Result~
+        +getLabel() string
+        +getDescription() string
+    }
+    class Issue {
+        -label: string
+        -description: string
+        -severity: Severity
+        +getLabel() string
+        +getDescription() string
+        +getSeverity() Severity
+    }
+    class Severity {
+        <<enumeration>>
+        INFO
+        WARNING
+        ERROR
+    }
+    class Status {
+        <<enumeration>>
+        SUCCESS
+        ERROR
+    }
+    class Scope {
+        <<enumeration>>
+        SITE
+        PAGE
+        FRAGMENT
+        UNKNOWN
+    }
+    class AnalysisFactory {
+        +fromJson(json: string) Analysis
+    }
+    class Analysis {
+        <<interface>>
+        +getStatus() Status
+        +getTimestamp() DateTimeInterface
+        +getScope() Scope
+        +getRuleset() Ruleset
+        +getResults() array~Result~
+    }
+    class ToolRuleset {
+        +getToolName() string
+        +configureTool(tool: Tool)
+    }
+    class Ruleset {
+        -name: string
+        +getName() string
+        +getTools() array~ToolRuleset~
+    }
+    class Renderer {
+        <<interface>>
+        +render(analysis: Analysis) string
+    }
+    class FixableIssue {
+        -fixLabel: string
+        -fixDescription: string
+        -fixIdentifier: string
+        +getFixLabel() string
+        +getFixDescription() string
+        +getFixIdentifier() string
+    }
+    class Fixable {
+        <<interface>>
+        +getFixLabel() string
+        +getFixDescription() string
+        +getFixIdentifier() string
+    }
+    class JsonRenderer {
+        +render(analysis: Analysis) string
     }
 ```
 
