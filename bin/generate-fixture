@@ -80,6 +80,17 @@ echo "WordPress public URL: $publicUrl"
 cd ../
 
 # Generate the fixture file for the amp-page.
-./bin/px psi --json --key $PSI_API_KEY $publicUrl/amp-page/ > ./tests/fixtures/psi_local-wp_amp-page.json
+echo "Generating the fixture file for the amp-page..."
+pageSpeedInsightData=$(./bin/px psi --json --key $PSI_API_KEY $publicUrl/amp-page/)
+pageSpeedInsightVersion=$(echo $pageSpeedInsightData | jq .lighthouseResult.lighthouseVersion)
 
+existingData=$(cat ./tests/fixtures/psi_local-wp_amp-page.json)
+existingDataVersion=$(echo $existingData | jq .lighthouseResult.lighthouseVersion)
+
+if [ "$pageSpeedInsightVersion" == "$existingDataVersion" ]; then
+    echo "Lighthouse version is the same. No need to update the fixture file."
+    exit
+fi
+
+echo $pageSpeedInsightData > ./tests/fixtures/psi_local-wp_amp-page.json
 echo "Generated the fixture file psi_local-wp_amp-page.json in tests/fixtures directory."
