@@ -10,15 +10,15 @@ use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\Engine\Context;
 use PageExperience\Engine\Exception\MissingResultDataKey;
 use PageExperience\Engine\Exception\ToolRulesetMismatch;
-use PageExperience\Engine\Tool\Lighthouse\Ruleset;
+use PageExperience\Engine\Tool\PageSpeedInsights\Ruleset;
 use PageExperience\PageSpeed\PageSpeedInsightsApi;
 
 /**
- * Lighthouse abstraction as a page experience tool.
+ * PageSpeedInsights abstraction as a page experience tool.
  *
  * @package ampproject/px-toolbox
  */
-final class Lighthouse implements AnalysisTool, Configurable
+final class PageSpeedInsights implements AnalysisTool, Configurable
 {
     /**
      * Array of scored metric keys.
@@ -38,7 +38,7 @@ final class Lighthouse implements AnalysisTool, Configurable
      *
      * @var string
      */
-    const NAME = 'lighthouse';
+    const NAME = 'page-speed-insights';
 
     /**
      * Context key under which to store the lighthouse audit in the context.
@@ -62,7 +62,7 @@ final class Lighthouse implements AnalysisTool, Configurable
     private $toolRuleset;
 
     /**
-     * Instantiate a Lighthouse tool instance.
+     * Instantiate a PageSpeedInsights tool instance.
      *
      * @param RemoteGetRequest $remoteRequest Remote request handler instance to use.
      */

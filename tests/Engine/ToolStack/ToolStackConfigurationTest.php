@@ -4,7 +4,7 @@ namespace PageExperience\Tests\Engine\ToolStack;
 
 use PageExperience\Engine\Tool\AmpOptimizer;
 use PageExperience\Engine\Tool\AmpValidator;
-use PageExperience\Engine\Tool\Lighthouse;
+use PageExperience\Engine\Tool\PageSpeedInsights;
 use PageExperience\Engine\ToolStack\ToolStackConfiguration;
 use PageExperience\Tests\TestCase;
 
@@ -51,8 +51,8 @@ final class ToolStackConfigurationTest extends TestCase
         self::assertEquals([], $tools[AmpValidator::class]);
         self::assertArrayHasKey(AmpOptimizer::class, $tools);
         self::assertEquals([], $tools[AmpOptimizer::class]);
-        self::assertArrayHasKey(Lighthouse::class, $tools);
-        self::assertEquals([], $tools[Lighthouse::class]);
+        self::assertArrayHasKey(PageSpeedInsights::class, $tools);
+        self::assertEquals([], $tools[PageSpeedInsights::class]);
     }
 
     public function testItCanRegisterNewTools()
@@ -70,8 +70,8 @@ final class ToolStackConfigurationTest extends TestCase
         self::assertEquals([], $tools[AmpValidator::class]);
         self::assertArrayHasKey(AmpOptimizer::class, $tools);
         self::assertEquals([], $tools[AmpOptimizer::class]);
-        self::assertArrayHasKey(Lighthouse::class, $tools);
-        self::assertEquals([], $tools[Lighthouse::class]);
+        self::assertArrayHasKey(PageSpeedInsights::class, $tools);
+        self::assertEquals([], $tools[PageSpeedInsights::class]);
         self::assertArrayHasKey('DummyToolA', $tools);
         self::assertEquals([], $tools['DummyToolA']);
         self::assertArrayHasKey('DummyToolB', $tools);
