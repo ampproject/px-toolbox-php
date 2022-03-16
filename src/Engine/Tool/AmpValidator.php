@@ -5,8 +5,8 @@ namespace PageExperience\Engine\Tool;
 use PageExperience\Engine\Analysis;
 use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\Engine\Context;
-use PageExperience\Engine\ErrorLogger;
 use PageExperience\Engine\Tool\AmpValidator\Ruleset;
+use Psr\Log\LoggerInterface;
 
 /**
  * AMP Validator abstraction as a page experience tool.
@@ -67,7 +67,7 @@ final class AmpValidator implements AnalysisTool, Configurable
      * @param string               $url      URL to run an analysis for.
      * @param ConfigurationProfile $profile  Configuration profile to use for the analysis.
      * @param Context              $context  Current context of the analysis.
-     * @param ErrorLogger          $errors   Error log that are collected during analysis.
+     * @param LoggerInterface      $logger   Logs that are collected during analysis.
      * @return Analysis Adapted page experience analysis.
      */
     public function analyze(
@@ -75,7 +75,7 @@ final class AmpValidator implements AnalysisTool, Configurable
         $url,
         ConfigurationProfile $profile,
         Context $context,
-        ErrorLogger $errors
+        LoggerInterface $logger
     ) {
         $this->toolRuleset->configureTool($this);
 

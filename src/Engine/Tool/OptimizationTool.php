@@ -5,9 +5,9 @@ namespace PageExperience\Engine\Tool;
 use PageExperience\Engine\Analysis;
 use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\Engine\Context;
-use PageExperience\Engine\ErrorLogger;
 use PageExperience\Engine\Tool;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Tool that provides optimization capabilities.
@@ -23,7 +23,7 @@ interface OptimizationTool extends Tool
      * @param string               $html     String of HTML to run an analysis for.
      * @param ConfigurationProfile $profile  Configuration profile to use for the analysis.
      * @param Context              $context  Current context of the analysis.
-     * @param ErrorLogger          $errors   Error log that are collected during optimization.
+     * @param LoggerInterface      $logger   Logs that are collected during optimization.
      * @return string String of optimized HTML.
      */
     public function optimizeHtml(
@@ -31,7 +31,7 @@ interface OptimizationTool extends Tool
         $html,
         ConfigurationProfile $profile,
         Context $context,
-        ErrorLogger $errors
+        LoggerInterface $logger
     );
 
     /**
@@ -41,7 +41,7 @@ interface OptimizationTool extends Tool
      * @param ResponseInterface    $response HTTP response to optimize.
      * @param ConfigurationProfile $profile  Configuration profile to use for the analysis.
      * @param Context              $context  Current context of the analysis.
-     * @param ErrorLogger          $errors   Error log that are collected during optimization.
+     * @param LoggerInterface      $logger   Logs that are collected during optimization.
      * @return ResponseInterface Optimized HTTP response.
      */
     public function optimizeResponse(
@@ -49,6 +49,6 @@ interface OptimizationTool extends Tool
         ResponseInterface $response,
         ConfigurationProfile $profile,
         Context $context,
-        ErrorLogger $errors
+        LoggerInterface $logger
     );
 }

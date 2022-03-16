@@ -10,11 +10,11 @@ use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\Engine\Context;
 use PageExperience\Engine\Dsl\Operation\RuleCollection;
 use PageExperience\Engine\Dsl\Stack;
-use PageExperience\Engine\ErrorLogger;
 use PageExperience\Engine\Exception\MissingResultDataKey;
 use PageExperience\Engine\Exception\ToolRulesetMismatch;
 use PageExperience\Engine\Tool\PageSpeedInsights\Ruleset;
 use PageExperience\PageSpeed\PageSpeedInsightsApi;
+use Psr\Log\LoggerInterface;
 
 /**
  * PageSpeedInsights abstraction as a page experience tool.
@@ -136,7 +136,7 @@ final class PageSpeedInsights implements AnalysisTool, Configurable, Programmabl
      * @param string               $url      URL to run an analysis for.
      * @param ConfigurationProfile $profile  Configuration profile to use for the analysis.
      * @param Context              $context  Current context of the analysis.
-     * @param ErrorLogger          $errors   Error log that are collected during analysis.
+     * @param LoggerInterface      $logger   Logs that are collected during analysis.
      * @return Analysis Adapted page experience analysis.
      */
     public function analyze(
@@ -144,7 +144,7 @@ final class PageSpeedInsights implements AnalysisTool, Configurable, Programmabl
         $url,
         ConfigurationProfile $profile,
         Context $context,
-        ErrorLogger $errors
+        LoggerInterface $logger
     ) {
         $psiApi = new PageSpeedInsightsApi($this->toolRuleset->getPsiApiKey(), $this->remoteRequest);
 

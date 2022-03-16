@@ -9,10 +9,10 @@ use AmpProject\RemoteGetRequest;
 use PageExperience\Engine\Analysis;
 use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\Engine\Context;
-use PageExperience\Engine\ErrorLogger;
 use PageExperience\Engine\StringStream;
 use PageExperience\Engine\Tool\AmpOptimizer\Ruleset;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * AMP Optimizer abstraction as a page experience tool.
@@ -90,7 +90,7 @@ final class AmpOptimizer implements OptimizationTool, Configurable
      * @param string               $html     String of HTML to run an analysis for.
      * @param ConfigurationProfile $profile  Configuration profile to use for the analysis.
      * @param Context              $context  Current context of the analysis.
-     * @param ErrorLogger          $errors   Error log that are collected during optimization.
+     * @param LoggerInterface      $logger   Logs that are collected during optimization.
      * @return string String of optimized HTML.
      */
     public function optimizeHtml(
@@ -98,7 +98,7 @@ final class AmpOptimizer implements OptimizationTool, Configurable
         $html,
         ConfigurationProfile $profile,
         Context $context,
-        ErrorLogger $errors
+        LoggerInterface $logger
     ) {
         $this->toolRuleset->configureTool($this);
 
@@ -123,7 +123,7 @@ final class AmpOptimizer implements OptimizationTool, Configurable
      * @param ResponseInterface    $response HTTP response to optimize.
      * @param ConfigurationProfile $profile  Configuration profile to use for the analysis.
      * @param Context              $context  Current context of the analysis.
-     * @param ErrorLogger          $errors   Error log that are collected during optimization.
+     * @param LoggerInterface      $logger   Logs that are collected during optimization.
      * @return ResponseInterface Optimized HTTP response.
      */
     public function optimizeResponse(
@@ -131,9 +131,9 @@ final class AmpOptimizer implements OptimizationTool, Configurable
         ResponseInterface $response,
         ConfigurationProfile $profile,
         Context $context,
-        ErrorLogger $errors
+        LoggerInterface $logger
     ) {
-        $optimizedHtml = $this->optimizeHtml($analysis, (string) $response->getBody(), $profile, $context, $errors);
+        $optimizedHtml = $this->optimizeHtml($analysis, (string) $response->getBody(), $profile, $context, $logger);
 
         return $response->withBody(new StringStream($optimizedHtml));
     }
