@@ -9,6 +9,7 @@ use AmpProject\RemoteGetRequest;
 use PageExperience\Engine\Analysis;
 use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\Engine\Context;
+use PageExperience\Engine\ErrorLogger;
 use PageExperience\Engine\StringStream;
 use PageExperience\Engine\Tool\AmpOptimizer\Ruleset;
 use Psr\Http\Message\ResponseInterface;
@@ -89,10 +90,16 @@ final class AmpOptimizer implements OptimizationTool, Configurable
      * @param string               $html     String of HTML to run an analysis for.
      * @param ConfigurationProfile $profile  Configuration profile to use for the analysis.
      * @param Context              $context  Current context of the analysis.
+     * @param ErrorLogger          $errors   Error log that are collected during optimization.
      * @return string String of optimized HTML.
      */
-    public function optimizeHtml(Analysis $analysis, $html, ConfigurationProfile $profile, Context $context)
-    {
+    public function optimizeHtml(
+        Analysis $analysis,
+        $html,
+        ConfigurationProfile $profile,
+        Context $context,
+        ErrorLogger $errors
+    ) {
         $this->toolRuleset->configureTool($this);
 
         // TODO: Use the tool ruleset to adapt the configuration.
@@ -116,15 +123,17 @@ final class AmpOptimizer implements OptimizationTool, Configurable
      * @param ResponseInterface    $response HTTP response to optimize.
      * @param ConfigurationProfile $profile  Configuration profile to use for the analysis.
      * @param Context              $context  Current context of the analysis.
+     * @param ErrorLogger          $errors   Error log that are collected during optimization.
      * @return ResponseInterface Optimized HTTP response.
      */
     public function optimizeResponse(
         Analysis $analysis,
         ResponseInterface $response,
         ConfigurationProfile $profile,
-        Context $context
+        Context $context,
+        ErrorLogger $errors
     ) {
-        $optimizedHtml = $this->optimizeHtml($analysis, (string) $response->getBody(), $profile, $context);
+        $optimizedHtml = $this->optimizeHtml($analysis, (string) $response->getBody(), $profile, $context, $errors);
 
         return $response->withBody(new StringStream($optimizedHtml));
     }

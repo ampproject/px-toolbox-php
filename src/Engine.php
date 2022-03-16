@@ -8,6 +8,7 @@ use PageExperience\Engine\Analysis\PageExperienceAnalysis;
 use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\Engine\Context;
 use PageExperience\Engine\Rules;
+use PageExperience\Engine\ErrorLogger;
 use PageExperience\Engine\ToolStack\DefaultToolStackFactory;
 use PageExperience\Engine\ToolStack\ToolStackConfiguration;
 use PageExperience\Engine\ToolStack\ToolStackFactory;
@@ -58,13 +59,14 @@ final class Engine
      *
      * @param string               $url     URL to run an analysis for.
      * @param ConfigurationProfile $profile Configuration profile to use for the analysis.
+     * @param ErrorLogger          $errors  Error log that are collected during analysis.
      * @return Analysis Page experience analysis.
      */
-    public function analyze($url, ConfigurationProfile $profile)
+    public function analyze($url, ConfigurationProfile $profile, ErrorLogger $errors)
     {
         $toolStack = $this->toolStackFactory->createForAnalysis($this->rules, $profile);
 
-        return $toolStack->analyze(new PageExperienceAnalysis(), $url, $profile, new Context());
+        return $toolStack->analyze(new PageExperienceAnalysis(), $url, $profile, new Context(), $errors);
     }
 
     /**
@@ -72,13 +74,14 @@ final class Engine
      *
      * @param string               $html    String of HTML to optimize.
      * @param ConfigurationProfile $profile Configuration profile to use for the optimization.
+     * @param ErrorLogger          $errors   Error log that are collected during optimization.
      * @return string String of optimized HTML.
      */
-    public function optimizeHtml($html, ConfigurationProfile $profile)
+    public function optimizeHtml($html, ConfigurationProfile $profile, ErrorLogger $errors)
     {
         $toolStack = $this->toolStackFactory->createForOptimization($this->rules, $profile);
 
-        return $toolStack->optimizeHtml(new PageExperienceAnalysis(), $html, $profile, new Context());
+        return $toolStack->optimizeHtml(new PageExperienceAnalysis(), $html, $profile, new Context(), $errors);
     }
 
     /**
@@ -86,12 +89,13 @@ final class Engine
      *
      * @param ResponseInterface    $response HTTP response to optimize.
      * @param ConfigurationProfile $profile  Configuration profile to use for the optimization.
+     * @param ErrorLogger          $errors   Error log that are collected during optimization.
      * @return ResponseInterface Optimized HTTP response.
      */
-    public function optimizeResponse(ResponseInterface $response, ConfigurationProfile $profile)
+    public function optimizeResponse(ResponseInterface $response, ConfigurationProfile $profile, ErrorLogger $errors)
     {
         $toolStack = $this->toolStackFactory->createForOptimization($this->rules, $profile);
 
-        return $toolStack->optimizeResponse(new PageExperienceAnalysis(), $response, $profile, new Context());
+        return $toolStack->optimizeResponse(new PageExperienceAnalysis(), $response, $profile, new Context(), $errors);
     }
 }
