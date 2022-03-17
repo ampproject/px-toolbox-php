@@ -3,7 +3,7 @@
 namespace PageExperience\Engine\Tool;
 
 /**
- * Individual tool that powers the aggregated page experience analysis.
+ * A tool that is configurable.
  *
  * @package ampproject/px-toolbox
  */
