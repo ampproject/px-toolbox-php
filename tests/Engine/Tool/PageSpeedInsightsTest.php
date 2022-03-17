@@ -9,6 +9,7 @@ use PageExperience\Engine\Context;
 use PageExperience\Engine\Tool\PageSpeedInsights;
 use PageExperience\Tests\ConfiguredStubbedRemoteGetRequest;
 use PageExperience\Tests\TestCase;
+use Psr\Log\NullLogger;
 
 /**
  * Test the PageSpeedInsights class.
@@ -33,11 +34,12 @@ final class PageSpeedInsightsTest extends TestCase
         $analysis = $this->createMock(Analysis::class);
         $profile  = new ConfigurationProfile();
         $context  = new Context();
+        $logger   = new NullLogger();
 
         $ruleset = PageSpeedInsights\Ruleset::fromProfile($profile);
         $pageSpeedInsights->configureWithRuleset($ruleset);
 
-        $analysis = $pageSpeedInsights->analyze($analysis, 'https://amp-wp.org', $profile, $context);
+        $analysis = $pageSpeedInsights->analyze($analysis, 'https://amp-wp.org', $profile, $context, $logger);
         $this->assertInstanceOf(Analysis::class, $analysis);
     }
 }

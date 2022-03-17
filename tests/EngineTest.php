@@ -9,6 +9,7 @@ use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\Engine\StringStream;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
+use Psr\Log\NullLogger;
 
 /**
  * Test the Engine entry point class.
@@ -46,7 +47,8 @@ final class EngineTest extends TestCase
     {
         $engine  = new Engine(ConfiguredStubbedRemoteGetRequest::create());
         $profile = new ConfigurationProfile();
-        $analysis = $engine->analyze('https://amp-wp.org', $profile);
+        $logger  = new NullLogger();
+        $analysis = $engine->analyze('https://amp-wp.org', $profile, $logger);
 
         self::assertInstanceOf(Analysis::class, $analysis);
     }
@@ -55,8 +57,9 @@ final class EngineTest extends TestCase
     {
         $engine  = new Engine();
         $profile = new ConfigurationProfile();
+        $logger  = new NullLogger();
 
-        $optimizedHtml = $engine->optimizeHtml('<html></html>', $profile);
+        $optimizedHtml = $engine->optimizeHtml('<html></html>', $profile, $logger);
 
         self::assertStringContainsString('<html', $optimizedHtml);
         self::assertStringContainsString('transformed="self;v=1"', $optimizedHtml);
@@ -66,6 +69,7 @@ final class EngineTest extends TestCase
     {
         $engine   = new Engine();
         $profile  = new ConfigurationProfile();
+        $logger   = new NullLogger();
         $response = $this->createMock(ResponseInterface::class);
         $response->method('getBody')
                  ->willReturn(new StringStream('<html></html>'));
@@ -80,7 +84,7 @@ final class EngineTest extends TestCase
         $response->method('withBody')
                  ->willReturnCallback($optimizedResponseCallback);
 
-        $optimizedResponse = $engine->optimizeResponse($response, $profile);
+        $optimizedResponse = $engine->optimizeResponse($response, $profile, $logger);
 
         self::assertInstanceOf(ResponseInterface::class, $optimizedResponse);
         self::assertInstanceOf(StreamInterface::class, $optimizedResponse->getBody());

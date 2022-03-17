@@ -10,6 +10,7 @@ use PageExperience\Engine\Context;
 use PageExperience\Engine\Tool\AmpOptimizer;
 use PageExperience\Tests\ConfiguredStubbedRemoteGetRequest;
 use PageExperience\Tests\TestCase;
+use Psr\Log\NullLogger;
 
 /**
  * Test the AmpOptimizer class.
@@ -33,13 +34,14 @@ final class AmpOptimizerTest extends TestCase
         $analysisMock     = $this->createMock(Analysis::class);
         $profile          = new ConfigurationProfile();
         $context          = new Context();
+        $logger           = new NullLogger();
 
         $ampOptimizer = new AmpOptimizer($remoteGetRequest);
 
         $ruleset = AmpOptimizer\Ruleset::fromProfile($profile);
         $ampOptimizer->configureWithRuleset($ruleset);
 
-        $optimizedHtml = $ampOptimizer->optimizeHtml($analysisMock, '<html amp></html>', $profile, $context);
+        $optimizedHtml = $ampOptimizer->optimizeHtml($analysisMock, '<html amp></html>', $profile, $context, $logger);
 
         $this->assertStringContainsString('<html', $optimizedHtml);
         $this->assertStringContainsString('transformed="self;v=1"', $optimizedHtml);
