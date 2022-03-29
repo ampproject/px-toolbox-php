@@ -2,7 +2,7 @@
 
 namespace PageExperience\Engine\Tool;
 
-use AmpProject\Optimizer\Exception\UnknownConfigurationKey;
+use PageExperience\Engine\Tool\Exception\UnknownConfigurationKey;
 
 /**
  * Interface for a PX tool configuration object that validates and stores configuration settings.

@@ -2,9 +2,9 @@
 
 namespace PageExperience\Engine\Tool;
 
-use AmpProject\Optimizer\Exception\InvalidConfigurationValue;
-use AmpProject\Optimizer\Exception\UnknownConfigurationClass;
-use AmpProject\Optimizer\Exception\UnknownConfigurationKey;
+use PageExperience\Engine\Tool\Exception\InvalidConfigurationValue;
+use PageExperience\Engine\Tool\Exception\UnknownConfigurationClass;
+use PageExperience\Engine\Tool\Exception\UnknownConfigurationKey;
 
 /**
  * The default configuration for the PX Engine.
@@ -143,7 +143,7 @@ class DefaultConfiguration implements Configuration
     public function getToolConfiguration($toolClassName)
     {
         if (! array_key_exists($toolClassName, $this->toolConfigurationClasses)) {
-            throw UnknownConfigurationClass::fromTransformerClass($toolClassName);
+            throw UnknownConfigurationClass::forToolClass($toolClassName);
         }
 
         $configuration      = $this->has($toolClassName) ? $this->get($toolClassName) : [];
