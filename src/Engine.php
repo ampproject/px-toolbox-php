@@ -8,6 +8,7 @@ use PageExperience\Engine\Analysis\PageExperienceAnalysis;
 use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\Engine\Context;
 use PageExperience\Engine\Rules;
+use PageExperience\Engine\Tool\Configuration;
 use PageExperience\Engine\ToolStack\DefaultToolStackFactory;
 use PageExperience\Engine\ToolStack\ToolStackConfiguration;
 use PageExperience\Engine\ToolStack\ToolStackFactory;
@@ -28,6 +29,13 @@ final class Engine
     private $toolStackFactory;
 
     /**
+     * Configuration for the engine tools.
+     *
+     * @var Configuration
+     */
+    private $configuration;
+
+    /**
      * Rules to use for the programmable tools.
      *
      * @var Rules
@@ -39,14 +47,19 @@ final class Engine
      *
      * @param RemoteGetRequest|null $remoteRequest    Optional. Remote request handler instance to use.
      * @param ToolStackFactory|null $toolStackFactory Optional. Tool stack factory instance to use.
+     * @param Configuration|null    $configuration    Optional. Configuration for the engine tools.
      */
-    public function __construct(RemoteGetRequest $remoteRequest = null, ToolStackFactory $toolStackFactory = null)
-    {
+    public function __construct(
+        RemoteGetRequest $remoteRequest = null,
+        ToolStackFactory $toolStackFactory = null,
+        Configuration $configuration = null
+    ) {
         $this->toolStackFactory = $toolStackFactory instanceof ToolStackFactory
             ? $toolStackFactory
             : new DefaultToolStackFactory(
                 ToolStackConfiguration::fromJsonFile(__DIR__ . '/../default-toolstack.json'),
-                $remoteRequest
+                $remoteRequest,
+                $configuration
             );
 
         $this->rules = Rules::createDefaultRules();

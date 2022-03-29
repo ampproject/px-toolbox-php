@@ -10,6 +10,8 @@ use PageExperience\Engine\Rules;
 use PageExperience\Engine\Tool;
 use PageExperience\Engine\Tool\AnalysisTool;
 use PageExperience\Engine\Tool\Configurable;
+use PageExperience\Engine\Tool\Configuration;
+use PageExperience\Engine\Tool\DefaultConfiguration;
 use PageExperience\Engine\Tool\OptimizationTool;
 use PageExperience\Engine\Tool\Programmable;
 use PageExperience\Engine\Tool\ToolRuleset;
@@ -39,15 +41,31 @@ final class DefaultToolStackFactory implements ToolStackFactory
     private $remoteRequest;
 
     /**
+     * Configuration for the engine tools.
+     *
+     * @var Configuration
+     */
+    private $configuration;
+
+    /**
      * Instantiate a default tool stack factory object.
      *
      * @param ToolStackConfiguration $toolStackConfiguration Tool stack configuration to use.
      * @param RemoteGetRequest|null  $remoteRequest          Optional. Remote request handler instance to use.
+     * @param Configuration|null     $configuration          Optional. Configuration for the engine tools.
      */
-    public function __construct(ToolStackConfiguration $toolStackConfiguration, RemoteGetRequest $remoteRequest = null)
-    {
+    public function __construct(
+        ToolStackConfiguration $toolStackConfiguration,
+        RemoteGetRequest $remoteRequest = null,
+        Configuration $configuration = null
+    ) {
         $this->toolStackConfiguration = $toolStackConfiguration;
         $this->remoteRequest          = $remoteRequest;
+
+        $this->configuration
+            = $configuration instanceof Configuration
+            ? $configuration
+            : new DefaultConfiguration();
     }
 
     /**
@@ -130,7 +148,6 @@ final class DefaultToolStackFactory implements ToolStackFactory
         }
 
         // @TODO: Handle ReflectionException.
-
         $tool = new $toolClassName(...$this->getToolDependencies($toolClassName));
 
         if (! $tool instanceof Tool) {
@@ -184,6 +201,11 @@ final class DefaultToolStackFactory implements ToolStackFactory
                     $this->remoteRequest = new CurlRemoteGetRequest();
                 }
                 $dependencies[] = $this->remoteRequest;
+                continue;
+            }
+
+            if (is_a($dependencyType->name, ToolConfiguration::class, true)) {
+                $dependencies[] = $this->configuration->getToolConfiguration($toolClassName);
                 continue;
             }
 
