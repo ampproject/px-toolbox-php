@@ -56,7 +56,7 @@ class Logger extends AbstractLogger
      *
      * @throws \Psr\Log\InvalidArgumentException If the log level is not valid.
      */
-    public function log($level, $message, $context = [])
+    public function log($level, $message, array $context = [])
     {
         if (!isset(self::$levels[$level])) {
             throw new InvalidArgumentException(
