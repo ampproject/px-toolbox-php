@@ -5,10 +5,10 @@ namespace PageExperience\Cli\Command;
 use AmpProject\Cli\Command;
 use AmpProject\Cli\Options;
 use AmpProject\Exception\Cli\InvalidArgument;
+use PageExperience\Cli\Logger;
 use PageExperience\Engine;
 use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\Tests\ConfiguredStubbedRemoteGetRequest;
-use Psr\Log\NullLogger;
 
 /**
  * Commands that deal with the PX Engine Optimizer.
@@ -84,7 +84,7 @@ final class Optimize extends Command
         // TODO: Use a proper LoggerInterface implementation.
         $engine         = new Engine(ConfiguredStubbedRemoteGetRequest::create());
         $profile        = new ConfigurationProfile();
-        $logger         = new NullLogger();
+        $logger         = new Logger();
         $optimizedHtml  = $engine->optimizeHtml($html, $profile, $logger);
 
         echo($optimizedHtml . PHP_EOL);

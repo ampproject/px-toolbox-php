@@ -4,14 +4,12 @@ namespace PageExperience\Cli\Command;
 
 use AmpProject\Cli\Command;
 use AmpProject\Cli\Options;
-use AmpProject\Cli\TableFormatter;
 use AmpProject\Exception\Cli\InvalidArgument;
+use PageExperience\Cli\Logger;
 use PageExperience\Engine;
 use PageExperience\Engine\Analysis;
 use PageExperience\Engine\ConfigurationProfile;
-use PageExperience\PageSpeed\PageSpeedInsightsApi;
 use PageExperience\Tests\ConfiguredStubbedRemoteGetRequest;
-use Psr\Log\NullLogger;
 
 /**
  * Run a Page Experience Engine analysis.
@@ -78,7 +76,7 @@ final class Analyze extends Command
         // TODO: Use a proper LoggerInterface implementation.
         $engine   = new Engine(ConfiguredStubbedRemoteGetRequest::create());
         $profile  = new ConfigurationProfile();
-        $logger   = new NullLogger();
+        $logger   = new Logger();
         $analysis = $engine->analyze($url, $profile, $logger);
 
         if ($json) {
