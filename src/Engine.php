@@ -38,15 +38,20 @@ final class Engine
     /**
      * Instantiate the Page Experience engine.
      *
+     * @param LoggerInterface       $logger           Logs that are collected during engine processes.
      * @param RemoteGetRequest|null $remoteRequest    Optional. Remote request handler instance to use.
      * @param ToolStackFactory|null $toolStackFactory Optional. Tool stack factory instance to use.
      */
-    public function __construct(RemoteGetRequest $remoteRequest = null, ToolStackFactory $toolStackFactory = null)
-    {
+    public function __construct(
+        LoggerInterface $logger,
+        RemoteGetRequest $remoteRequest = null,
+        ToolStackFactory $toolStackFactory = null
+    ) {
         $this->toolStackFactory = $toolStackFactory instanceof ToolStackFactory
             ? $toolStackFactory
             : new DefaultToolStackFactory(
                 ToolStackConfiguration::fromJsonFile(__DIR__ . '/../default-toolstack.json'),
+                $logger,
                 $remoteRequest
             );
 
@@ -59,14 +64,13 @@ final class Engine
      *
      * @param string               $url     URL to run an analysis for.
      * @param ConfigurationProfile $profile Configuration profile to use for the analysis.
-     * @param LoggerInterface      $logger  Logs that are collected during analysis.
      * @return Analysis Page experience analysis.
      */
-    public function analyze($url, ConfigurationProfile $profile, LoggerInterface $logger)
+    public function analyze($url, ConfigurationProfile $profile)
     {
         $toolStack = $this->toolStackFactory->createForAnalysis($this->rules, $profile);
 
-        return $toolStack->analyze(new PageExperienceAnalysis(), $url, $profile, new Context(), $logger);
+        return $toolStack->analyze(new PageExperienceAnalysis(), $url, $profile, new Context());
     }
 
     /**
@@ -74,14 +78,13 @@ final class Engine
      *
      * @param string               $html    String of HTML to optimize.
      * @param ConfigurationProfile $profile Configuration profile to use for the optimization.
-     * @param LoggerInterface      $logger  Logs that are collected during optimization.
      * @return string String of optimized HTML.
      */
-    public function optimizeHtml($html, ConfigurationProfile $profile, LoggerInterface $logger)
+    public function optimizeHtml($html, ConfigurationProfile $profile)
     {
         $toolStack = $this->toolStackFactory->createForOptimization($this->rules, $profile);
 
-        return $toolStack->optimizeHtml(new PageExperienceAnalysis(), $html, $profile, new Context(), $logger);
+        return $toolStack->optimizeHtml(new PageExperienceAnalysis(), $html, $profile, new Context());
     }
 
     /**
@@ -89,16 +92,12 @@ final class Engine
      *
      * @param ResponseInterface    $response HTTP response to optimize.
      * @param ConfigurationProfile $profile  Configuration profile to use for the optimization.
-     * @param LoggerInterface      $logger   Logs that are collected during optimization.
      * @return ResponseInterface Optimized HTTP response.
      */
-    public function optimizeResponse(
-        ResponseInterface $response,
-        ConfigurationProfile $profile,
-        LoggerInterface $logger
-    ) {
+    public function optimizeResponse(ResponseInterface $response, ConfigurationProfile $profile)
+    {
         $toolStack = $this->toolStackFactory->createForOptimization($this->rules, $profile);
 
-        return $toolStack->optimizeResponse(new PageExperienceAnalysis(), $response, $profile, new Context(), $logger);
+        return $toolStack->optimizeResponse(new PageExperienceAnalysis(), $response, $profile, new Context());
     }
 }

@@ -9,7 +9,6 @@ use PageExperience\Engine\Exception\NotImplemented;
 use PageExperience\Engine\Tool\AnalysisTool;
 use PageExperience\Engine\Tool\OptimizationTool;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Log\LoggerInterface;
 use React\EventLoop\Loop;
 
 /**
@@ -26,16 +25,10 @@ final class ParallelToolStack extends BaseToolStack
      * @param string               $url      URL to run an analysis for.
      * @param ConfigurationProfile $profile  Configuration profile to use for the analysis.
      * @param Context              $context  Current context of the analysis.
-     * @param LoggerInterface      $logger   Logs that are collected during analysis.
      * @return Analysis Adapted page experience analysis.
      */
-    public function analyze(
-        Analysis $analysis,
-        $url,
-        ConfigurationProfile $profile,
-        Context $context,
-        LoggerInterface $logger
-    ) {
+    public function analyze(Analysis $analysis, $url, ConfigurationProfile $profile, Context $context)
+    {
         $analysisMerger = new AnalysisMerger($analysis);
         $contextMerger  = new ContextMerger($context);
 
@@ -55,10 +48,9 @@ final class ParallelToolStack extends BaseToolStack
                     $profile,
                     $contextClone,
                     $analysisMerger,
-                    $contextMerger,
-                    $logger
+                    $contextMerger
                 ) {
-                    $newAnalysis = $tool->analyze($analysisClone, $url, $profile, $contextClone, $logger);
+                    $newAnalysis = $tool->analyze($analysisClone, $url, $profile, $contextClone);
                     $analysisMerger->collectAnalysis($newAnalysis);
                     $contextMerger->collectContext($contextClone);
                 }
@@ -79,7 +71,6 @@ final class ParallelToolStack extends BaseToolStack
      * @param string               $html     String of HTML to run an analysis for.
      * @param ConfigurationProfile $profile  Configuration profile to use for the analysis.
      * @param Context              $context  Current context of the analysis.
-     * @param LoggerInterface      $logger   Logs that are collected during optimization.
      * @return string String of optimized HTML.
      * @throws NotImplemented If multiple tools are meant to optimize in parallel.
      */
@@ -87,8 +78,7 @@ final class ParallelToolStack extends BaseToolStack
         Analysis $analysis,
         $html,
         ConfigurationProfile $profile,
-        Context $context,
-        LoggerInterface $logger
+        Context $context
     ) {
         /** @var array<OptimizationTool> $optimizationTools */
         $optimizationTools = array_filter(
@@ -102,7 +92,7 @@ final class ParallelToolStack extends BaseToolStack
             throw NotImplemented::forParallelOptimization();
         }
 
-        return $optimizationTools[0]->optimizeHtml($analysis, $html, $profile, $context, $logger);
+        return $optimizationTools[0]->optimizeHtml($analysis, $html, $profile, $context);
     }
 
     /**
@@ -112,7 +102,6 @@ final class ParallelToolStack extends BaseToolStack
      * @param ResponseInterface    $response HTTP response to optimize.
      * @param ConfigurationProfile $profile  Configuration profile to use for the analysis.
      * @param Context              $context  Current context of the analysis.
-     * @param LoggerInterface      $logger   Logs that are collected during optimization.
      * @return ResponseInterface Optimized HTTP response.
      * @throws NotImplemented If multiple tools are meant to optimize in parallel.
      */
@@ -120,8 +109,7 @@ final class ParallelToolStack extends BaseToolStack
         Analysis $analysis,
         ResponseInterface $response,
         ConfigurationProfile $profile,
-        Context $context,
-        LoggerInterface $logger
+        Context $context
     ) {
         /** @var array<OptimizationTool> $optimizationTools */
         $optimizationTools = array_filter(
@@ -135,6 +123,6 @@ final class ParallelToolStack extends BaseToolStack
             throw NotImplemented::forParallelOptimization();
         }
 
-        return $optimizationTools[0]->optimizeResponse($analysis, $response, $profile, $context, $logger);
+        return $optimizationTools[0]->optimizeResponse($analysis, $response, $profile, $context);
     }
 }

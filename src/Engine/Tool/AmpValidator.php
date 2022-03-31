@@ -23,11 +23,30 @@ final class AmpValidator implements AnalysisTool, Configurable
     const NAME = 'amp-validator';
 
     /**
+     * Logs that are collected during engine processes.
+     *
+     * @TODO Use the logger to collect the logs during processing.
+     *
+     * @var LoggerInterface
+     */
+    private $logger; /* @phpstan-ignore-line */
+
+    /**
      * Ruleset the tool is to be configured with.
      *
      * @var ToolRuleset
      */
     private $toolRuleset;
+
+    /**
+     * Instantiate a AmpValidator tool instance.
+     *
+     * @param LoggerInterface $logger Logs that are collected during engine processes.
+     */
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
 
     /**
      * Get the name of the tool.
@@ -67,15 +86,13 @@ final class AmpValidator implements AnalysisTool, Configurable
      * @param string               $url      URL to run an analysis for.
      * @param ConfigurationProfile $profile  Configuration profile to use for the analysis.
      * @param Context              $context  Current context of the analysis.
-     * @param LoggerInterface      $logger   Logs that are collected during analysis.
      * @return Analysis Adapted page experience analysis.
      */
     public function analyze(
         Analysis $analysis,
         $url,
         ConfigurationProfile $profile,
-        Context $context,
-        LoggerInterface $logger
+        Context $context
     ) {
         $this->toolRuleset->configureTool($this);
 

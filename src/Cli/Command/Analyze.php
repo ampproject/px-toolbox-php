@@ -73,11 +73,10 @@ final class Analyze extends Command
         list($url) = $options->getArguments();
         $json      = (bool) $options->getOption('json');
 
-        // TODO: Use a proper LoggerInterface implementation.
-        $engine   = new Engine(ConfiguredStubbedRemoteGetRequest::create());
-        $profile  = new ConfigurationProfile();
         $logger   = new Logger();
-        $analysis = $engine->analyze($url, $profile, $logger);
+        $engine   = new Engine($logger, ConfiguredStubbedRemoteGetRequest::create());
+        $profile  = new ConfigurationProfile();
+        $analysis = $engine->analyze($url, $profile);
 
         if ($json) {
             $renderer = new Analysis\Renderer\JsonRenderer();

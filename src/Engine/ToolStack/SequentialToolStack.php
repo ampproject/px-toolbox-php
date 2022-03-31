@@ -8,7 +8,6 @@ use PageExperience\Engine\Context;
 use PageExperience\Engine\Tool\AnalysisTool;
 use PageExperience\Engine\Tool\OptimizationTool;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Log\LoggerInterface;
 
 /**
  * Stack of tools that execute synchronously in sequential order.
@@ -24,22 +23,16 @@ final class SequentialToolStack extends BaseToolStack
      * @param string               $url      URL to run an analysis for.
      * @param ConfigurationProfile $profile  Configuration profile to use for the analysis.
      * @param Context              $context  Current context of the analysis.
-     * @param LoggerInterface      $logger   Logs that are collected during analysis.
      * @return Analysis Adapted page experience analysis.
      */
-    public function analyze(
-        Analysis $analysis,
-        $url,
-        ConfigurationProfile $profile,
-        Context $context,
-        LoggerInterface $logger
-    ) {
+    public function analyze(Analysis $analysis, $url, ConfigurationProfile $profile, Context $context)
+    {
         foreach ($this->tools as $tool) {
             if (! $tool instanceof AnalysisTool) {
                 continue;
             }
 
-            $analysis = $tool->analyze($analysis, $url, $profile, $context, $logger);
+            $analysis = $tool->analyze($analysis, $url, $profile, $context);
         }
 
         return $analysis;
@@ -52,22 +45,16 @@ final class SequentialToolStack extends BaseToolStack
      * @param string               $html     String of HTML to run an analysis for.
      * @param ConfigurationProfile $profile  Configuration profile to use for the analysis.
      * @param Context              $context  Current context of the analysis.
-     * @param LoggerInterface      $logger   Logs that are collected during optimization.
      * @return string String of optimized HTML.
      */
-    public function optimizeHtml(
-        Analysis $analysis,
-        $html,
-        ConfigurationProfile $profile,
-        Context $context,
-        LoggerInterface $logger
-    ) {
+    public function optimizeHtml(Analysis $analysis, $html, ConfigurationProfile $profile, Context $context)
+    {
         foreach ($this->tools as $tool) {
             if (! $tool instanceof OptimizationTool) {
                 continue;
             }
 
-            $html = $tool->optimizeHtml($analysis, $html, $profile, $context, $logger);
+            $html = $tool->optimizeHtml($analysis, $html, $profile, $context);
         }
 
         return $html;
@@ -80,22 +67,20 @@ final class SequentialToolStack extends BaseToolStack
      * @param ResponseInterface    $response HTTP response to optimize.
      * @param ConfigurationProfile $profile  Configuration profile to use for the analysis.
      * @param Context              $context  Current context of the analysis.
-     * @param LoggerInterface      $logger   Logs that are collected during optimization.
      * @return ResponseInterface Optimized HTTP response.
      */
     public function optimizeResponse(
         Analysis $analysis,
         ResponseInterface $response,
         ConfigurationProfile $profile,
-        Context $context,
-        LoggerInterface $logger
+        Context $context
     ) {
         foreach ($this->tools as $tool) {
             if (! $tool instanceof OptimizationTool) {
                 continue;
             }
 
-            $response = $tool->optimizeResponse($analysis, $response, $profile, $context, $logger);
+            $response = $tool->optimizeResponse($analysis, $response, $profile, $context);
         }
 
         return $response;

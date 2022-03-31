@@ -36,6 +36,15 @@ final class AmpOptimizer implements OptimizationTool, Configurable
     private $remoteRequest;
 
     /**
+     * Logs that are collected during engine processes.
+     *
+     * @TODO Use the logger to collect the logs during processing.
+     *
+     * @var LoggerInterface
+     */
+    private $logger; /* @phpstan-ignore-line */
+
+    /**
      * Ruleset the tool is to be configured with.
      *
      * @var ToolRuleset
@@ -46,10 +55,12 @@ final class AmpOptimizer implements OptimizationTool, Configurable
      * Instantiate a Lighthouse tool instance.
      *
      * @param RemoteGetRequest $remoteRequest Remote request handler instance to use.
+     * @param LoggerInterface  $logger        Logs that are collected during engine processes.
      */
-    public function __construct(RemoteGetRequest $remoteRequest)
+    public function __construct(RemoteGetRequest $remoteRequest, LoggerInterface $logger)
     {
         $this->remoteRequest = $remoteRequest;
+        $this->logger        = $logger;
     }
 
     /**
@@ -90,15 +101,13 @@ final class AmpOptimizer implements OptimizationTool, Configurable
      * @param string               $html     String of HTML to run an analysis for.
      * @param ConfigurationProfile $profile  Configuration profile to use for the analysis.
      * @param Context              $context  Current context of the analysis.
-     * @param LoggerInterface      $logger   Logs that are collected during optimization.
      * @return string String of optimized HTML.
      */
     public function optimizeHtml(
         Analysis $analysis,
         $html,
         ConfigurationProfile $profile,
-        Context $context,
-        LoggerInterface $logger
+        Context $context
     ) {
         $this->toolRuleset->configureTool($this);
 
@@ -123,17 +132,15 @@ final class AmpOptimizer implements OptimizationTool, Configurable
      * @param ResponseInterface    $response HTTP response to optimize.
      * @param ConfigurationProfile $profile  Configuration profile to use for the analysis.
      * @param Context              $context  Current context of the analysis.
-     * @param LoggerInterface      $logger   Logs that are collected during optimization.
      * @return ResponseInterface Optimized HTTP response.
      */
     public function optimizeResponse(
         Analysis $analysis,
         ResponseInterface $response,
         ConfigurationProfile $profile,
-        Context $context,
-        LoggerInterface $logger
+        Context $context
     ) {
-        $optimizedHtml = $this->optimizeHtml($analysis, (string) $response->getBody(), $profile, $context, $logger);
+        $optimizedHtml = $this->optimizeHtml($analysis, (string) $response->getBody(), $profile, $context);
 
         return $response->withBody(new StringStream($optimizedHtml));
     }

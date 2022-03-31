@@ -81,11 +81,10 @@ final class Optimize extends Command
             return;
         }
 
-        // TODO: Use a proper LoggerInterface implementation.
-        $engine         = new Engine(ConfiguredStubbedRemoteGetRequest::create());
-        $profile        = new ConfigurationProfile();
         $logger         = new Logger();
-        $optimizedHtml  = $engine->optimizeHtml($html, $profile, $logger);
+        $engine         = new Engine($logger, ConfiguredStubbedRemoteGetRequest::create());
+        $profile        = new ConfigurationProfile();
+        $optimizedHtml  = $engine->optimizeHtml($html, $profile);
 
         echo($optimizedHtml . PHP_EOL);
     }

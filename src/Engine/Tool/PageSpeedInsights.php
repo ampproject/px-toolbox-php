@@ -58,6 +58,15 @@ final class PageSpeedInsights implements AnalysisTool, Configurable, Programmabl
     private $remoteRequest;
 
     /**
+     * Logs that are collected during engine processes.
+     *
+     * @TODO Use the logger to collect the logs during processing.
+     *
+     * @var LoggerInterface
+     */
+    private $logger; /* @phpstan-ignore-line */
+
+    /**
      * Ruleset the tool is to be configured with.
      *
      * @var Ruleset
@@ -75,10 +84,12 @@ final class PageSpeedInsights implements AnalysisTool, Configurable, Programmabl
      * Instantiate a PageSpeedInsights tool instance.
      *
      * @param RemoteGetRequest $remoteRequest Remote request handler instance to use.
+     * @param LoggerInterface  $logger        Logs that are collected during engine processes.
      */
-    public function __construct(RemoteGetRequest $remoteRequest)
+    public function __construct(RemoteGetRequest $remoteRequest, LoggerInterface $logger)
     {
         $this->remoteRequest  = $remoteRequest;
+        $this->logger         = $logger;
         $this->ruleCollection = new RuleCollection(self::NAME, []);
     }
 
@@ -136,16 +147,10 @@ final class PageSpeedInsights implements AnalysisTool, Configurable, Programmabl
      * @param string               $url      URL to run an analysis for.
      * @param ConfigurationProfile $profile  Configuration profile to use for the analysis.
      * @param Context              $context  Current context of the analysis.
-     * @param LoggerInterface      $logger   Logs that are collected during analysis.
      * @return Analysis Adapted page experience analysis.
      */
-    public function analyze(
-        Analysis $analysis,
-        $url,
-        ConfigurationProfile $profile,
-        Context $context,
-        LoggerInterface $logger
-    ) {
+    public function analyze(Analysis $analysis, $url, ConfigurationProfile $profile, Context $context)
+    {
         $psiApi = new PageSpeedInsightsApi($this->toolRuleset->getPsiApiKey(), $this->remoteRequest);
 
         $psiAudit = $psiApi->audit(
