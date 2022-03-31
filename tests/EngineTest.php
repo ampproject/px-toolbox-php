@@ -9,6 +9,7 @@ use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\Engine\StringStream;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Test the Engine entry point class.
@@ -19,32 +20,37 @@ final class EngineTest extends TestCase
 {
     public function testItCanBeInstantiated()
     {
-        $engine = new Engine();
+        $logger = $this->createMock(LoggerInterface::class);
+
+        $engine = new Engine($logger);
 
         self::assertInstanceOf(Engine::class, $engine);
     }
 
     public function testItCanAcceptACustomRemoteRequestHandler()
     {
+        $logger        = $this->createMock(LoggerInterface::class);
         $remoteRequest = $this->createMock(RemoteGetRequest::class);
 
-        $engine = new Engine($remoteRequest);
+        $engine = new Engine($logger, $remoteRequest);
 
         self::assertInstanceOf(Engine::class, $engine);
     }
 
     public function testItCanAcceptACustomToolStackFactory()
     {
+        $logger           = $this->createMock(LoggerInterface::class);
         $toolStackFactory = $this->createMock(Engine\ToolStack\ToolStackFactory::class);
 
-        $engine = new Engine(null, $toolStackFactory);
+        $engine = new Engine($logger, null, $toolStackFactory);
 
         self::assertInstanceOf(Engine::class, $engine);
     }
 
     public function testItCanAnalyze()
     {
-        $engine  = new Engine(ConfiguredStubbedRemoteGetRequest::create());
+        $logger  = $this->createMock(LoggerInterface::class);
+        $engine  = new Engine($logger, ConfiguredStubbedRemoteGetRequest::create());
         $profile = new ConfigurationProfile();
         $analysis = $engine->analyze('https://amp-wp.org', $profile);
 
@@ -53,7 +59,8 @@ final class EngineTest extends TestCase
 
     public function testItCanOptimizeHtml()
     {
-        $engine  = new Engine();
+        $logger  = $this->createMock(LoggerInterface::class);
+        $engine  = new Engine($logger);
         $profile = new ConfigurationProfile();
 
         $optimizedHtml = $engine->optimizeHtml('<html></html>', $profile);
@@ -64,7 +71,8 @@ final class EngineTest extends TestCase
 
     public function testItCanOptimizeAResponse()
     {
-        $engine   = new Engine();
+        $logger   = $this->createMock(LoggerInterface::class);
+        $engine   = new Engine($logger);
         $profile  = new ConfigurationProfile();
         $response = $this->createMock(ResponseInterface::class);
         $response->method('getBody')

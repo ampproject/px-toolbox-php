@@ -74,8 +74,12 @@ final class ParallelToolStack extends BaseToolStack
      * @return string String of optimized HTML.
      * @throws NotImplemented If multiple tools are meant to optimize in parallel.
      */
-    public function optimizeHtml(Analysis $analysis, $html, ConfigurationProfile $profile, Context $context)
-    {
+    public function optimizeHtml(
+        Analysis $analysis,
+        $html,
+        ConfigurationProfile $profile,
+        Context $context
+    ) {
         /** @var array<OptimizationTool> $optimizationTools */
         $optimizationTools = array_filter(
             $this->tools,

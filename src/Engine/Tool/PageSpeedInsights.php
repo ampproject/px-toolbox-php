@@ -14,6 +14,7 @@ use PageExperience\Engine\Exception\MissingResultDataKey;
 use PageExperience\Engine\Exception\ToolRulesetMismatch;
 use PageExperience\Engine\Tool\PageSpeedInsights\Ruleset;
 use PageExperience\PageSpeed\PageSpeedInsightsApi;
+use Psr\Log\LoggerInterface;
 
 /**
  * PageSpeedInsights abstraction as a page experience tool.
@@ -57,6 +58,15 @@ final class PageSpeedInsights implements AnalysisTool, Configurable, Programmabl
     private $remoteRequest;
 
     /**
+     * Logs that are collected during engine processes.
+     *
+     * @TODO Use the logger to collect the logs during processing.
+     *
+     * @var LoggerInterface
+     */
+    private $logger; /* @phpstan-ignore-line */
+
+    /**
      * Ruleset the tool is to be configured with.
      *
      * @var Ruleset
@@ -74,10 +84,12 @@ final class PageSpeedInsights implements AnalysisTool, Configurable, Programmabl
      * Instantiate a PageSpeedInsights tool instance.
      *
      * @param RemoteGetRequest $remoteRequest Remote request handler instance to use.
+     * @param LoggerInterface  $logger        Logs that are collected during engine processes.
      */
-    public function __construct(RemoteGetRequest $remoteRequest)
+    public function __construct(RemoteGetRequest $remoteRequest, LoggerInterface $logger)
     {
         $this->remoteRequest  = $remoteRequest;
+        $this->logger         = $logger;
         $this->ruleCollection = new RuleCollection(self::NAME, []);
     }
 

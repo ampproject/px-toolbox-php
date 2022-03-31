@@ -4,12 +4,11 @@ namespace PageExperience\Cli\Command;
 
 use AmpProject\Cli\Command;
 use AmpProject\Cli\Options;
-use AmpProject\Cli\TableFormatter;
 use AmpProject\Exception\Cli\InvalidArgument;
+use PageExperience\Cli\Logger;
 use PageExperience\Engine;
 use PageExperience\Engine\Analysis;
 use PageExperience\Engine\ConfigurationProfile;
-use PageExperience\PageSpeed\PageSpeedInsightsApi;
 use PageExperience\Tests\ConfiguredStubbedRemoteGetRequest;
 
 /**
@@ -74,9 +73,9 @@ final class Analyze extends Command
         list($url) = $options->getArguments();
         $json      = (bool) $options->getOption('json');
 
-        $engine  = new Engine(ConfiguredStubbedRemoteGetRequest::create());
-        $profile = new ConfigurationProfile();
-
+        $logger   = new Logger();
+        $engine   = new Engine($logger, ConfiguredStubbedRemoteGetRequest::create());
+        $profile  = new ConfigurationProfile();
         $analysis = $engine->analyze($url, $profile);
 
         if ($json) {

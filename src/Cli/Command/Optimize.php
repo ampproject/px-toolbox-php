@@ -2,10 +2,11 @@
 
 namespace PageExperience\Cli\Command;
 
-use PageExperience\Engine;
 use AmpProject\Cli\Command;
 use AmpProject\Cli\Options;
 use AmpProject\Exception\Cli\InvalidArgument;
+use PageExperience\Cli\Logger;
+use PageExperience\Engine;
 use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\Tests\ConfiguredStubbedRemoteGetRequest;
 
@@ -80,7 +81,8 @@ final class Optimize extends Command
             return;
         }
 
-        $engine         = new Engine(ConfiguredStubbedRemoteGetRequest::create());
+        $logger         = new Logger();
+        $engine         = new Engine($logger, ConfiguredStubbedRemoteGetRequest::create());
         $profile        = new ConfigurationProfile();
         $optimizedHtml  = $engine->optimizeHtml($html, $profile);
 

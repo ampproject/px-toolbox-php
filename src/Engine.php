@@ -12,6 +12,7 @@ use PageExperience\Engine\ToolStack\DefaultToolStackFactory;
 use PageExperience\Engine\ToolStack\ToolStackConfiguration;
 use PageExperience\Engine\ToolStack\ToolStackFactory;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Page experience engine.
@@ -37,15 +38,20 @@ final class Engine
     /**
      * Instantiate the Page Experience engine.
      *
+     * @param LoggerInterface       $logger           Logs that are collected during engine processes.
      * @param RemoteGetRequest|null $remoteRequest    Optional. Remote request handler instance to use.
      * @param ToolStackFactory|null $toolStackFactory Optional. Tool stack factory instance to use.
      */
-    public function __construct(RemoteGetRequest $remoteRequest = null, ToolStackFactory $toolStackFactory = null)
-    {
+    public function __construct(
+        LoggerInterface $logger,
+        RemoteGetRequest $remoteRequest = null,
+        ToolStackFactory $toolStackFactory = null
+    ) {
         $this->toolStackFactory = $toolStackFactory instanceof ToolStackFactory
             ? $toolStackFactory
             : new DefaultToolStackFactory(
                 ToolStackConfiguration::fromJsonFile(__DIR__ . '/../default-toolstack.json'),
+                $logger,
                 $remoteRequest
             );
 

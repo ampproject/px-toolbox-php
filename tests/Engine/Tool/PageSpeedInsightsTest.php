@@ -9,6 +9,7 @@ use PageExperience\Engine\Context;
 use PageExperience\Engine\Tool\PageSpeedInsights;
 use PageExperience\Tests\ConfiguredStubbedRemoteGetRequest;
 use PageExperience\Tests\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Test the PageSpeedInsights class.
@@ -20,15 +21,17 @@ final class PageSpeedInsightsTest extends TestCase
     public function testItCanBeInstantiated()
     {
         $remoteRequestMock = $this->createMock(RemoteGetRequest::class);
+        $loggerMock        = $this->createMock(LoggerInterface::class);
 
-        $pageSpeedInsights = new PageSpeedInsights($remoteRequestMock);
+        $pageSpeedInsights = new PageSpeedInsights($remoteRequestMock, $loggerMock);
 
         self::assertInstanceOf(PageSpeedInsights::class, $pageSpeedInsights);
     }
 
     public function testItCanRunAnAudit()
     {
-        $pageSpeedInsights = new PageSpeedInsights(ConfiguredStubbedRemoteGetRequest::create());
+        $loggerMock        = $this->createMock(LoggerInterface::class);
+        $pageSpeedInsights = new PageSpeedInsights(ConfiguredStubbedRemoteGetRequest::create(), $loggerMock);
 
         $analysis = $this->createMock(Analysis::class);
         $profile  = new ConfigurationProfile();

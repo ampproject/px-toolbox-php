@@ -14,6 +14,7 @@ use PageExperience\Engine\Tool\OptimizationTool;
 use PageExperience\Engine\Tool\Programmable;
 use PageExperience\Engine\Tool\ToolRuleset;
 use PageExperience\Engine\ToolStack;
+use Psr\Log\LoggerInterface;
 use ReflectionClass;
 use ReflectionException;
 
@@ -32,6 +33,13 @@ final class DefaultToolStackFactory implements ToolStackFactory
     private $toolStackConfiguration;
 
     /**
+     * Logs that are collected during engine processes.
+     *
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Remote request handler instance to use.
      *
      * @var RemoteGetRequest|null
@@ -42,11 +50,16 @@ final class DefaultToolStackFactory implements ToolStackFactory
      * Instantiate a default tool stack factory object.
      *
      * @param ToolStackConfiguration $toolStackConfiguration Tool stack configuration to use.
+     * @param LoggerInterface        $logger                 Logs that are collected during engine processes.
      * @param RemoteGetRequest|null  $remoteRequest          Optional. Remote request handler instance to use.
      */
-    public function __construct(ToolStackConfiguration $toolStackConfiguration, RemoteGetRequest $remoteRequest = null)
-    {
+    public function __construct(
+        ToolStackConfiguration $toolStackConfiguration,
+        LoggerInterface $logger,
+        RemoteGetRequest $remoteRequest = null
+    ) {
         $this->toolStackConfiguration = $toolStackConfiguration;
+        $this->logger                 = $logger;
         $this->remoteRequest          = $remoteRequest;
     }
 
@@ -176,6 +189,11 @@ final class DefaultToolStackFactory implements ToolStackFactory
             if ($dependencyType === null) {
                 // No type provided, so we pass `null` in the hopes that the argument is optional.
                 $dependencies[] = null;
+                continue;
+            }
+
+            if (is_a($dependencyType->name, LoggerInterface::class, true)) {
+                $dependencies[] = $this->logger;
                 continue;
             }
 
