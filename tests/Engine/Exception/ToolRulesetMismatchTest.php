@@ -6,6 +6,7 @@ use PageExperience\Engine\Exception\ToolRulesetMismatch;
 use PageExperience\Engine\Tool\AmpOptimizer;
 use PageExperience\Engine\Tool\AmpValidator;
 use PageExperience\Tests\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Test the ToolRulesetMismatch class.
@@ -23,7 +24,8 @@ final class ToolRulesetMismatchTest extends TestCase
 
     public function testItProducesTheExpectedMessageWithoutPreviousException()
     {
-        $exception = ToolRulesetMismatch::forToolWithToolRuleset(new AmpValidator(), new AmpOptimizer\Ruleset());
+        $logger    = $this->createMock(LoggerInterface::class);
+        $exception = ToolRulesetMismatch::forToolWithToolRuleset(new AmpValidator($logger), new AmpOptimizer\Ruleset());
 
         self::assertEquals(
             "Could not configure tool 'amp-validator' with ruleset targeted at tool 'amp-optimizer'.",

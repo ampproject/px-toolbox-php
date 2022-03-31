@@ -9,7 +9,7 @@ use PageExperience\Engine\Context;
 use PageExperience\Engine\Tool\PageSpeedInsights;
 use PageExperience\Tests\ConfiguredStubbedRemoteGetRequest;
 use PageExperience\Tests\TestCase;
-use Psr\Log\NullLogger;
+use Psr\Log\LoggerInterface;
 
 /**
  * Test the PageSpeedInsights class.
@@ -21,25 +21,26 @@ final class PageSpeedInsightsTest extends TestCase
     public function testItCanBeInstantiated()
     {
         $remoteRequestMock = $this->createMock(RemoteGetRequest::class);
+        $loggerMock        = $this->createMock(LoggerInterface::class);
 
-        $pageSpeedInsights = new PageSpeedInsights($remoteRequestMock);
+        $pageSpeedInsights = new PageSpeedInsights($remoteRequestMock, $loggerMock);
 
         self::assertInstanceOf(PageSpeedInsights::class, $pageSpeedInsights);
     }
 
     public function testItCanRunAnAudit()
     {
-        $pageSpeedInsights = new PageSpeedInsights(ConfiguredStubbedRemoteGetRequest::create());
+        $loggerMock        = $this->createMock(LoggerInterface::class);
+        $pageSpeedInsights = new PageSpeedInsights(ConfiguredStubbedRemoteGetRequest::create(), $loggerMock);
 
         $analysis = $this->createMock(Analysis::class);
         $profile  = new ConfigurationProfile();
         $context  = new Context();
-        $logger   = new NullLogger();
 
         $ruleset = PageSpeedInsights\Ruleset::fromProfile($profile);
         $pageSpeedInsights->configureWithRuleset($ruleset);
 
-        $analysis = $pageSpeedInsights->analyze($analysis, 'https://amp-wp.org', $profile, $context, $logger);
+        $analysis = $pageSpeedInsights->analyze($analysis, 'https://amp-wp.org', $profile, $context);
         $this->assertInstanceOf(Analysis::class, $analysis);
     }
 }

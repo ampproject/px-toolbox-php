@@ -4,6 +4,7 @@ namespace PageExperience\Tests\Engine\Tool;
 
 use PageExperience\Engine\Tool\AmpValidator;
 use PageExperience\Tests\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Test the AmpValidator class.
@@ -14,7 +15,8 @@ final class AmpValidatorTest extends TestCase
 {
     public function testItCanBeInstantiated()
     {
-        $ampValidator = new AmpValidator();
+        $loggerMock   = $this->createMock(LoggerInterface::class);
+        $ampValidator = new AmpValidator($loggerMock);
 
         self::assertInstanceOf(AmpValidator::class, $ampValidator);
     }

@@ -9,7 +9,7 @@ use PageExperience\Engine\ConfigurationProfile;
 use PageExperience\Engine\StringStream;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
-use Psr\Log\NullLogger;
+use Psr\Log\LoggerInterface;
 
 /**
  * Test the Engine entry point class.
@@ -20,46 +20,50 @@ final class EngineTest extends TestCase
 {
     public function testItCanBeInstantiated()
     {
-        $engine = new Engine();
+        $logger = $this->createMock(LoggerInterface::class);
+
+        $engine = new Engine($logger);
 
         self::assertInstanceOf(Engine::class, $engine);
     }
 
     public function testItCanAcceptACustomRemoteRequestHandler()
     {
+        $logger        = $this->createMock(LoggerInterface::class);
         $remoteRequest = $this->createMock(RemoteGetRequest::class);
 
-        $engine = new Engine($remoteRequest);
+        $engine = new Engine($logger, $remoteRequest);
 
         self::assertInstanceOf(Engine::class, $engine);
     }
 
     public function testItCanAcceptACustomToolStackFactory()
     {
+        $logger           = $this->createMock(LoggerInterface::class);
         $toolStackFactory = $this->createMock(Engine\ToolStack\ToolStackFactory::class);
 
-        $engine = new Engine(null, $toolStackFactory);
+        $engine = new Engine($logger, null, $toolStackFactory);
 
         self::assertInstanceOf(Engine::class, $engine);
     }
 
     public function testItCanAnalyze()
     {
-        $engine  = new Engine(ConfiguredStubbedRemoteGetRequest::create());
+        $logger  = $this->createMock(LoggerInterface::class);
+        $engine  = new Engine($logger, ConfiguredStubbedRemoteGetRequest::create());
         $profile = new ConfigurationProfile();
-        $logger  = new NullLogger();
-        $analysis = $engine->analyze('https://amp-wp.org', $profile, $logger);
+        $analysis = $engine->analyze('https://amp-wp.org', $profile);
 
         self::assertInstanceOf(Analysis::class, $analysis);
     }
 
     public function testItCanOptimizeHtml()
     {
-        $engine  = new Engine();
+        $logger  = $this->createMock(LoggerInterface::class);
+        $engine  = new Engine($logger);
         $profile = new ConfigurationProfile();
-        $logger  = new NullLogger();
 
-        $optimizedHtml = $engine->optimizeHtml('<html></html>', $profile, $logger);
+        $optimizedHtml = $engine->optimizeHtml('<html></html>', $profile);
 
         self::assertStringContainsString('<html', $optimizedHtml);
         self::assertStringContainsString('transformed="self;v=1"', $optimizedHtml);
@@ -67,9 +71,9 @@ final class EngineTest extends TestCase
 
     public function testItCanOptimizeAResponse()
     {
-        $engine   = new Engine();
+        $logger   = $this->createMock(LoggerInterface::class);
+        $engine   = new Engine($logger);
         $profile  = new ConfigurationProfile();
-        $logger   = new NullLogger();
         $response = $this->createMock(ResponseInterface::class);
         $response->method('getBody')
                  ->willReturn(new StringStream('<html></html>'));
@@ -84,7 +88,7 @@ final class EngineTest extends TestCase
         $response->method('withBody')
                  ->willReturnCallback($optimizedResponseCallback);
 
-        $optimizedResponse = $engine->optimizeResponse($response, $profile, $logger);
+        $optimizedResponse = $engine->optimizeResponse($response, $profile);
 
         self::assertInstanceOf(ResponseInterface::class, $optimizedResponse);
         self::assertInstanceOf(StreamInterface::class, $optimizedResponse->getBody());
