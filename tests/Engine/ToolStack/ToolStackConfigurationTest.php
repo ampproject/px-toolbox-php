@@ -20,7 +20,7 @@ final class ToolStackConfigurationTest extends TestCase
      *
      * @var string
      */
-    const DEFAULT_TOOLSTACK_JSON_FILEPATH = __DIR__ . '/../../../default-toolstack.json';
+    const DEFAULT_TOOLSTACK_JSON_FILEPATH = __DIR__ . '/../../../config/default-toolstack.json';
 
     public function testItCanBeInstantiated()
     {

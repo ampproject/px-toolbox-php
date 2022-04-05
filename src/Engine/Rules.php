@@ -120,7 +120,7 @@ final class Rules
     public static function createDefaultRules()
     {
         $rules = new self();
-        $rules->registerRulesLocation(__DIR__ . '/../../tests/fixtures/dsl/dsl.json');
+        $rules->registerRulesLocation(__DIR__ . '/../../config/default-dsl.json');
         return $rules;
     }
 }
