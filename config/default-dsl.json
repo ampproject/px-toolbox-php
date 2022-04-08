@@ -1,0 +1,51 @@
+{
+  "dsls": [
+    {
+      "id": "tool-dsl-lighthouse",
+      "type": "tool-dsl",
+      "tool": "lighthouse",
+      "version": 1,
+      "rules": [
+        {
+          "id": "cumulative-layout-shift",
+          "script": [
+            {
+              "operation": "extract",
+              "key-chain": [ "lighthouseResult.audits.cumulative-layout-shift" ]
+            },
+            {
+              "operation": "forward",
+              "keys": [ "title", "description", "score", "scoreDisplayMode", "displayValue", "numericValue", "numericUnit" ]
+            }
+          ]
+        },
+        {
+          "id": "largest-contentful-paint",
+          "script": [
+            {
+              "operation": "extract",
+              "key-chain": [ "lighthouseResult.audits.largest-contentful-paint" ]
+            },
+            {
+              "operation": "forward",
+              "keys": [ "title", "description", "score", "scoreDisplayMode", "displayValue", "numericValue", "numericUnit" ]
+            }
+          ]
+        },
+        {
+          "id": "total-blocking-time",
+          "script": [
+            {
+              "operation": "extract",
+              "key-chain": [ "lighthouseResult.audits.total-blocking-time" ]
+            },
+            {
+              "operation": "forward",
+              "keys": [ "title", "description", "score", "scoreDisplayMode", "displayValue", "numericValue", "numericUnit" ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
