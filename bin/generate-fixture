@@ -1,0 +1,96 @@
+#!/bin/bash
+
+# Load environment variables from .env file if exists.
+if [ ! -f ../.env ]; then
+    export $(cat .env | xargs)
+fi
+
+# Check if wp-cli and ngrok are available or not.
+if ! which wp > /dev/null; then
+    echo "wp-cli is not installed. Please install it first."
+    exit
+fi
+
+if ! which ngrok > /dev/null; then
+    echo "ngrok is not installed. Please install it first."
+    exit
+fi
+
+# Create a wordpress directory where we can build the WordPress setup.
+mkdir -p wordpress
+echo "WordPress directory is created."
+
+# Change the current directory to our wordpress directory.
+cd wordpress
+echo "Current directory is changed to wordpress."
+
+# Launch the web server
+echo "Launching the web server..."
+php -S localhost:8080 > /dev/null 2>&1 &
+
+# Launch ngrok to expose the localhost port to the internet.
+echo "Creating the public url..."
+ngrok http 8080 > /dev/null 2>&1 &
+
+function getPublicUrl() {
+    echo $(curl http://localhost:4040/api/tunnels -s | grep -oP '(?<="public_url":")https[^"]*')
+}
+
+publicUrl=$(getPublicUrl)
+
+while [ -z "$publicUrl" ]; do
+    sleep 1
+    echo "Waiting for the public url..."
+    publicUrl=$(getPublicUrl)
+done
+
+# Create a WordPress site.
+FILE=wp-content
+if [ ! -d "$FILE" ]; then
+    wp core download
+    wp core config --dbname=$DB_NAME --dbuser=$DB_USER --dbpass=$DB_PASS --dbhost=$DB_HOST --extra-php <<PHP
+define( 'SCRIPT_DEBUG', true );
+\$_SERVER['HTTPS']='on';
+PHP
+    wp db create
+    wp core install --url=$publicUrl --title="WordPress" --admin_user=admin --admin_password=password --admin_email="admin@example.com" --skip-email
+
+    # This is required for the .htaccess.
+    touch wp-cli.local.yml
+    echo "apache_modules:
+      - mod_rewrite
+    " > wp-cli.local.yml
+
+    # Set pretty urls.
+    wp rewrite structure '/%postname%/' --hard
+    wp rewrite flush --hard
+
+    rm wp-cli.local.yml
+
+    wp post create ../bin/wp/amp-page.html --post_name=amp-page --post_title='AMP Page' --post_status=publish --post_author=1
+
+    # Copy and activate the test plugin
+    cp -r ../bin/wp/px-test-plugin ./wp-content/plugins/
+    wp plugin activate px-test-plugin
+fi
+
+echo "WordPress public URL: $publicUrl"
+
+# Go back to the root directory.
+cd ../
+
+# Generate the fixture file for the amp-page.
+echo "Generating the fixture file for the amp-page..."
+pageSpeedInsightData=$(./bin/px psi --json --key $PSI_API_KEY $publicUrl/amp-page/)
+pageSpeedInsightVersion=$(echo $pageSpeedInsightData | jq .lighthouseResult.lighthouseVersion)
+
+existingData=$(cat ./tests/fixtures/psi_local-wp_amp-page.json)
+existingDataVersion=$(echo $existingData | jq .lighthouseResult.lighthouseVersion)
+
+if [ "$pageSpeedInsightVersion" == "$existingDataVersion" ]; then
+    echo "Lighthouse version is the same. No need to update the fixture file."
+    exit
+fi
+
+echo $pageSpeedInsightData > ./tests/fixtures/psi_local-wp_amp-page.json
+echo "Generated the fixture file psi_local-wp_amp-page.json in tests/fixtures directory."

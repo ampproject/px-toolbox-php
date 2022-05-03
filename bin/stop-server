@@ -1,0 +1,12 @@
+#!/bin/bash
+
+ps -ef | grep localhost:8080 | grep -v grep | awk '{print $2}' | xargs kill
+ps -ef | grep ngrok | grep -v grep | awk '{print $2}' | xargs kill
+
+FILE=wordpress
+if [ -d "$FILE" ]; then
+    wp db drop --yes --path=wordpress
+    rm -rf wordpress
+fi
+
+echo "WordPress server is stopped."

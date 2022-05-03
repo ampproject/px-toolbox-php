@@ -1,0 +1,134 @@
+name: Update the test fixtures audited by the PageSpeed Insight API
+on:
+  schedule:
+    # https://crontab.guru/once-a-week
+    - cron: 0 0 * * 0
+
+jobs:
+  update-fixture-files:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mariadb:latest
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: true
+          MYSQL_ROOT_PASSWORD:
+        ports:
+          - 3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          extensions: curl, date, dom, gd, iconv, json, libxml, mysql, spl
+          tools: composer
+
+      - name: Shutdown default MySQL service
+        run: sudo service mysql stop
+
+      - name: Verify MariaDB connection
+        run: |
+          while ! mysqladmin ping -h"127.0.0.1" -P"${{ job.services.mysql.ports[3306] }}" --silent; do
+            sleep 1
+          done
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Configure Composer cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install Composer dependencies
+        run: composer install
+
+      - name: Configure git user
+        run: |
+          git config --global user.email "alain.schlesser@gmail.com"
+          git config --global user.name "Alain Schlesser"
+
+      - name: Check if remote branch exists
+        id: remote-branch
+        run: echo ::set-output name=exists::$([[ -z $(git ls-remote --heads origin update-fixture-files) ]] && echo "0" || echo "1")
+
+      - name: Create branch to base pull request on
+        if: steps.remote-branch.outputs.exists == 0
+        run: |
+          git checkout -b update-fixture-files
+
+      - name: Fetch existing branch to add commits to
+        if: steps.remote-branch.outputs.exists == 1
+        run: |
+          git fetch --all --prune
+          git checkout update-fixture-files
+          git pull --no-rebase
+
+      - name: Setup ngrok
+        run: |
+          curl -O https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.tgz
+          tar xvzf ngrok-stable-linux-amd64.tgz
+          rm ngrok-stable-linux-amd64.tgz
+          mv ngrok /usr/local/bin
+          ngrok authtoken ${{ secrets.NGROK_AUTH_TOKEN }}
+
+      - name: Setup wp-cli
+        run: |
+          curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+          chmod +x wp-cli.phar
+          mv wp-cli.phar /usr/local/bin/wp
+
+      - name: Run the generator script
+        env:
+          PSI_API_KEY: ${{ secrets.PSI_API_KEY }}
+          DB_NAME: px_toolbox_php
+          DB_USER: root
+          DB_PASS: ''
+          DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
+        run: composer run generate-fixture
+
+      - name: Check if there are changes
+        id: changes
+        run: echo ::set-output name=changed::$([[ -z $(git status --porcelain) ]] && echo "0" || echo "1")
+
+      - name: Get pull request body text
+        if: steps.changes.outputs.changed == 1
+        id: body
+        run: |
+          BODY=$(bin/render-pr-body.bash)
+          echo $BODY
+          BODY="${BODY//$'\n'/'%0A'}"
+          BODY="${BODY//$'`'/'\`'}"
+          echo -e "::set-output name=text::$BODY"
+
+      - name: Commit changes
+        if: steps.changes.outputs.changed == 1
+        run: |
+          git add --all .
+          git commit -m "Update fixture files - $(date +'%Y-%m-%d')"
+          git push origin update-fixture-files
+
+      - name: Create pull request
+        if: |
+          steps.changes.outputs.changed == 1 &&
+          steps.remote-branch.outputs.exists == 0
+        uses: repo-sync/pull-request@v2
+        with:
+          source_branch: update-fixture-files
+          destination_branch: main
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          pr_title: Update fixture files
+          pr_body: ${{ steps.body.outputs.text }}
+          pr_reviewer: schlessera
